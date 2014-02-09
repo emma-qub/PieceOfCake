@@ -174,7 +174,7 @@ void MainWindow::openFile(void) {
     }
 
     if (canOpen) {
-        QString fileName = QFileDialog::getOpenFileName(this, "Open file", "../SliceIt/levels/", "XML Files (*.xml)");
+        QString fileName = QFileDialog::getOpenFileName(this, "Open file", "../PieceOfCake/levels/", "XML Files (*.xml)");
 
         if (!fileName.isEmpty()) {
             initNewDocument(false, fileName);

@@ -1,0 +1,40 @@
+<!DOCTYPE SliceItML>
+<level>
+    <partscount value="5"/>
+    <linescount value="3"/>
+    <starscount value="4"/>
+    <tolerances value="7"/>
+    <polygons>
+        <polygon id="0">
+            <vertex x="100" y="800"/>
+            <vertex x="100" y="100"/>
+            <vertex x="400" y="100"/>
+            <vertex x="400" y="700"/>
+            <vertex x="500" y="700"/>
+            <vertex x="500" y="100"/>
+            <vertex x="800" y="100"/>
+            <vertex x="800" y="700"/>
+            <vertex x="900" y="700"/>
+            <vertex x="900" y="100"/>
+            <vertex x="1000" y="100"/>
+            <vertex x="1000" y="800"/>
+            <vertex x="700" y="800"/>
+            <vertex x="700" y="200"/>
+            <vertex x="600" y="200"/>
+            <vertex x="600" y="800"/>
+            <vertex x="300" y="800"/>
+            <vertex x="300" y="200"/>
+            <vertex x="200" y="200"/>
+            <vertex x="200" y="800"/>
+        </polygon>
+    </polygons>
+    <hints>
+        <hint id="0">
+            <line>
+                <bound x="32" y="55"/>
+                <bound x="562" y="395"/>
+            </line>
+            <cost value="2"/>
+        </hint>
+    </hints>
+</level>

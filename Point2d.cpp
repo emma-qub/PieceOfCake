@@ -1,6 +1,7 @@
 #include "Point2d.h"
 #include "Vector2d.h"
 
+#include <cstdlib>
 #include <cmath>    // sqrt, pow, abs
 #include <cfloat>   // FLT_EPSILON
 

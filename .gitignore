@@ -14,3 +14,8 @@
 
 *.user
 *.user.*
+
+# Qmake files
+Makefile
+moc_*.cpp
+PieceOfCake

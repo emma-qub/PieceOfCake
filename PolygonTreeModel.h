@@ -38,7 +38,7 @@ public:
     bool translatePolygon(int polygonRow, const Vector2d& direction);
 
     bool insertVertex(int polygonRow, int vertexRow, const Point2d& vertex, bool exist = false);
-    bool removeVertex(int polygonRow, int vertexRow, bool fromUndo = false);
+    bool removeVertex(int polygonRow, int vertexRow);
     bool replaceVertex(int polygonRow, int vertexRow, const Point2d& vertex);
 
     void updatePolygons(void);

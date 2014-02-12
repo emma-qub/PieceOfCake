@@ -15,7 +15,7 @@ AddVertexCommand::AddVertexCommand(PolygonTreeModel* model, int polygonRow, int 
 }
 
 void AddVertexCommand::undo(void) {
-    _model->removeVertex(_polygonRow, _vertexRow, true);
+    _model->removeVertex(_polygonRow, _vertexRow);
     _model->popSelection();
 }
 
@@ -44,7 +44,7 @@ void RemoveVertexCommand::undo(void) {
 }
 
 void RemoveVertexCommand::redo(void) {
-    _model->removeVertex(_polygonRow, _vertexRow, false);
+    _model->removeVertex(_polygonRow, _vertexRow);
     _model->addSelection(_selectionPolygonRow, _selectionVertexRow);
 }
 

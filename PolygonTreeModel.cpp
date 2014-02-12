@@ -85,7 +85,11 @@ bool PolygonTreeModel::insertPolygon(int polygonRow, const Polygon& polygon) {
 bool PolygonTreeModel::removePolygon(int polygonRow) {
     _polygonList.removeAt(polygonRow);
 
-    return removeRow(polygonRow);
+    bool success = removeRow(polygonRow);
+    if (success)
+        updatePolygons();
+
+    return success;
 }
 
 bool PolygonTreeModel::replacePolygon(int polygonRow, const Polygon& polygon) {
@@ -137,7 +141,7 @@ bool PolygonTreeModel::insertVertex(int polygonRow, int vertexRow, const Point2d
     return true;
 }
 
-bool PolygonTreeModel::removeVertex(int polygonRow, int vertexRow, bool fromUndo) {
+bool PolygonTreeModel::removeVertex(int polygonRow, int vertexRow) {
     QModelIndex polygonIndex = index(polygonRow, 0);
     bool result = removeRow(vertexRow, polygonIndex);
 

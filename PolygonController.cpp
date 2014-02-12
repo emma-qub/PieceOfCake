@@ -3,59 +3,37 @@
 
 #include <QDebug>
 
-PolygonController::PolygonController(PolygonTreeModel *model, QUndoStack* undoStack, QUndoStack* selectionsStack, QObject* parent) :
+PolygonController::PolygonController(PolygonTreeModel *model, QUndoStack* undoStack, QObject* parent) :
     QObject(parent),
     _model(model),
-    _undoStack(undoStack),
-    _selectionsStack(selectionsStack) {
+    _undoStack(undoStack) {
 
     connect(_undoStack, SIGNAL(indexChanged(int)), this, SLOT(emitUpdate(int)));
 }
 
-//void PolygonController::initPolygon(void) {
-//    PolygonList polygonList;
-//    polygonList << Polygon();
-
-//    appendPolygon();
-
-//    _model->pushIndex(_model->index(0, 0));
-//}
-
-//void PolygonController::appendPolygon(void) {
-//    addPolygon(_model->rowCount(), Polygon());
-//}
-
 void PolygonController::addPolygon(int polygonRow, const Polygon& polygon) {
-    QUndoCommand* addPolygonCommand = new AddPolygonCommand(_model, polygonRow, polygon);
+    QUndoCommand* addPolygonCommand = new AddPolygonCommand(_model, polygonRow, polygon, polygonRow, -1);
     _undoStack->push(addPolygonCommand);
-
-    QUndoCommand* addSelectionCommand = new AddSelectionCommand(_model, polygonRow, -1);
-    _selectionsStack->push(addSelectionCommand);
 }
 
 void PolygonController::removePolygon(int polygonRow, const Polygon& polygon) {
-    QUndoCommand* removePolygonCommand = new RemovePolygonCommand(_model, polygonRow, polygon);
-    _undoStack->push(removePolygonCommand);
-
     int newPolygonRow = polygonRow;
     if (_model->rowCount() == 0) {
         newPolygonRow = -1;
     } else {
-        if (polygonRow == _model->rowCount()) {
+        if (polygonRow == _model->rowCount()-1) {
             newPolygonRow = polygonRow-1;
         }
     }
-    QUndoCommand* addSelectionCommand = new AddSelectionCommand(_model, newPolygonRow, -1);
-    _selectionsStack->push(addSelectionCommand);
+
+    QUndoCommand* removePolygonCommand = new RemovePolygonCommand(_model, polygonRow, polygon, newPolygonRow, -1);
+    _undoStack->push(removePolygonCommand);
 }
 
 void PolygonController::movePolygon(int polygonRow, int oldX, int oldY, int newX, int newY, bool pushToStack) {
     if (pushToStack) {
-        QUndoCommand* movePolygonCommand = new MovePolygonCommand(_model, polygonRow, oldX, oldY, newX, newY);
+        QUndoCommand* movePolygonCommand = new MovePolygonCommand(_model, polygonRow, oldX, oldY, newX, newY, polygonRow, -1);
         _undoStack->push(movePolygonCommand);
-
-        QUndoCommand* addSelectionCommand = new AddSelectionCommand(_model, polygonRow, -1);
-        _selectionsStack->push(addSelectionCommand);
     } else {
         Polygon polygon(_model->polygonFromIndex(_model->index(polygonRow, 0)));
         polygon.translate(Vector2d(newX-oldX, newY-oldY));
@@ -66,36 +44,28 @@ void PolygonController::movePolygon(int polygonRow, int oldX, int oldY, int newX
 }
 
 void PolygonController::addVertex(int polygonRow, int vertexRow, const Point2d& vertex) {
-    QUndoCommand* addVertexCommand = new AddVertexCommand(_model, polygonRow, vertexRow, vertex);
+    QUndoCommand* addVertexCommand = new AddVertexCommand(_model, polygonRow, vertexRow, vertex, polygonRow, vertexRow);
     _undoStack->push(addVertexCommand);
-
-    QUndoCommand* addSelectionCommand = new AddSelectionCommand(_model, polygonRow, vertexRow);
-    _selectionsStack->push(addSelectionCommand);
 }
 
 void PolygonController::removeVertex(int polygonRow, int vertexRow, const Point2d& vertex) {
-    QUndoCommand* removeVertexCommand = new RemoveVertexCommand(_model, polygonRow, vertexRow, vertex);
-    _undoStack->push(removeVertexCommand);
-
     int newVertexRow = vertexRow;
     if (_model->rowCount(_model->index(polygonRow, 0)) == 0) {
         newVertexRow = -1;
     } else {
-        if (vertexRow == _model->rowCount(_model->index(polygonRow, 0))) {
+        if (vertexRow == _model->rowCount(_model->index(polygonRow, 0)) - 1) {
             newVertexRow = vertexRow-1;
         }
     }
-    QUndoCommand* addSelectionCommand = new AddSelectionCommand(_model, polygonRow, newVertexRow);
-    _selectionsStack->push(addSelectionCommand);
+
+    QUndoCommand* removeVertexCommand = new RemoveVertexCommand(_model, polygonRow, vertexRow, vertex, polygonRow, newVertexRow);
+    _undoStack->push(removeVertexCommand);
 }
 
 void PolygonController::moveVertex(int polygonRow, int vertexRow, int oldX, int oldY, int newX, int newY, bool pushToStack) {
     if (pushToStack) {
-        QUndoCommand* moverVertexCommand = new MoveVertexCommand(_model, polygonRow, vertexRow, oldX, oldY, newX, newY);
+        QUndoCommand* moverVertexCommand = new MoveVertexCommand(_model, polygonRow, vertexRow, oldX, oldY, newX, newY, polygonRow, vertexRow);
         _undoStack->push(moverVertexCommand);
-
-        QUndoCommand* addSelectionCommand = new AddSelectionCommand(_model, polygonRow, vertexRow);
-        _selectionsStack->push(addSelectionCommand);
     } else {
         _model->replaceVertex(polygonRow, vertexRow, Point2d(newX, newY));
 

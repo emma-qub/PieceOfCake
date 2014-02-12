@@ -122,7 +122,7 @@ void PolygonTreeView::selection(void) {
     int polygonRow = selections.last().first;
     int vertexRow = selections.last().second;
 
-    qDebug() << "###" << polygonRow << vertexRow;
+    qDebug() << "###" << selections.size() << polygonRow << vertexRow;
 
     QModelIndex currIndex;
     if (polygonRow == -1 && vertexRow != -1) {

@@ -22,11 +22,7 @@ MainWindow::MainWindow(QWidget* parent) :
     _undoStack = new QUndoStack;
     connect(_undoStack, SIGNAL(indexChanged(int)), this, SLOT(updateSavingState(int)));
 
-    // Create selection stack to manage selections
-    _selectionsStack = new QUndoStack;
-//    connect(_undoStack, SIGNAL(indexChanged(int)), this, SLOT(updateSavingState(int)));
-
-    _controller = new PolygonController(_model, _undoStack, _selectionsStack, this);
+    _controller = new PolygonController(_model, _undoStack, this);
 
     _treeView = new PolygonTreeView(_controller, _levelWidget);
     _treeView->setModel(_model);
@@ -78,14 +74,6 @@ MainWindow::MainWindow(QWidget* parent) :
     _undoView->setAlternatingRowColors(true);
     _undoView->show();
     _undoView->setAttribute(Qt::WA_QuitOnClose, false);
-
-    _selectionsView = new QUndoView(_selectionsStack, _levelWidget);
-    _selectionsView->setWindowTitle(tr("Selection List"));
-    _selectionsView->setEmptyLabel("New Selection");
-    _selectionsView->setAlternatingRowColors(true);
-    _selectionsView->show();
-    _selectionsView->setAttribute(Qt::WA_QuitOnClose, false);
-    connect(_undoStack, SIGNAL(indexChanged(int)), _selectionsStack, SLOT(setIndex(int)));
 
     editMenu->addSeparator();
 

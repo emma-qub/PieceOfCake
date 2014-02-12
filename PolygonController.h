@@ -10,7 +10,7 @@ class PolygonController : public QObject {
     Q_OBJECT
 
 public:
-    PolygonController(PolygonTreeModel* model, QUndoStack *undoStack, QUndoStack* selectionsStack, QObject* parent = 0);
+    PolygonController(PolygonTreeModel* model, QUndoStack* undoStack, QObject* parent = 0);
 
     void initPolygon(void);
 

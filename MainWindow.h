@@ -39,7 +39,6 @@ private:
     PolygonTreeModel* _model;
 
     QUndoStack* _undoStack;
-    QUndoStack* _selectionsStack;
     QUndoView* _undoView;
     QUndoView* _selectionsView;
 

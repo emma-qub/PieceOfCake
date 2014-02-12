@@ -79,33 +79,10 @@ bool PolygonTreeModel::insertPolygon(int polygonRow, const Polygon& polygon, boo
 
     updatePolygons();
 
-    if (fromUndo) {
-        _selections.pop();
-        int newPolygonRow = _selections.last().first;
-        for (unsigned int k = 0; k < vertices.size(); k++) {
-            _selections << QPair<int, int>(newPolygonRow, k);
-        }
-//        _selections << QPair<int, int>(polygonRow, k);
-    } else {
-        _selections << QPair<int, int>(polygonRow, -1);
-    }
-
     return true;
 }
 
 bool PolygonTreeModel::removePolygon(int polygonRow, bool fromUndo) {
-    if (fromUndo) {
-        _selections.pop();
-    } else {
-        if (rowCount() == 0) {
-            _selections << QPair<int, int>(-1, -1);
-        } else if (polygonRow == rowCount()-1) {
-            _selections << QPair<int, int>(rowCount()-2, -1);
-        } else {
-            _selections << QPair<int, int>(polygonRow, -1);
-        }
-    }
-
     _polygonList.removeAt(polygonRow);
 
     return removeRow(polygonRow);
@@ -140,13 +117,6 @@ bool PolygonTreeModel::translatePolygon(int polygonRow, const Vector2d& directio
 
 
 
-//bool PolygonTreeModel::appendVertex(int polygonRow, const Point2d& vertex) {
-//    TreeItem* polygonItem = getItem(index(polygonRow, 0));
-//    int vertexRow = polygonItem->childCount();
-//    polygonItem->insertChildren(vertexRow, 1, 4);
-//    return insertVertex(polygonRow, vertexRow, vertex);
-//}
-
 bool PolygonTreeModel::insertVertex(int polygonRow, int vertexRow, const Point2d& vertex, bool fromUndo, bool exist) {
     insertRow(vertexRow, index(polygonRow, 0));
 
@@ -164,30 +134,12 @@ bool PolygonTreeModel::insertVertex(int polygonRow, int vertexRow, const Point2d
 
     updateVertices(polygonIndex);
 
-    if (fromUndo) {
-        _selections.pop();
-    } else {
-        _selections << QPair<int, int>(polygonRow, vertexRow);
-    }
-
     return true;
 }
 
 bool PolygonTreeModel::removeVertex(int polygonRow, int vertexRow, bool fromUndo) {
     QModelIndex polygonIndex = index(polygonRow, 0);
     bool result = removeRow(vertexRow, polygonIndex);
-
-    if (fromUndo) {
-        _selections.pop();
-    } else {
-        if (rowCount(index(polygonRow, 0)) == 0) {
-            _selections << QPair<int, int>(polygonRow, -1);
-        } else if (vertexRow == rowCount(index(polygonRow, 0))) {
-            _selections << QPair<int, int>(polygonRow, rowCount(index(polygonRow, 0))-1);
-        } else {
-            _selections << QPair<int, int>(polygonRow, vertexRow);
-        }
-    }
 
     if (rowCount(polygonIndex) > 0)
         updateVertices(polygonIndex);

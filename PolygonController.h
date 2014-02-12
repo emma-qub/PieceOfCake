@@ -41,7 +41,6 @@ signals:
 private:
     PolygonTreeModel* _model;
     QUndoStack* _undoStack;
-    QUndoStack* _selectionsStack;
 };
 
 #endif // POLYGONCONTROLLER_H

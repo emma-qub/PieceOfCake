@@ -76,7 +76,6 @@ void PolygonController::moveVertex(int polygonRow, int vertexRow, int oldX, int 
 void PolygonController::clear(void) {
     _model->clear();
     _undoStack->clear();
-    _selectionsStack->clear();
     emit updateReset();
     emitUpdate(0);
 }

@@ -32,12 +32,12 @@ public:
     Point2d vertexFromIndex(const QModelIndex& vertexIndex);
 
     bool appendPolygon(const Polygon& polygon);
-    bool insertPolygon(int polygonRow, const Polygon& polygon, bool fromUndo = false);
-    bool removePolygon(int polygonRow, bool fromUndo = false);
+    bool insertPolygon(int polygonRow, const Polygon& polygon);
+    bool removePolygon(int polygonRow);
     bool replacePolygon(int polygonRow, const Polygon& polygon);
     bool translatePolygon(int polygonRow, const Vector2d& direction);
 
-    bool insertVertex(int polygonRow, int vertexRow, const Point2d& vertex, bool fromUndo = false, bool exist = false);
+    bool insertVertex(int polygonRow, int vertexRow, const Point2d& vertex, bool exist = false);
     bool removeVertex(int polygonRow, int vertexRow, bool fromUndo = false);
     bool replaceVertex(int polygonRow, int vertexRow, const Point2d& vertex);
 

@@ -56,7 +56,7 @@ bool PolygonTreeModel::appendPolygon(const Polygon& polygon) {
     return insertPolygon(rowCount(), polygon);
 }
 
-bool PolygonTreeModel::insertPolygon(int polygonRow, const Polygon& polygon, bool fromUndo) {
+bool PolygonTreeModel::insertPolygon(int polygonRow, const Polygon& polygon) {
     std::vector<Point2d> vertices = polygon.getVertices();
 
     int r = std::rand()%255;
@@ -72,7 +72,7 @@ bool PolygonTreeModel::insertPolygon(int polygonRow, const Polygon& polygon, boo
 
     for (unsigned int k = 0; k < vertices.size(); k++) {
         Point2d vertex = vertices.at(k);
-        insertVertex(polygonRow, k, vertex, fromUndo, true);
+        insertVertex(polygonRow, k, vertex, true);
     }
 
     _polygonList.insert(polygonRow, polygon);
@@ -82,7 +82,7 @@ bool PolygonTreeModel::insertPolygon(int polygonRow, const Polygon& polygon, boo
     return true;
 }
 
-bool PolygonTreeModel::removePolygon(int polygonRow, bool fromUndo) {
+bool PolygonTreeModel::removePolygon(int polygonRow) {
     _polygonList.removeAt(polygonRow);
 
     return removeRow(polygonRow);
@@ -117,7 +117,7 @@ bool PolygonTreeModel::translatePolygon(int polygonRow, const Vector2d& directio
 
 
 
-bool PolygonTreeModel::insertVertex(int polygonRow, int vertexRow, const Point2d& vertex, bool fromUndo, bool exist) {
+bool PolygonTreeModel::insertVertex(int polygonRow, int vertexRow, const Point2d& vertex, bool exist) {
     insertRow(vertexRow, index(polygonRow, 0));
 
     QModelIndex polygonIndex = index(polygonRow, 0);

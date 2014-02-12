@@ -62,12 +62,12 @@ AddPolygonCommand::AddPolygonCommand(PolygonTreeModel* model, int polygonRow, co
 }
 
 void AddPolygonCommand::undo(void) {
-    _model->removePolygon(_polygonRow, true);
+    _model->removePolygon(_polygonRow);
     _model->popSelection();
 }
 
 void AddPolygonCommand::redo(void) {
-    _model->insertPolygon(_polygonRow, _polygon, false);
+    _model->insertPolygon(_polygonRow, _polygon);
     _model->addSelection(_selectionPolygonRow, _selectionVertexRow);
 }
 
@@ -85,12 +85,12 @@ RemovePolygonCommand::RemovePolygonCommand(PolygonTreeModel* model, int polygonR
 }
 
 void RemovePolygonCommand::undo(void) {
-    _model->insertPolygon(_polygonRow, _polygon, true);
+    _model->insertPolygon(_polygonRow, _polygon);
     _model->popSelection();
 }
 
 void RemovePolygonCommand::redo(void) {
-    _model->removePolygon(_polygonRow, false);
+    _model->removePolygon(_polygonRow);
     _model->addSelection(_selectionPolygonRow, _selectionVertexRow);
 }
 

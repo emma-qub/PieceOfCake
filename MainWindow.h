@@ -40,12 +40,10 @@ private:
 
     QUndoStack* _undoStack;
     QUndoView* _undoView;
-    QUndoView* _selectionsView;
 
     bool _fileSaved;
     bool _neverSavedBefore;
     QString _fileName;
-//    int _indexWhereToSave;
 
     QAction* _newAction;
     QAction* _openAction;

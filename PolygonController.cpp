@@ -99,6 +99,7 @@ void PolygonController::openLevel(const QString& fileName) {
     PolygonList polygonList(parser.createPolygonList());
 
     _model->setPolygonList(polygonList);
+    emitUpdate(0);
 }
 
 void PolygonController::alignToGrid(void) {

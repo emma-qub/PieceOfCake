@@ -1,4 +1,4 @@
-#include "GameModel.hxx"
+#include "GameModel.h"
 
 GameModel::GameModel(const PolygonList& polygonList, QObject* parent) :
   QStandardItemModel(parent),

@@ -18,8 +18,8 @@ HEADERS += \
     PolygonItemDelegate.h \
     Commands.h \
     PolygonController.h \
-    GameController.hxx \
-    GameModel.hxx
+    GameController.h \
+    GameModel.h
 
 SOURCES += \
     Point2d.cpp \
@@ -42,8 +42,8 @@ SOURCES += \
     PolygonItemDelegate.cpp \
     Commands.cpp \
     PolygonController.cpp \
-    GameController.cxx \
-    GameModel.cxx
+    GameController.cpp \
+    GameModel.cpp
 
 CONFIG += c++11
 

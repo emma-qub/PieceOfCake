@@ -3,7 +3,7 @@
 
 #include <QObject>
 
-#include "GameModel.hxx"
+#include "GameModel.h"
 
 class GameController : public QObject {
   Q_OBJECT

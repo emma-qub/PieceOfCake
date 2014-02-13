@@ -1,4 +1,4 @@
-#include "GameController.hxx"
+#include "GameController.h"
 
 GameController::GameController(GameModel* model, QObject* parent) :
   QObject(parent),

@@ -27,8 +27,6 @@ public:
 
     void translate(const Vector2d& direction);
 
-    inline std::vector<Segment> getCuttingSegments(void) { return _cuttingSegments; }
-
     bool newPointIsGood(const Point2d& vertex) const;
 
     bool isPointInside(const Point2d& point) const;
@@ -37,7 +35,7 @@ public:
     bool isCrossing(const Segment& line) const;
     bool isGoodSegment(const Segment& line) const;
 
-    inline void clear(void) { _vertices.clear(); _newVertices.clear(); _cuttingSegments.clear(); }
+    inline void clear(void) { _vertices.clear(); }
 
     float orientedArea(void) const;
     Point2d barycenter(void) const;
@@ -56,8 +54,6 @@ public:
 
 private:
     std::vector<Point2d> _vertices;
-    std::vector<Point2d> _newVertices;
-    std::vector<Segment> _cuttingSegments;
 };
 
 #endif // POLYGON_H

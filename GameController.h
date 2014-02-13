@@ -12,7 +12,8 @@ public:
   enum LineType {
     goodCrossing,
     badCrossing,
-    noCrossing
+    noCrossing,
+    unknownCrossing
   };
 
   GameController(GameModel* model, QObject* parent = 0);

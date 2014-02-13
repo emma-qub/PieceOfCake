@@ -13,14 +13,10 @@
 #include <QString>
 
 Polygon::Polygon(const std::vector<Point2d>& vertices) :
-    _vertices(vertices),
-    _newVertices(),
-    _cuttingSegments() {
+    _vertices(vertices) {
 }
 
-Polygon::Polygon(int xMin, int xMax, int yMin, int yMax, unsigned int verticesCount) :
-    _newVertices(),
-    _cuttingSegments() {
+Polygon::Polygon(int xMin, int xMax, int yMin, int yMax, unsigned int verticesCount) {
 
     if (verticesCount < 3)
         Polygon();
@@ -40,13 +36,9 @@ Polygon::Polygon(int xMin, int xMax, int yMin, int yMax, unsigned int verticesCo
 
 Polygon::Polygon(const Polygon& polygon) {
     _vertices = polygon._vertices;
-    _newVertices = polygon._newVertices;
-    _cuttingSegments = polygon._cuttingSegments;
 }
 
-Polygon::Polygon(std::istream& is) :
-    _newVertices(),
-    _cuttingSegments() {
+Polygon::Polygon(std::istream& is) {
 
     operator<<(is);
 

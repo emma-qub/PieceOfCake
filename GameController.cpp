@@ -229,3 +229,30 @@ bool GameController::isACuttingSegment(const Segment& segment) const {
     }
     return false;
 }
+
+GameController::LineType GameController::computeLineType(const Segment& line) const {
+    PolygonList polygonList = _model->getPolygonList();
+
+    bool noCrossing = false;
+    bool goodCrossing = false;
+    bool badCrossing = false;
+
+    foreach (const Polygon& polygon, polygonList) {
+        if (!polygon.isCrossing(line) && !polygon.isPointInside(line.getA())) {
+            noCrossing = true;
+        } else if (!polygon.isGoodSegment(line) && polygon.isCrossing(line)) {
+            goodCrossing = true;
+        } else {
+            badCrossing = true;
+        }
+    }
+
+    if (badCrossing)
+        return GameController::badCrossing;
+    else if (goodCrossing)
+        return GameController::goodCrossing;
+    else if (noCrossing)
+        return GameController::noCrossing;
+    else
+        return GameController::unknownCrossing;
+}

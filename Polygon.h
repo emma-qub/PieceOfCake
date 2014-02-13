@@ -31,9 +31,6 @@ public:
 
     bool newPointIsGood(const Point2d& vertex) const;
 
-    void sortSmartVertices(std::vector<std::pair<Point2d, bool>>& smartVertices) const;
-    std::vector<Polygon> splitSmartVertices(const std::vector<std::pair<Point2d, bool>>& smartVertices) const;
-
     bool isPointInside(const Point2d& point) const;
     bool isPointInside2(const Point2d& point) const;
 
@@ -44,10 +41,6 @@ public:
 
     float orientedArea(void) const;
     Point2d barycenter(void) const;
-
-    std::vector<Polygon> sliceIt(const Segment& line);
-    void computeCuttingSegments(void);
-    bool isACuttingSegment(const Segment& segment) const;
 
     friend bool operator==(const Polygon& polygon1, const Polygon& polygon2);
 

@@ -17,7 +17,9 @@ HEADERS += \
     PolygonTreeView.h \
     PolygonItemDelegate.h \
     Commands.h \
-    PolygonController.h
+    PolygonController.h \
+    GameController.hxx \
+    GameModel.hxx
 
 SOURCES += \
     Point2d.cpp \
@@ -39,7 +41,9 @@ SOURCES += \
     PolygonTreeView.cpp \
     PolygonItemDelegate.cpp \
     Commands.cpp \
-    PolygonController.cpp
+    PolygonController.cpp \
+    GameController.cxx \
+    GameModel.cxx
 
 CONFIG += c++11
 

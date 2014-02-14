@@ -2,26 +2,30 @@
 
 #include <QPropertyAnimation>
 
-GameView::GameView(QWidget* parent) :
+GameView::GameView(GameController* controller, QWidget* parent) :
     QWidget(parent),
     _scribbling(false),
     _myPenWidth(7),
     _myPenColor(Qt::black),
     _image(QImage("../SliceIt/design/polygonBackground.png")),
     _firstPoint(),
-//    _lastPoint(),
     _canErase(false),
-    _polygons(),
-    _goodSegment(false) {
+    _goodSegment(false),
+    _controller(controller) {
 
     setAttribute(Qt::WA_StaticContents);
     setMouseTracking(true);
 
-    setStyleSheet("background:transparent;");
+//    setStyleSheet("background:transparent;");
 //    setAttribute(Qt::WA_TranslucentBackground);
     setWindowFlags(Qt::FramelessWindowHint);
 
     setFixedSize(381, 441);
+}
+
+void GameView::setModel(GameModel* model) {
+  _model = model;
+  drawPolygon();
 }
 
 void GameView::mousePressEvent(QMouseEvent* event) {
@@ -43,19 +47,23 @@ void GameView::mouseMoveEvent(QMouseEvent* event) {
         Point2d firstPoint(_firstPoint.x(), _firstPoint.y());
 
         Segment line(firstPoint, Point2d(currPoint.x(), currPoint.y()));
-        QColor color(QColor(0x639C45));
+        GameController::LineType lineType = _controller->computeLineType(line);
+        QColor color;
+        switch (lineType) {
+        case GameController::noCrossing:
+          color = QColor(0x626262);
+          break;
+        case GameController::goodCrossing:
+          color = QColor(0x5DBE14);
+          break;
+        case GameController::badCrossing:
+          color = QColor(0xC81214);
+          break;
+        default:
+          break;
+        }
 
         _goodSegment = true;
-
-        for (const Polygon& polygon: _polygons) {
-            if (!polygon.isCrossing(line) && !polygon.isPointInside(firstPoint)) {
-                color = QColor(Qt::gray);
-//                _goodSegment = false;
-            } else if (!polygon.isGoodSegment(line)) {
-                color = QColor(QColor(0xB6492C));
-//                _goodSegment = false;
-            }
-        }
 
         drawLine(_firstPoint, currPoint, color);
     }
@@ -127,6 +135,7 @@ void GameView::drawLine(const QPoint& begin, const QPoint& end, const QColor& co
 }
 
 void GameView::drawPolygon(void) {
+  PolygonList _polygons = _model->getPolygonList();
 //    std::cerr << _polygons.size() << std::endl;
 
     for (const Polygon& polygon: _polygons) {

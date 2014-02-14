@@ -30,8 +30,14 @@ MainWindow::MainWindow(QWidget* parent) :
     _scribbleView->setModel(_model);
     _scribbleView->setSelectionModel(_treeView->selectionModel());
 
+    _gameModel = new GameModel;
+    _gameController = new GameController(_gameModel, this);
+    _gameView = new GameView(_gameController);
+    _gameView->setModel(_gameModel);
+
     _tabWidget = new QTabWidget;
-    _tabWidget->addTab(_levelWidget, "Level");
+    _tabWidget->addTab(_levelWidget, "Make level");
+    _tabWidget->addTab(_gameView, "Game");
 
     setCentralWidget(_tabWidget);
 

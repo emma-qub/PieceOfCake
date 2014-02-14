@@ -8,6 +8,9 @@
 #include "PolygonTreeView.h"
 #include "PolygonScribbleView.h"
 #include "Commands.h"
+#include "GameController.h"
+#include "GameView.h"
+#include "GameModel.h"
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -37,6 +40,10 @@ private:
     PolygonTreeView* _treeView;
     PolygonScribbleView* _scribbleView;
     PolygonTreeModel* _model;
+
+    GameController* _gameController;
+    GameView* _gameView;
+    GameModel* _gameModel;
 
     QUndoStack* _undoStack;
     QUndoView* _undoView;

@@ -3,19 +3,17 @@
 
 #include <QtWidgets>
 
-#include "Point2d.h"
-#include "Segment.h"
-#include "Vector2d.h"
-#include "Polygon.h"
+#include "GameModel.h"
+#include "GameController.h"
 
 class GameView : public QWidget {
     Q_OBJECT
 
 public:
-    GameView(QWidget* parent = NULL);
+    GameView(GameController* controller, QWidget* parent = NULL);
 
-    inline void setPolygons(const std::vector<Polygon>& polygons) { _polygons = polygons; }
-    inline void addPolygon(const Polygon& polygon) { _polygons.push_back(polygon); }
+    inline GameModel* model() const { return _model; }
+    void setModel(GameModel* model);
 
 protected:
     void mousePressEvent(QMouseEvent* event);
@@ -45,10 +43,10 @@ protected:
     QColor _myPenColor;
     QImage _image;
     QPoint _firstPoint;
-//    QPoint _lastPoint;
     bool _canErase;
-    std::vector<Polygon> _polygons;
     bool _goodSegment;
+    GameModel* _model;
+    GameController* _controller;
 };
 
 #endif // GAMEVIEW_H

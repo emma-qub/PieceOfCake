@@ -12,7 +12,7 @@ class GameModel : public QStandardItemModel {
   Q_OBJECT
 
 public:
-  GameModel(const PolygonList& polygonList, QObject* parent = NULL);
+  GameModel(QObject* parent = NULL);
 
   inline PolygonList getPolygonList(void) const { return _polygonList; }
   void setPolygonList(const PolygonList& polygonList);

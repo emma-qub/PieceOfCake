@@ -1,10 +1,7 @@
 #include "GameModel.h"
 
-GameModel::GameModel(const PolygonList& polygonList, QObject* parent) :
-  QStandardItemModel(parent),
-  _polygonList(polygonList) {
-
-  populate();
+GameModel::GameModel(QObject* parent) :
+  QStandardItemModel(parent) {
 }
 
 void GameModel::setPolygonList(const PolygonList& polygonList) {

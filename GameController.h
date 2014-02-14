@@ -18,7 +18,6 @@ public:
 
   GameController(GameModel* model, QObject* parent = 0);
 
-  void sortSmartVertices(std::vector<std::pair<Point2d, bool>>& smartVertices) const;
   PolygonList splitSmartVertices(const std::vector<std::pair<Point2d, bool>>& smartVertices) const;
   PolygonList cutPolygons(const Segment& line);
   void computeCuttingSegments(void);

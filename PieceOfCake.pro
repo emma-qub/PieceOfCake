@@ -7,7 +7,7 @@ HEADERS += \
     MainWindow.h \
     ParserXML.h \
     Hint.h \
-    SliceArea.h \
+    GameView.h \
     MainMenuWidget.h \
     PolygonTreeModel.h \
 #    PolygonEditorView.h \
@@ -31,7 +31,7 @@ SOURCES += \
     MainWindow.cpp \
     ParserXML.cpp \
     Hint.cpp \
-    SliceArea.cpp \
+    GameView.cpp \
     MainMenuWidget.cpp \
     PolygonTreeModel.cpp \
 #    PolygonEditorView.cpp \

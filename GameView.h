@@ -1,5 +1,5 @@
-#ifndef SLICEAREA_H
-#define SLICEAREA_H
+#ifndef GAMEVIEW_H
+#define GAMEVIEW_H
 
 #include <QtWidgets>
 
@@ -8,11 +8,11 @@
 #include "Vector2d.h"
 #include "Polygon.h"
 
-class SliceArea : public QWidget {
+class GameView : public QWidget {
     Q_OBJECT
 
 public:
-    SliceArea(QWidget* parent = NULL);
+    GameView(QWidget* parent = NULL);
 
     inline void setPolygons(const std::vector<Polygon>& polygons) { _polygons = polygons; }
     inline void addPolygon(const Polygon& polygon) { _polygons.push_back(polygon); }
@@ -51,4 +51,4 @@ protected:
     bool _goodSegment;
 };
 
-#endif // SLICEAREA_H
+#endif // GAMEVIEW_H

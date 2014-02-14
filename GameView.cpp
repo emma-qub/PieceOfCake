@@ -1,8 +1,8 @@
-#include "SliceArea.h"
+#include "GameView.h"
 
 #include <QPropertyAnimation>
 
-SliceArea::SliceArea(QWidget* parent) :
+GameView::GameView(QWidget* parent) :
     QWidget(parent),
     _scribbling(false),
     _myPenWidth(7),
@@ -24,14 +24,14 @@ SliceArea::SliceArea(QWidget* parent) :
     setFixedSize(381, 441);
 }
 
-void SliceArea::mousePressEvent(QMouseEvent* event) {
+void GameView::mousePressEvent(QMouseEvent* event) {
     if (event->button() == Qt::LeftButton && !_scribbling) {
         _scribbling = true;
         _firstPoint = event->pos();
     }
 }
 
-void SliceArea::mouseMoveEvent(QMouseEvent* event) {
+void GameView::mouseMoveEvent(QMouseEvent* event) {
     emit position(event->pos().x(), event->pos().y());
 
     if (_scribbling) {
@@ -61,7 +61,7 @@ void SliceArea::mouseMoveEvent(QMouseEvent* event) {
     }
 }
 
-void SliceArea::mouseReleaseEvent(QMouseEvent* event) {
+void GameView::mouseReleaseEvent(QMouseEvent* event) {
     if (_scribbling) {
         clearImage();
         drawPolygon();
@@ -73,7 +73,7 @@ void SliceArea::mouseReleaseEvent(QMouseEvent* event) {
     }
 }
 
-void SliceArea::paintEvent(QPaintEvent* event) {
+void GameView::paintEvent(QPaintEvent* event) {
     QPainter painter(this);
     QRect dirtyRect = event->rect();
     painter.drawImage(dirtyRect, _image, dirtyRect);
@@ -88,7 +88,7 @@ void SliceArea::paintEvent(QPaintEvent* event) {
 //    }
 }
 
-void SliceArea::resizeEvent(QResizeEvent* event) {
+void GameView::resizeEvent(QResizeEvent* event) {
     if (width() > _image.width() || height() > _image.height()) {
         int newWidth = qMax(width() + 128, _image.width());
         int newHeight = qMax(height() + 128, _image.height());
@@ -98,7 +98,7 @@ void SliceArea::resizeEvent(QResizeEvent* event) {
     QWidget::resizeEvent(event);
 }
 
-void SliceArea::resizeImage(QImage* image, const QSize& newSize) {
+void GameView::resizeImage(QImage* image, const QSize& newSize) {
     if (image->size() == newSize)
         return;
 
@@ -109,11 +109,11 @@ void SliceArea::resizeImage(QImage* image, const QSize& newSize) {
     *image = newImage;
 }
 
-void SliceArea::drawLineTo(const QPoint& endPoint) {
+void GameView::drawLineTo(const QPoint& endPoint) {
     drawLine(_firstPoint, endPoint, _myPenColor);
 }
 
-void SliceArea::drawLine(const QPoint& begin, const QPoint& end, const QColor& color) {
+void GameView::drawLine(const QPoint& begin, const QPoint& end, const QColor& color) {
     QPainter painter(&_image);
     painter.setPen(QPen(color, _myPenWidth, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
     painter.drawLine(begin, end);
@@ -126,7 +126,7 @@ void SliceArea::drawLine(const QPoint& begin, const QPoint& end, const QColor& c
     update(QRect(begin, end).normalized().adjusted(-rad, -rad, +rad, +rad));
 }
 
-void SliceArea::drawPolygon(void) {
+void GameView::drawPolygon(void) {
 //    std::cerr << _polygons.size() << std::endl;
 
     for (const Polygon& polygon: _polygons) {
@@ -141,14 +141,14 @@ void SliceArea::drawPolygon(void) {
     }
 }
 
-void SliceArea::drawText(const QPoint& position, const QString& text, const QColor &color) {
+void GameView::drawText(const QPoint& position, const QString& text, const QColor &color) {
     QPainter painter(&_image);
     painter.setPen(QPen(color, _myPenWidth, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
     painter.setFont(QFont("", 3));
     painter.drawText(position, text);
 }
 
-void SliceArea::clearImage(void) {
+void GameView::clearImage(void) {
     _image = QImage("../SliceIt/design/polygonBackground.png");
     QPainter painter(&_image);
 

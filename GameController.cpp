@@ -1,10 +1,12 @@
+#include "ParserXML.h"
 #include "GameController.h"
 
-GameController::GameController(GameModel* model, QObject* parent) :
-  QObject(parent),
+GameController::GameController(GameModel* model, QWidget* tabWidget, QUndoStack* undoStack, QObject* parent) :
+  AbstractController(model, tabWidget, undoStack, parent),
   _model(model),
   _newVertices(),
   _cuttingSegments() {
+
 }
 
 PolygonList GameController::splitSmartVertices(const std::vector<std::pair<Point2d, bool>>& smartVertices) const {
@@ -81,129 +83,145 @@ PolygonList GameController::splitSmartVertices(const std::vector<std::pair<Point
     return polygons;
 }
 
-PolygonList GameController::cutPolygons(const Segment& line) {
+PolygonList GameController::cutPolygon(const Polygon& currPolygon, const Segment& line) {
     PolygonList polygons;
     std::vector<std::pair<Point2d, bool>> smartVerticesLeft;
     std::vector<std::pair<Point2d, bool>> smartVerticesRight;
 
+    _newVertices.clear();
+
+    if (!currPolygon.isCrossing(line)) {
+        polygons << currPolygon;
+        std::cerr << currPolygon << std::endl;
+        return polygons;
+    }
+
+    bool onLeft = true;
+    std::vector<Point2d> currVertices = currPolygon.getVertices();
+    unsigned int verticesCount = currVertices.size();
+
+    for (unsigned int k = 0; k < verticesCount; k++) {
+        Point2d fstPoint(currVertices.at(k));
+        Point2d sndPoint(currVertices.at((k+1)%verticesCount));
+//        std::cerr << "Dealing with " << fstPoint << " " << sndPoint << std::endl;
+        Segment currSegment(fstPoint, sndPoint);
+        Segment::Intersection intersection = currSegment.computeIntersection(line);
+
+        switch (intersection) {
+        case Segment::Regular: {
+//            std::cerr << "Intersection: Regular" << std::endl;
+            Point2d intersectionPoint(Segment::intersectionPoint(currSegment, line));
+            if (onLeft) {
+                smartVerticesLeft.push_back(std::pair<Point2d, bool>(fstPoint, false));
+                smartVerticesLeft.push_back(std::pair<Point2d, bool>(intersectionPoint, true));
+//                std::cerr << "Adding " << fstPoint << " to left vertices" << std::endl;
+//                std::cerr << "Adding " << intersectionPoint << " to left vertices" << std::endl;
+                smartVerticesRight.push_back(std::pair<Point2d, bool>(intersectionPoint, true));
+//                std::cerr << "Adding " << intersectionPoint << " to right vertices" << std::endl;
+                smartVerticesRight.push_back(std::pair<Point2d, bool>(sndPoint, false));
+//                std::cerr << "Adding " << sndPoint << " to right vertices" << std::endl;
+            } else {
+                smartVerticesRight.push_back(std::pair<Point2d, bool>(intersectionPoint, true));
+//                std::cerr << "Adding " << intersectionPoint << " to right vertices" << std::endl;
+                smartVerticesLeft.push_back(std::pair<Point2d, bool>(intersectionPoint, true));
+//                std::cerr << "Adding " << intersectionPoint << " to left vertices" << std::endl;
+            }
+            _newVertices.push_back(intersectionPoint);
+            onLeft = !onLeft;
+            break;
+        }
+        case Segment::None:
+//            std::cerr << "Intersection: None" << std::endl;
+            if (onLeft) {
+//                std::cerr << "Adding " << fstPoint << " to left vertices" << std::endl;
+                smartVerticesLeft.push_back(std::pair<Point2d, bool>(fstPoint, false));
+            } else {
+//                std::cerr << "Adding " << sndPoint << " to right vertices" << std::endl;
+                smartVerticesRight.push_back(std::pair<Point2d, bool>(sndPoint, false));
+            }
+            break;
+        case Segment::FirstVertexRegular:
+            break;
+        case Segment::SecondVertexRegular: {
+//            std::cerr << "Intersection: SecondVertexRegular" << std::endl;
+            Point2d nextPoint(currVertices.at((k+2)%verticesCount));
+            bool isCutting = !line.sameSide(fstPoint, nextPoint);
+
+            if (onLeft && isCutting) {
+                smartVerticesLeft.push_back(std::pair<Point2d, bool>(fstPoint, false));
+                smartVerticesLeft.push_back(std::pair<Point2d, bool>(sndPoint, true));
+//                std::cerr << "Adding " << fstPoint << " to left vertices" << std::endl;
+//                std::cerr << "Adding " << sndPoint << " to left vertices" << std::endl;
+                smartVerticesRight.push_back(std::pair<Point2d, bool>(sndPoint, true));
+                smartVerticesRight.push_back(std::pair<Point2d, bool>(nextPoint, false));
+//                std::cerr << "Adding " << sndPoint << " to right vertices" << std::endl;
+//                std::cerr << "Adding " << nextPoint << " to right vertices" << std::endl;
+                _newVertices.push_back(sndPoint);
+            } else if (onLeft && !isCutting) {
+                smartVerticesLeft.push_back(std::pair<Point2d, bool>(fstPoint, false));
+                smartVerticesLeft.push_back(std::pair<Point2d, bool>(sndPoint, true));
+                smartVerticesLeft.push_back(std::pair<Point2d, bool>(sndPoint, true));
+//                std::cerr << "Adding " << fstPoint << " to left vertices" << std::endl;
+//                std::cerr << "Adding " << sndPoint << " to left vertices" << std::endl;
+//                std::cerr << "Adding " << sndPoint << " to left vertices" << std::endl;
+                _newVertices.push_back(sndPoint);
+                _newVertices.push_back(sndPoint);
+            } else if (!onLeft && !isCutting) {
+                smartVerticesRight.push_back(std::pair<Point2d, bool>(sndPoint, true));
+                smartVerticesRight.push_back(std::pair<Point2d, bool>(sndPoint, true));
+                smartVerticesRight.push_back(std::pair<Point2d, bool>(nextPoint, false));
+//                std::cerr << "Adding " << sndPoint << " to right vertices" << std::endl;
+//                std::cerr << "Adding " << sndPoint << " to right vertices" << std::endl;
+//                std::cerr << "Adding " << nextPoint << " to right vertices" << std::endl;
+                _newVertices.push_back(sndPoint);
+                _newVertices.push_back(sndPoint);
+            } else if (!onLeft && isCutting) {
+                smartVerticesRight.push_back(std::pair<Point2d, bool>(sndPoint, true));
+                smartVerticesLeft.push_back(std::pair<Point2d, bool>(sndPoint, true));
+//                std::cerr << "Adding " << sndPoint << " to right vertices" << std::endl;
+//                std::cerr << "Adding " << sndPoint << " to left vertices" << std::endl;
+                _newVertices.push_back(sndPoint);
+            }
+
+            if (isCutting) {
+                onLeft = !onLeft;
+            }
+            break;
+        }
+        }
+    }
+
+//    std::cerr << std::endl;
+
+//    QString mess = "";
+//    for (const std::pair<Point2d, bool>& p: smartVerticesLeft)
+//        mess += " ("+QString::number(p.first.getX())+"; "+QString::number(p.first.getY())+" | ("+QString::number(p.second)+"))";
+//    std::cerr << "Left vertices:" << mess.toStdString() << std::endl;
+
+//    mess = "";
+//    for (const std::pair<Point2d, bool>& p: smartVerticesRight)
+//        mess += " ("+QString::number(p.first.getX())+"; "+QString::number(p.first.getY())+" | ("+QString::number(p.second)+"))";
+//    std::cerr << "Right vertices:" << mess.toStdString() << std::endl << std::endl;
+
+    computeCuttingSegments();
+
+    PolygonList polygonsOnLeft = splitSmartVertices(smartVerticesLeft);
+    foreach (const Polygon& polygon, polygonsOnLeft)
+        polygons << polygon;
+
+    PolygonList polygonsOnRight = splitSmartVertices(smartVerticesRight);
+    foreach (const Polygon& polygon, polygonsOnRight)
+        polygons << polygon;
+
+    return polygons;
+}
+
+PolygonList GameController::cutPolygons(const Segment& line) {
+    PolygonList polygons;
+
     PolygonList polygonsToCut = _model->getPolygonList();
     foreach (const Polygon& currPolygon, polygonsToCut) {
-        bool onLeft = true;
-        std::vector<Point2d> currVertices = currPolygon.getVertices();
-        unsigned int verticesCount = currVertices.size();
-
-        for (unsigned int k = 0; k < verticesCount; k++) {
-            Point2d fstPoint(currVertices.at(k));
-            Point2d sndPoint(currVertices.at((k+1)%verticesCount));
-    //        std::cerr << "Dealing with " << fstPoint << " " << sndPoint << std::endl;
-            Segment currSegment(fstPoint, sndPoint);
-            Segment::Intersection intersection = currSegment.computeIntersection(line);
-
-            switch (intersection) {
-            case Segment::Regular: {
-    //            std::cerr << "Intersection: Regular" << std::endl;
-                Point2d intersectionPoint(Segment::intersectionPoint(currSegment, line));
-                if (onLeft) {
-                    smartVerticesLeft.push_back(std::pair<Point2d, bool>(fstPoint, false));
-                    smartVerticesLeft.push_back(std::pair<Point2d, bool>(intersectionPoint, true));
-    //                std::cerr << "Adding " << fstPoint << " to left vertices" << std::endl;
-    //                std::cerr << "Adding " << intersectionPoint << " to left vertices" << std::endl;
-                    smartVerticesRight.push_back(std::pair<Point2d, bool>(intersectionPoint, true));
-    //                std::cerr << "Adding " << intersectionPoint << " to right vertices" << std::endl;
-                    smartVerticesRight.push_back(std::pair<Point2d, bool>(sndPoint, false));
-    //                std::cerr << "Adding " << sndPoint << " to right vertices" << std::endl;
-                } else {
-                    smartVerticesRight.push_back(std::pair<Point2d, bool>(intersectionPoint, true));
-    //                std::cerr << "Adding " << intersectionPoint << " to right vertices" << std::endl;
-                    smartVerticesLeft.push_back(std::pair<Point2d, bool>(intersectionPoint, true));
-    //                std::cerr << "Adding " << intersectionPoint << " to left vertices" << std::endl;
-                }
-                _newVertices.push_back(intersectionPoint);
-                onLeft = !onLeft;
-                break;
-            }
-            case Segment::None:
-    //            std::cerr << "Intersection: None" << std::endl;
-                if (onLeft) {
-    //                std::cerr << "Adding " << fstPoint << " to left vertices" << std::endl;
-                    smartVerticesLeft.push_back(std::pair<Point2d, bool>(fstPoint, false));
-                } else {
-    //                std::cerr << "Adding " << sndPoint << " to right vertices" << std::endl;
-                    smartVerticesRight.push_back(std::pair<Point2d, bool>(sndPoint, false));
-                }
-                break;
-            case Segment::FirstVertexRegular:
-                break;
-            case Segment::SecondVertexRegular: {
-    //            std::cerr << "Intersection: SecondVertexRegular" << std::endl;
-                Point2d nextPoint(currVertices.at((k+2)%verticesCount));
-                bool isCutting = !line.sameSide(fstPoint, nextPoint);
-
-                if (onLeft && isCutting) {
-                    smartVerticesLeft.push_back(std::pair<Point2d, bool>(fstPoint, false));
-                    smartVerticesLeft.push_back(std::pair<Point2d, bool>(sndPoint, true));
-    //                std::cerr << "Adding " << fstPoint << " to left vertices" << std::endl;
-    //                std::cerr << "Adding " << sndPoint << " to left vertices" << std::endl;
-                    smartVerticesRight.push_back(std::pair<Point2d, bool>(sndPoint, true));
-                    smartVerticesRight.push_back(std::pair<Point2d, bool>(nextPoint, false));
-    //                std::cerr << "Adding " << sndPoint << " to right vertices" << std::endl;
-    //                std::cerr << "Adding " << nextPoint << " to right vertices" << std::endl;
-                    _newVertices.push_back(sndPoint);
-                } else if (onLeft && !isCutting) {
-                    smartVerticesLeft.push_back(std::pair<Point2d, bool>(fstPoint, false));
-                    smartVerticesLeft.push_back(std::pair<Point2d, bool>(sndPoint, true));
-                    smartVerticesLeft.push_back(std::pair<Point2d, bool>(sndPoint, true));
-    //                std::cerr << "Adding " << fstPoint << " to left vertices" << std::endl;
-    //                std::cerr << "Adding " << sndPoint << " to left vertices" << std::endl;
-    //                std::cerr << "Adding " << sndPoint << " to left vertices" << std::endl;
-                    _newVertices.push_back(sndPoint);
-                    _newVertices.push_back(sndPoint);
-                } else if (!onLeft && !isCutting) {
-                    smartVerticesRight.push_back(std::pair<Point2d, bool>(sndPoint, true));
-                    smartVerticesRight.push_back(std::pair<Point2d, bool>(sndPoint, true));
-                    smartVerticesRight.push_back(std::pair<Point2d, bool>(nextPoint, false));
-    //                std::cerr << "Adding " << sndPoint << " to right vertices" << std::endl;
-    //                std::cerr << "Adding " << sndPoint << " to right vertices" << std::endl;
-    //                std::cerr << "Adding " << nextPoint << " to right vertices" << std::endl;
-                    _newVertices.push_back(sndPoint);
-                    _newVertices.push_back(sndPoint);
-                } else if (!onLeft && isCutting) {
-                    smartVerticesRight.push_back(std::pair<Point2d, bool>(sndPoint, true));
-                    smartVerticesLeft.push_back(std::pair<Point2d, bool>(sndPoint, true));
-    //                std::cerr << "Adding " << sndPoint << " to right vertices" << std::endl;
-    //                std::cerr << "Adding " << sndPoint << " to left vertices" << std::endl;
-                    _newVertices.push_back(sndPoint);
-                }
-
-                if (isCutting) {
-                    onLeft = !onLeft;
-                }
-                break;
-            }
-            }
-        }
-
-    //    std::cerr << std::endl;
-
-    //    QString mess = "";
-    //    for (const std::pair<Point2d, bool>& p: smartVerticesLeft)
-    //        mess += " ("+QString::number(p.first.getX())+"; "+QString::number(p.first.getY())+" | ("+QString::number(p.second)+"))";
-    //    std::cerr << "Left vertices:" << mess.toStdString() << std::endl;
-
-    //    mess = "";
-    //    for (const std::pair<Point2d, bool>& p: smartVerticesRight)
-    //        mess += " ("+QString::number(p.first.getX())+"; "+QString::number(p.first.getY())+" | ("+QString::number(p.second)+"))";
-    //    std::cerr << "Right vertices:" << mess.toStdString() << std::endl << std::endl;
-
-        computeCuttingSegments();
-
-        PolygonList polygonsOnLeft = splitSmartVertices(smartVerticesLeft);
-        foreach (const Polygon& polygon, polygonsOnLeft)
-            polygons << polygon;
-
-        PolygonList polygonsOnRight = splitSmartVertices(smartVerticesRight);
-        foreach (const Polygon& polygon, polygonsOnRight)
-            polygons << polygon;
+        polygons << cutPolygon(currPolygon, line);
     }
 
     return polygons;
@@ -217,6 +235,11 @@ void GameController::computeCuttingSegments(void) {
     for (unsigned int k = 0; k < _newVertices.size()-1; k += 2) {
         _cuttingSegments.push_back(Segment(_newVertices.at(k), _newVertices.at((k+1)%_newVertices.size())));
     }
+}
+
+void GameController::sliceIt(const Segment& line) {
+    _model->setPolygonList(cutPolygons(line));
+    emit update();
 }
 
 bool GameController::isACuttingSegment(const Segment& segment) const {
@@ -244,7 +267,7 @@ GameController::LineType GameController::computeLineType(const Segment& line) co
     foreach (const Polygon& polygon, polygonList) {
         if (!polygon.isCrossing(line) && !polygon.isPointInside(line.getA())) {
             noCrossing = true;
-        } else if (!polygon.isGoodSegment(line) && polygon.isCrossing(line)) {
+        } else if (polygon.isGoodSegment(line)) {
             goodCrossing = true;
         } else {
             badCrossing = true;
@@ -259,4 +282,15 @@ GameController::LineType GameController::computeLineType(const Segment& line) co
         return GameController::noCrossing;
     else
         return GameController::unknownCrossing;
+}
+
+void GameController::openLevel(const QString& fileName) {
+    clear();
+
+    ParserXML parser(fileName);
+
+    PolygonList polygonList(parser.createPolygonList());
+
+    _model->setPolygonList(polygonList);
+    emit update();
 }

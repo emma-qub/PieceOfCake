@@ -1,49 +1,49 @@
 HEADERS += \
-    Point2d.h \
-    tests.h \
-    Vector2d.h \
-    Polygon.h \
-    Segment.h \
+    AbstractController.h \
+    Commands.h \
+    GameController.h \
+    GameModel.h \
+    GameView.h \
+    Hint.h \
+    LevelDesignerController.h \
+    LevelDesignerTreeItemDelegate.h \
+    LevelDesignerModel.h \
+    LevelDesignerScribbleView.h \
+    LevelDesignerTreeView.h \
+    #MainMenuWidget.h \
     MainWindow.h \
     ParserXML.h \
-    Hint.h \
-    GameView.h \
-    MainMenuWidget.h \
-    PolygonTreeModel.h \
-#    PolygonEditorView.h \
-    PolygonScribbleView.h \
-    TreeModel.h \
+    Point2d.h \
+    Polygon.h \
+    Segment.h \
     TreeItem.h \
-    PolygonTreeView.h \
-    PolygonItemDelegate.h \
-    Commands.h \
-    PolygonController.h \
-    GameController.h \
-    GameModel.h
+    TreeModel.h \
+    Vector2d.h \
+    tests.h
 
 SOURCES += \
-    Point2d.cpp \
-    main.cpp \
-    tests.cpp \
-    Vector2d.cpp \
-    Polygon.cpp \
-    Segment.cpp \
+    AbstractController.cpp \
+    Commands.cpp \
+    GameController.cpp \
+    GameModel.cpp \
+    GameView.cpp \
+    Hint.cpp \
+    LevelDesignerController.cpp \
+    LevelDesignerTreeItemDelegate.cpp \
+    LevelDesignerModel.cpp \
+    LevelDesignerScribbleView.cpp \
+    LevelDesignerTreeView.cpp \
+    #MainMenuWidget.cpp \
     MainWindow.cpp \
     ParserXML.cpp \
-    Hint.cpp \
-    GameView.cpp \
-    MainMenuWidget.cpp \
-    PolygonTreeModel.cpp \
-#    PolygonEditorView.cpp \
-    PolygonScribbleView.cpp \
-    TreeModel.cpp \
+    Point2d.cpp \
+    Polygon.cpp \
+    Segment.cpp \
     TreeItem.cpp \
-    PolygonTreeView.cpp \
-    PolygonItemDelegate.cpp \
-    Commands.cpp \
-    PolygonController.cpp \
-    GameController.cpp \
-    GameModel.cpp
+    TreeModel.cpp \
+    Vector2d.cpp \
+    tests.cpp \
+    main.cpp
 
 CONFIG += c++11
 

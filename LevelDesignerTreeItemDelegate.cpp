@@ -1,11 +1,11 @@
-#include "PolygonItemDelegate.h"
-#include "PolygonTreeModel.h"
+#include "LevelDesignerTreeItemDelegate.h"
+#include "LevelDesignerModel.h"
 
-PolygonItemDelegate::PolygonItemDelegate(QObject* parent) :
+LevelDesignerTreeItemDelegate::LevelDesignerTreeItemDelegate(QObject* parent) :
     QStyledItemDelegate(parent) {
 }
 
-QWidget* PolygonItemDelegate::createEditor(QWidget* parent, const QStyleOptionViewItem& /*option*/, const QModelIndex& index) const {
+QWidget* LevelDesignerTreeItemDelegate::createEditor(QWidget* parent, const QStyleOptionViewItem& /*option*/, const QModelIndex& index) const {
     if ((index.column() != 2 && index.column() != 3) || index.parent() == QModelIndex())
         return NULL;
 
@@ -22,20 +22,20 @@ QWidget* PolygonItemDelegate::createEditor(QWidget* parent, const QStyleOptionVi
     return _editor;
 }
 
-void PolygonItemDelegate::setEditorData(QWidget* /*editor*/, const QModelIndex& index) const {
+void LevelDesignerTreeItemDelegate::setEditorData(QWidget* /*editor*/, const QModelIndex& index) const {
     int value = index.model()->data(index, Qt::EditRole).toInt();
 
     _editor->setValue(value);
 }
 
-void PolygonItemDelegate::updateEditorGeometry(QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex& /*index*/) const {
+void LevelDesignerTreeItemDelegate::updateEditorGeometry(QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex& /*index*/) const {
     editor->setGeometry(option.rect);
 }
 
-void PolygonItemDelegate::updateModel(int value) {
+void LevelDesignerTreeItemDelegate::updateModel(int value) {
     emit moveVertex(_index, value);
 }
 
-void PolygonItemDelegate::dataCommited(QWidget*) {
+void LevelDesignerTreeItemDelegate::dataCommited(QWidget*) {
     emit moveVertex(_index, _editor->value(), true);
 }

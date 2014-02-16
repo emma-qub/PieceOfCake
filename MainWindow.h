@@ -4,9 +4,10 @@
 #include <QtWidgets>
 
 #include "Segment.h"
-#include "PolygonTreeModel.h"
-#include "PolygonTreeView.h"
-#include "PolygonScribbleView.h"
+#include "LevelDesignerController.h"
+#include "LevelDesignerModel.h"
+#include "LevelDesignerTreeView.h"
+#include "LevelDesignerScribbleView.h"
 #include "Commands.h"
 #include "GameController.h"
 #include "GameView.h"
@@ -18,39 +19,39 @@ class MainWindow : public QMainWindow {
 public:
     explicit MainWindow(QWidget* parent = NULL);
 
-    bool confirmErase(void);
-    void initNewDocument(bool neverSavedBefore, const QString& fileName = "");
-
 public slots:
-    void updateSavingState(int index);
-    void newFile(void);
-    void clear(void);
+//    bool confirmErase(void);
+//    void initNewDocument(bool neverSavedBefore, const QString& fileName = "");
+//    void updateSavingState(int index);
+//    void newFile(void);
+//    void clear(void);
     void openFile(void);
-    void saveFile(void);
-    void saveAsFile(void);
-    void saveAndUpdate(void);
+//    void saveFile(void);
+//    void saveAsFile(void);
+//    void saveAndUpdate(void);
     void addPolygon(void);
-    void alignToGrid(void);
+//    void alignToGrid(void);
+//    void updateMenuActions(int);
+//    void updateCurrentController(int currentIndex);
 
 private:
-    QTabWidget* _tabWidget;
-    QWidget* _levelWidget;
+    AbstractController* _currentController;
 
-    PolygonController* _controller;
-    PolygonTreeView* _treeView;
-    PolygonScribbleView* _scribbleView;
-    PolygonTreeModel* _model;
+    QUndoStack* _undoStack;
+    QUndoView* _undoView;
+
+    LevelDesignerController* _levelDesignerController;
+    LevelDesignerTreeView* _levelDesignerTreeView;
+    LevelDesignerScribbleView* _levelDesignerScribbleView;
+    LevelDesignerModel* _levelDesignerModel;
 
     GameController* _gameController;
     GameView* _gameView;
     GameModel* _gameModel;
 
-    QUndoStack* _undoStack;
-    QUndoView* _undoView;
-
-    bool _fileSaved;
-    bool _neverSavedBefore;
-    QString _fileName;
+    QTabWidget* _tabWidget;
+//    QStackedWidget* _stackWidget;
+    QWidget* _levelDesignerWidget;
 
     QAction* _newAction;
     QAction* _openAction;

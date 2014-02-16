@@ -1,9 +1,9 @@
-#include "PolygonTreeModel.h"
+#include "LevelDesignerModel.h"
 
 #include <QDebug>
 #include <QColor>
 
-PolygonTreeModel::PolygonTreeModel(const QStringList& headers, const QString& data, QObject *parent) :
+LevelDesignerModel::LevelDesignerModel(const QStringList& headers, const QString& data, QObject *parent) :
     TreeModel(headers, data, parent),
     _polygonList(),
     _selections() {
@@ -19,32 +19,32 @@ PolygonTreeModel::PolygonTreeModel(const QStringList& headers, const QString& da
     connect(this, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(debug(QModelIndex,QModelIndex)));
 }
 
-PolygonTreeModel::~PolygonTreeModel(void) {
+LevelDesignerModel::~LevelDesignerModel(void) {
 }
 
-void PolygonTreeModel::setPolygonList(const PolygonList& polygonList) {
+void LevelDesignerModel::setPolygonList(const PolygonList& polygonList) {
     foreach (const Polygon& polygon, polygonList) {
         appendPolygon(polygon);
     }
 }
 
-void PolygonTreeModel::clear(void) {
+void LevelDesignerModel::clear(void) {
     removeRows(0, rowCount());
     _polygonList.clear();
 }
 
-bool PolygonTreeModel::polygonHasVertex(int polygonRow) {
+bool LevelDesignerModel::polygonHasVertex(int polygonRow) {
     return (_polygonList.at(polygonRow).getVertices().size() > 1 && hasChildren(index(polygonRow, 0)));
 }
 
-Polygon PolygonTreeModel::polygonFromIndex(const QModelIndex& polygonIndex) {
+Polygon LevelDesignerModel::polygonFromIndex(const QModelIndex& polygonIndex) {
     if (_polygonList.size() > polygonIndex.row())
         return _polygonList.at(polygonIndex.row());
     else
         return Polygon();
 }
 
-Point2d PolygonTreeModel::vertexFromIndex(const QModelIndex& vertexIndex) {
+Point2d LevelDesignerModel::vertexFromIndex(const QModelIndex& vertexIndex) {
     std::vector<Point2d> vertices = polygonFromIndex(vertexIndex.parent()).getVertices();
     if (vertices.size() > static_cast<unsigned int>(vertexIndex.row()))
         return vertices.at(vertexIndex.row());
@@ -52,11 +52,11 @@ Point2d PolygonTreeModel::vertexFromIndex(const QModelIndex& vertexIndex) {
         return Point2d();
 }
 
-bool PolygonTreeModel::appendPolygon(const Polygon& polygon) {
+bool LevelDesignerModel::appendPolygon(const Polygon& polygon) {
     return insertPolygon(rowCount(), polygon);
 }
 
-bool PolygonTreeModel::insertPolygon(int polygonRow, const Polygon& polygon) {
+bool LevelDesignerModel::insertPolygon(int polygonRow, const Polygon& polygon) {
     std::vector<Point2d> vertices = polygon.getVertices();
 
     int r = std::rand()%255;
@@ -82,7 +82,7 @@ bool PolygonTreeModel::insertPolygon(int polygonRow, const Polygon& polygon) {
     return true;
 }
 
-bool PolygonTreeModel::removePolygon(int polygonRow) {
+bool LevelDesignerModel::removePolygon(int polygonRow) {
     _polygonList.removeAt(polygonRow);
 
     bool success = removeRow(polygonRow);
@@ -92,7 +92,7 @@ bool PolygonTreeModel::removePolygon(int polygonRow) {
     return success;
 }
 
-bool PolygonTreeModel::replacePolygon(int polygonRow, const Polygon& polygon) {
+bool LevelDesignerModel::replacePolygon(int polygonRow, const Polygon& polygon) {
     bool res = true;
 
     std::vector<Point2d> vertices = polygon.getVertices();
@@ -105,7 +105,7 @@ bool PolygonTreeModel::replacePolygon(int polygonRow, const Polygon& polygon) {
     return res;
 }
 
-bool PolygonTreeModel::translatePolygon(int polygonRow, const Vector2d& direction) {
+bool LevelDesignerModel::translatePolygon(int polygonRow, const Vector2d& direction) {
     Polygon polygon(_polygonList.at(polygonRow));
     polygon.translate(direction);
 
@@ -121,7 +121,7 @@ bool PolygonTreeModel::translatePolygon(int polygonRow, const Vector2d& directio
 
 
 
-bool PolygonTreeModel::insertVertex(int polygonRow, int vertexRow, const Point2d& vertex, bool exist) {
+bool LevelDesignerModel::insertVertex(int polygonRow, int vertexRow, const Point2d& vertex, bool exist) {
     insertRow(vertexRow, index(polygonRow, 0));
 
     QModelIndex polygonIndex = index(polygonRow, 0);
@@ -141,7 +141,7 @@ bool PolygonTreeModel::insertVertex(int polygonRow, int vertexRow, const Point2d
     return true;
 }
 
-bool PolygonTreeModel::removeVertex(int polygonRow, int vertexRow) {
+bool LevelDesignerModel::removeVertex(int polygonRow, int vertexRow) {
     QModelIndex polygonIndex = index(polygonRow, 0);
     bool result = removeRow(vertexRow, polygonIndex);
 
@@ -153,23 +153,23 @@ bool PolygonTreeModel::removeVertex(int polygonRow, int vertexRow) {
     return result;
 }
 
-bool PolygonTreeModel::replaceVertex(int polygonRow, int vertexRow, const Point2d& vertex) {
+bool LevelDesignerModel::replaceVertex(int polygonRow, int vertexRow, const Point2d& vertex) {
     return removeVertex(polygonRow, vertexRow) && insertVertex(polygonRow, vertexRow, vertex);
 }
 
-void PolygonTreeModel::updatePolygons(void) {
+void LevelDesignerModel::updatePolygons(void) {
     for (int k = 0; k < rowCount(); k++) {
         setData(index(k, 0), "Polygon "+QString::number(k));
         updateVertices(index(k, 0));
     }
 }
 
-void PolygonTreeModel::updateVertices(QModelIndex polygonIndex) {
+void LevelDesignerModel::updateVertices(QModelIndex polygonIndex) {
     for (int k = 0; k < rowCount(polygonIndex); k++) {
         setData(index(k, 1, polygonIndex), QChar(65+k)+QString::number(polygonIndex.row()));
     }
 }
 
-void PolygonTreeModel::debug(QModelIndex,QModelIndex) {
+void LevelDesignerModel::debug(QModelIndex,QModelIndex) {
     qDebug() << "><";
 }

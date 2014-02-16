@@ -1,22 +1,21 @@
-#include "PolygonController.h"
+#include "LevelDesignerController.h"
 #include "ParserXML.h"
 
 #include <QDebug>
 
-PolygonController::PolygonController(PolygonTreeModel *model, QUndoStack* undoStack, QObject* parent) :
-    QObject(parent),
-    _model(model),
-    _undoStack(undoStack) {
+LevelDesignerController::LevelDesignerController(LevelDesignerModel *model, QWidget* tabWidget, QUndoStack* undoStack, QObject* parent) :
+    AbstractController(model, tabWidget, undoStack, parent),
+    _model(model) {
 
     connect(_undoStack, SIGNAL(indexChanged(int)), this, SLOT(emitUpdate(int)));
 }
 
-void PolygonController::addPolygon(int polygonRow, const Polygon& polygon) {
+void LevelDesignerController::addPolygon(int polygonRow, const Polygon& polygon) {
     QUndoCommand* addPolygonCommand = new AddPolygonCommand(_model, polygonRow, polygon, polygonRow, -1);
     _undoStack->push(addPolygonCommand);
 }
 
-void PolygonController::removePolygon(int polygonRow, const Polygon& polygon) {
+void LevelDesignerController::removePolygon(int polygonRow, const Polygon& polygon) {
     int newPolygonRow = polygonRow;
     if (_model->rowCount() == 0) {
         newPolygonRow = -1;
@@ -30,7 +29,7 @@ void PolygonController::removePolygon(int polygonRow, const Polygon& polygon) {
     _undoStack->push(removePolygonCommand);
 }
 
-void PolygonController::movePolygon(int polygonRow, int oldX, int oldY, int newX, int newY, bool pushToStack) {
+void LevelDesignerController::movePolygon(int polygonRow, int oldX, int oldY, int newX, int newY, bool pushToStack) {
     if (pushToStack) {
         QUndoCommand* movePolygonCommand = new MovePolygonCommand(_model, polygonRow, oldX, oldY, newX, newY, polygonRow, -1);
         _undoStack->push(movePolygonCommand);
@@ -43,12 +42,12 @@ void PolygonController::movePolygon(int polygonRow, int oldX, int oldY, int newX
     }
 }
 
-void PolygonController::addVertex(int polygonRow, int vertexRow, const Point2d& vertex) {
+void LevelDesignerController::addVertex(int polygonRow, int vertexRow, const Point2d& vertex) {
     QUndoCommand* addVertexCommand = new AddVertexCommand(_model, polygonRow, vertexRow, vertex, polygonRow, vertexRow);
     _undoStack->push(addVertexCommand);
 }
 
-void PolygonController::removeVertex(int polygonRow, int vertexRow, const Point2d& vertex) {
+void LevelDesignerController::removeVertex(int polygonRow, int vertexRow, const Point2d& vertex) {
     int newVertexRow = vertexRow;
     if (_model->rowCount(_model->index(polygonRow, 0)) == 0) {
         newVertexRow = -1;
@@ -62,7 +61,7 @@ void PolygonController::removeVertex(int polygonRow, int vertexRow, const Point2
     _undoStack->push(removeVertexCommand);
 }
 
-void PolygonController::moveVertex(int polygonRow, int vertexRow, int oldX, int oldY, int newX, int newY, bool pushToStack) {
+void LevelDesignerController::moveVertex(int polygonRow, int vertexRow, int oldX, int oldY, int newX, int newY, bool pushToStack) {
     if (pushToStack) {
         QUndoCommand* moverVertexCommand = new MoveVertexCommand(_model, polygonRow, vertexRow, oldX, oldY, newX, newY, polygonRow, vertexRow);
         _undoStack->push(moverVertexCommand);
@@ -73,14 +72,14 @@ void PolygonController::moveVertex(int polygonRow, int vertexRow, int oldX, int 
     }
 }
 
-void PolygonController::clear(void) {
+void LevelDesignerController::clear(void) {
     _model->clear();
     _undoStack->clear();
     emit updateReset();
     emitUpdate(0);
 }
 
-void PolygonController::saveLevel(const QString& fileName) {
+void LevelDesignerController::saveLevel(const QString& fileName) {
     ParserXML parser;
     parser.initFileName(fileName);
 
@@ -91,7 +90,7 @@ void PolygonController::saveLevel(const QString& fileName) {
     parser.writeXML();
 }
 
-void PolygonController::openLevel(const QString& fileName) {
+void LevelDesignerController::openLevel(const QString& fileName) {
     clear();
 
     ParserXML parser(fileName);
@@ -102,7 +101,7 @@ void PolygonController::openLevel(const QString& fileName) {
     emitUpdate(0);
 }
 
-void PolygonController::alignToGrid(void) {
+void LevelDesignerController::alignToGrid(void) {
     PolygonList polygonList = _model->getPolygonList();
     for (int k = 0; k < _model->rowCount(); ++k) {
         TreeItem* polygonItem = _model->getItem(_model->index(k, 0));
@@ -135,7 +134,7 @@ void PolygonController::alignToGrid(void) {
     }
 }
 
-void PolygonController::emitUpdate(int) {
+void LevelDesignerController::emitUpdate(int) {
     emit selection();
     emit update();
 }

@@ -1,7 +1,7 @@
 #include "Commands.h"
 #include <QDebug>
 
-AddVertexCommand::AddVertexCommand(PolygonTreeModel* model, int polygonRow, int vertexRow, const Point2d& vertex, int selectionPolygonRow, int selectionVertexRow, QUndoCommand* parent) :
+AddVertexCommand::AddVertexCommand(LevelDesignerModel* model, int polygonRow, int vertexRow, const Point2d& vertex, int selectionPolygonRow, int selectionVertexRow, QUndoCommand* parent) :
     QUndoCommand(parent),
     _model(model),
     _polygonRow(polygonRow),
@@ -26,7 +26,7 @@ void AddVertexCommand::redo(void) {
 
 
 
-RemoveVertexCommand::RemoveVertexCommand(PolygonTreeModel* model, int polygonRow, int vertexRow, const Point2d& vertex, int selectionPolygonRow, int selectionVertexRow, QUndoCommand* parent) :
+RemoveVertexCommand::RemoveVertexCommand(LevelDesignerModel* model, int polygonRow, int vertexRow, const Point2d& vertex, int selectionPolygonRow, int selectionVertexRow, QUndoCommand* parent) :
     QUndoCommand(parent),
     _model(model),
     _polygonRow(polygonRow),
@@ -50,7 +50,7 @@ void RemoveVertexCommand::redo(void) {
 
 
 
-AddPolygonCommand::AddPolygonCommand(PolygonTreeModel* model, int polygonRow, const Polygon& polygon, int selectionPolygonRow, int selectionVertexRow, QUndoCommand* parent) :
+AddPolygonCommand::AddPolygonCommand(LevelDesignerModel* model, int polygonRow, const Polygon& polygon, int selectionPolygonRow, int selectionVertexRow, QUndoCommand* parent) :
     QUndoCommand(parent),
     _model(model),
     _polygonRow(polygonRow),
@@ -73,7 +73,7 @@ void AddPolygonCommand::redo(void) {
 
 
 
-RemovePolygonCommand::RemovePolygonCommand(PolygonTreeModel* model, int polygonRow, const Polygon& polygon, int selectionPolygonRow, int selectionVertexRow, QUndoCommand* parent) :
+RemovePolygonCommand::RemovePolygonCommand(LevelDesignerModel* model, int polygonRow, const Polygon& polygon, int selectionPolygonRow, int selectionVertexRow, QUndoCommand* parent) :
     QUndoCommand(parent),
     _model(model),
     _polygonRow(polygonRow),
@@ -96,7 +96,7 @@ void RemovePolygonCommand::redo(void) {
 
 
 
-MovePolygonCommand::MovePolygonCommand(PolygonTreeModel* model, int polygonRow, int oldX, int oldY, int newX, int newY, int selectionPolygonRow, int selectionVertexRow, QUndoCommand* parent) :
+MovePolygonCommand::MovePolygonCommand(LevelDesignerModel* model, int polygonRow, int oldX, int oldY, int newX, int newY, int selectionPolygonRow, int selectionVertexRow, QUndoCommand* parent) :
     QUndoCommand(parent),
     _model(model),
     _polygonRow(polygonRow),
@@ -119,7 +119,7 @@ void MovePolygonCommand::redo() {
 
 
 
-MoveVertexCommand::MoveVertexCommand(PolygonTreeModel* model, int polygonRow, int vertexRow, int oldX, int oldY, int newX, int newY, int selectionPolygonRow, int selectionVertexRow, QUndoCommand* parent) :
+MoveVertexCommand::MoveVertexCommand(LevelDesignerModel* model, int polygonRow, int vertexRow, int oldX, int oldY, int newX, int newY, int selectionPolygonRow, int selectionVertexRow, QUndoCommand* parent) :
     QUndoCommand(parent),
     _model(model),
     _polygonRow(polygonRow),

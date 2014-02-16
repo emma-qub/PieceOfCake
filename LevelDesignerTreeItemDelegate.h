@@ -5,11 +5,11 @@
 #include <QPainter>
 #include <QtWidgets>
 
-class PolygonItemDelegate : public QStyledItemDelegate {
+class LevelDesignerTreeItemDelegate : public QStyledItemDelegate {
     Q_OBJECT
 
 public:
-    PolygonItemDelegate(QObject* parent = 0);
+    LevelDesignerTreeItemDelegate(QObject* parent = 0);
 
     virtual QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index) const;
 

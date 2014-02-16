@@ -1,11 +1,11 @@
-#include "PolygonScribbleView.h"
+#include "LevelDesignerScribbleView.h"
 #include "Polygon.h"
 #include "Commands.h"
 
-const int PolygonScribbleView::PEN_WIDTH = 7;
-const QColor PolygonScribbleView::NOT_SELECTED_COLOR = QColor(0xCCCCCC);
+const int LevelDesignerScribbleView::PEN_WIDTH = 7;
+const QColor LevelDesignerScribbleView::NOT_SELECTED_COLOR = QColor(0xCCCCCC);
 
-PolygonScribbleView::PolygonScribbleView(PolygonController* controller, QWidget* parent) :
+LevelDesignerScribbleView::LevelDesignerScribbleView(LevelDesignerController* controller, QWidget* parent) :
     QWidget(parent),
     _model(0),
     _image(),
@@ -27,7 +27,6 @@ PolygonScribbleView::PolygonScribbleView(PolygonController* controller, QWidget*
     _currOldY(-1) {
 
     resize(381, 441);
-//    setFixedSize(381, 441);
 
     setMouseTracking(true);
 
@@ -35,11 +34,11 @@ PolygonScribbleView::PolygonScribbleView(PolygonController* controller, QWidget*
     connect(_controller, SIGNAL(updateReset()), this, SLOT(resetValues()));
 }
 
-void PolygonScribbleView::setModel(PolygonTreeModel* model) {
+void LevelDesignerScribbleView::setModel(LevelDesignerModel* model) {
     _model = model;
 }
 
-void PolygonScribbleView::mouseMoveEvent(QMouseEvent* event) {
+void LevelDesignerScribbleView::mouseMoveEvent(QMouseEvent* event) {
     _movingVertex = (event->buttons() == Qt::LeftButton && _nearToVertex);
     _movingPolygon = (event->buttons() == Qt::LeftButton && _nearToBarycenter);
 
@@ -77,7 +76,7 @@ void PolygonScribbleView::mouseMoveEvent(QMouseEvent* event) {
         _nearToBarycenter = false;
         Point2d barycenter;
         if (_model->rowCount(currIndex) > 2) {
-//            qDebug() << "Compute polygon barycenter from PolygonScribbleView::mouseMoveEvent";
+//            qDebug() << "Compute polygon barycenter from LevelDesignerScribbleView::mouseMoveEvent";
             barycenter = currPolygon.barycenter();
             _nearToBarycenter = (Point2d::distance(currPos, barycenter) < 20);
         }
@@ -149,7 +148,7 @@ void PolygonScribbleView::mouseMoveEvent(QMouseEvent* event) {
     }
 }
 
-void PolygonScribbleView::mouseReleaseEvent(QMouseEvent* event) {
+void LevelDesignerScribbleView::mouseReleaseEvent(QMouseEvent* event) {
     if (_model->rowCount() < 1)
         return;
 
@@ -200,7 +199,7 @@ void PolygonScribbleView::mouseReleaseEvent(QMouseEvent* event) {
         return;
     } else if (_movingPolygon) {
         Polygon polygon = _model->polygonFromIndex(polygonIndex);
-//        qDebug() << "Compute polygon barycenter from PolygonScribbleView::mouseReleaseEvent";
+//        qDebug() << "Compute polygon barycenter from LevelDesignerScribbleView::mouseReleaseEvent";
         Point2d barycenter = polygon.barycenter();
         if (barycenter.getX() != _beforeMovingPolygonX || barycenter.getY() != _beforeMovingPolygonY) {
             _controller->movePolygon(_currPolygonRow, barycenter.getX(), barycenter.getY(), _beforeMovingPolygonX, _beforeMovingPolygonY, false);
@@ -214,7 +213,7 @@ void PolygonScribbleView::mouseReleaseEvent(QMouseEvent* event) {
     }
 }
 
-void PolygonScribbleView::mousePressEvent(QMouseEvent* event) {
+void LevelDesignerScribbleView::mousePressEvent(QMouseEvent* event) {
     if (event->buttons() == Qt::LeftButton && _nearToVertex) {
         QPoint pos = mapToGlobal(QPoint(_beforeMovingVertexX, _beforeMovingVertexY));
         QCursor::setPos(pos);
@@ -222,7 +221,7 @@ void PolygonScribbleView::mousePressEvent(QMouseEvent* event) {
     }
 }
 
-void PolygonScribbleView::paintEvent(QPaintEvent* event) {
+void LevelDesignerScribbleView::paintEvent(QPaintEvent* event) {
     QPainter painter(this);
     QRect dirtyRect = event->rect();
     painter.drawImage(dirtyRect, _image, dirtyRect);
@@ -230,7 +229,7 @@ void PolygonScribbleView::paintEvent(QPaintEvent* event) {
         drawFromModel();
 }
 
-void PolygonScribbleView::resizeEvent(QResizeEvent* event) {
+void LevelDesignerScribbleView::resizeEvent(QResizeEvent* event) {
     if (width() > _image.width() || height() > _image.height()) {
         int newWidth = qMax(width() + 128, _image.width());
         int newHeight = qMax(height() + 128, _image.height());
@@ -240,7 +239,7 @@ void PolygonScribbleView::resizeEvent(QResizeEvent* event) {
     QWidget::resizeEvent(event);
 }
 
-void PolygonScribbleView::resizeImage(QImage* image, const QSize& newSize) {
+void LevelDesignerScribbleView::resizeImage(QImage* image, const QSize& newSize) {
     if (image->size() == newSize)
         return;
 
@@ -251,43 +250,43 @@ void PolygonScribbleView::resizeImage(QImage* image, const QSize& newSize) {
     *image = newImage;
 }
 
-void PolygonScribbleView::setVertex(Point2d& vertex, const QModelIndex& vertexIndex, int value) const {
+void LevelDesignerScribbleView::setVertex(Point2d& vertex, const QModelIndex& vertexIndex, int value) const {
     if (vertexIndex.column() == 2)
         vertex.setX(value);
     else if (vertexIndex.column() == 3)
         vertex.setY(value);
     else
-        qDebug() << "Error within PolygonScribbleView::setVertex: column not editable.";
+        qDebug() << "Error within LevelDesignerScribbleView::setVertex: column not editable.";
 }
 
-void PolygonScribbleView::setSelectionModel(QItemSelectionModel* selectionModel) {
+void LevelDesignerScribbleView::setSelectionModel(QItemSelectionModel* selectionModel) {
     _selectionModel = selectionModel;
     connect(_selectionModel, SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(currentChanged(QModelIndex,QModelIndex)));
 }
 
-void PolygonScribbleView::drawPoint(const QPoint& point, const QColor& color) {
+void LevelDesignerScribbleView::drawPoint(const QPoint& point, const QColor& color) {
     QPainter painter(&_image);
     painter.setPen(QPen(color, PEN_WIDTH, Qt::SolidLine, Qt::RoundCap));
     painter.drawPoint(point);
 }
 
-void PolygonScribbleView::drawLine(const QPoint& a, const QPoint& b, const QColor& color) {
+void LevelDesignerScribbleView::drawLine(const QPoint& a, const QPoint& b, const QColor& color) {
     QPainter painter(&_image);
     painter.setPen(QPen(color, PEN_WIDTH/2));
     painter.drawLine(a, b);
 }
 
-void PolygonScribbleView::drawText(const QString& text, const QPoint& position) {
+void LevelDesignerScribbleView::drawText(const QString& text, const QPoint& position) {
     QPainter painter(&_image);
     painter.drawText(position, text);
 }
 
-void PolygonScribbleView::drawGrid(void) {
+void LevelDesignerScribbleView::drawGrid(void) {
     QPainter painter(&_image);
     painter.setPen(QPen(Qt::gray, 1));
 
     int caseSize = 50;
-    int xMin = 5, xMax = 455;
+    int xMin = 5, xMax = 755;
     int yMin = 5, yMax = 655;
     for (int i = xMin; i <= xMax; i += caseSize) {
         painter.drawLine(QPoint(i, yMin), QPoint(i, yMax));
@@ -297,7 +296,7 @@ void PolygonScribbleView::drawGrid(void) {
     }
 }
 
-void PolygonScribbleView::drawPolygon(const QModelIndex& polygonIndex, const QModelIndex& vertexIndex, int value, const QColor& color) {
+void LevelDesignerScribbleView::drawPolygon(const QModelIndex& polygonIndex, const QModelIndex& vertexIndex, int value, const QColor& color) {
     if (!polygonIndex.isValid()) {
         qDebug() << "Polygon index invalid";
         return;
@@ -336,13 +335,13 @@ void PolygonScribbleView::drawPolygon(const QModelIndex& polygonIndex, const QMo
 
     if (polygonIndex.isValid() && _model->rowCount(polygonIndex) > 2) {
         Polygon polygon(_model->polygonFromIndex(polygonIndex));
-//        qDebug() << "Compute polygon barycenter from PolygonScribbleView::drawPolygon";
+//        qDebug() << "Compute polygon barycenter from LevelDesignerScribbleView::drawPolygon";
         Point2d barycenter(polygon.barycenter());
         drawPoint(QPoint(barycenter.getX(), barycenter.getY()), color);
     }
 }
 
-void PolygonScribbleView::drawFromModel(const QModelIndex& vertexIndex, int value) {
+void LevelDesignerScribbleView::drawFromModel(const QModelIndex& vertexIndex, int value) {
     clearImage();
     drawGrid();
 
@@ -379,26 +378,26 @@ void PolygonScribbleView::drawFromModel(const QModelIndex& vertexIndex, int valu
     update();
 }
 
-void PolygonScribbleView::clearImage(void) {
+void LevelDesignerScribbleView::clearImage(void) {
     _image.fill(Qt::white);
 }
 
-//void PolygonScribbleView::newPolygon(void) {
+//void LevelDesignerScribbleView::newPolygon(void) {
 //    _model->appendPolygon(Polygon());
 //    QModelIndex currIndex = _model->index(_model->rowCount()-1, 0);
 //    _selectionModel->setCurrentIndex(currIndex, QItemSelectionModel::ClearAndSelect);
 //}
 
-void PolygonScribbleView::updateViewNotModel(QModelIndex vertexIndex, int value) {
+void LevelDesignerScribbleView::updateViewNotModel(QModelIndex vertexIndex, int value) {
     drawFromModel(vertexIndex, value);
 }
 
-void PolygonScribbleView::currentChanged(QModelIndex currentIndex, QModelIndex previousIndex) {
+void LevelDesignerScribbleView::currentChanged(QModelIndex currentIndex, QModelIndex previousIndex) {
     if ((currentIndex.parent() == QModelIndex()) || (currentIndex.parent() != QModelIndex() && currentIndex.parent() != previousIndex.parent()))
         drawFromModel();
 }
 
-void PolygonScribbleView::resetValues(void) {
+void LevelDesignerScribbleView::resetValues(void) {
     setCursor(Qt::ArrowCursor);
     _isStuck = false;
     _nearToVertex = false;

@@ -25,11 +25,11 @@ protected:
 public:
     void resizeImage(QImage* image, const QSize& newSize);
     void drawLineTo(const QPoint& endPoint);
-    void drawLine(const QPoint& begin, const QPoint& end, const QColor &color = Qt::black);
-    void drawPolygon(void);
+    void drawLine(const QPoint& begin, const QPoint& end, const QColor &color = Qt::black, Qt::PenStyle penStyle = Qt::SolidLine);
     void drawText(const QPoint& position, const QString& text, const QColor &color = QColor(0x777700));
 
 public slots:
+    void drawFromModel(void);
     void clearImage(void);
 
 signals:

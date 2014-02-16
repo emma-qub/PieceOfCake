@@ -9,12 +9,12 @@
 
 typedef QList<Polygon> PolygonList;
 
-class  PolygonTreeModel : public TreeModel {
+class  LevelDesignerModel : public TreeModel {
     Q_OBJECT
 
 public:
-    explicit PolygonTreeModel(const QStringList& headers = QStringList(), const QString& data = QString(), QObject* parent = 0);
-    virtual ~ PolygonTreeModel(void);
+    explicit LevelDesignerModel(const QStringList& headers = QStringList(), const QString& data = QString(), QObject* parent = 0);
+    virtual ~ LevelDesignerModel(void);
 
     void setPolygonList(const PolygonList& polygonList);
     PolygonList getPolygonList(void) const { return _polygonList; }

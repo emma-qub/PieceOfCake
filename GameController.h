@@ -1,11 +1,11 @@
 #ifndef GAMECONTROLLER_HXX
 #define GAMECONTROLLER_HXX
 
-#include <QObject>
+#include "AbstractController.h"
 
 #include "GameModel.h"
 
-class GameController : public QObject {
+class GameController : public AbstractController {
   Q_OBJECT
 
 public:
@@ -16,21 +16,28 @@ public:
     unknownCrossing
   };
 
-  GameController(GameModel* model, QObject* parent = 0);
+  GameController(GameModel* model, QWidget* tabWidget, QUndoStack* undoStack, QObject* parent = 0);
 
   PolygonList splitSmartVertices(const std::vector<std::pair<Point2d, bool>>& smartVertices) const;
+  PolygonList cutPolygon(const Polygon& currPolygon, const Segment& line);
   PolygonList cutPolygons(const Segment& line);
   void computeCuttingSegments(void);
+  void sliceIt(const Segment& line);
+
   bool isACuttingSegment(const Segment& segment) const;
 
   inline std::vector<Segment> getCuttingSegments(void) { return _cuttingSegments; }
-  inline void clear(void) { _newVertices.clear(); _cuttingSegments.clear(); }
 
   LineType computeLineType(const Segment& line) const;
-  void openLevel(const QString& fileName);
+
+public slots:
+  inline virtual void clear(void) { AbstractController::clear(); _newVertices.clear(); _cuttingSegments.clear(); }
+  virtual void openLevel(const QString& fileName);
+  virtual void saveLevel(const QString& fileName) { Q_UNUSED(fileName) }
 
 signals:
   void updateLine(LineType);
+  void update(void);
 
 private:
   GameModel* _model;

@@ -3,10 +3,10 @@
 
 #include <QtWidgets>
 
-#include "PolygonTreeModel.h"
-#include "PolygonController.h"
+#include "LevelDesignerModel.h"
+#include "LevelDesignerController.h"
 
-class PolygonScribbleView :public QWidget {
+class LevelDesignerScribbleView :public QWidget {
     Q_OBJECT
 
 public:
@@ -50,10 +50,10 @@ public:
         Yellow3 = 0xD7E71C
     };
 
-    PolygonScribbleView(PolygonController* controller, QWidget* parent = 0);
+    LevelDesignerScribbleView(LevelDesignerController* controller, QWidget* parent = 0);
 
-    PolygonTreeModel* model() const { return _model; }
-    void setModel(PolygonTreeModel *model);
+    LevelDesignerModel* model() const { return _model; }
+    void setModel(LevelDesignerModel *model);
     void setSelectionModel(QItemSelectionModel* selectionModel);
 
 protected:
@@ -80,12 +80,12 @@ public slots:
     void resetValues(void);
 
 protected:
-    PolygonTreeModel* _model;
+    LevelDesignerModel* _model;
     QImage _image;
     bool _hasToDraw;
     QItemSelectionModel* _selectionModel;
     QUndoStack* _undoStack;
-    PolygonController* _controller;
+    LevelDesignerController* _controller;
 
     bool _isMagnetic;
     bool _isStuck;

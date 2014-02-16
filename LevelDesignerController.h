@@ -1,16 +1,17 @@
 #ifndef POLYGONCONTROLLER_H
 #define POLYGONCONTROLLER_H
 
-#include "PolygonTreeModel.h"
+#include "AbstractController.h"
+#include "LevelDesignerModel.h"
 #include "Commands.h"
-#include <QUndoStack>
+
 #include <QPoint>
 
-class PolygonController : public QObject {
+class LevelDesignerController : public AbstractController {
     Q_OBJECT
 
 public:
-    PolygonController(PolygonTreeModel* model, QUndoStack* undoStack, QObject* parent = 0);
+    LevelDesignerController(LevelDesignerModel* model, QWidget* tabWidget, QUndoStack* undoStack, QObject* parent = 0);
 
     void initPolygon(void);
 
@@ -25,12 +26,10 @@ public:
 
     void clear(void);
 
+public slots:
     void saveLevel(const QString& fileName);
     void openLevel(const QString& fileName);
-
     void alignToGrid(void);
-
-public slots:
     void emitUpdate(int stackIndex);
 
 signals:
@@ -38,9 +37,8 @@ signals:
     void updateReset(void);
     void selection(void);
 
-private:
-    PolygonTreeModel* _model;
-    QUndoStack* _undoStack;
+protected:
+    LevelDesignerModel* _model;
 };
 
 #endif // POLYGONCONTROLLER_H

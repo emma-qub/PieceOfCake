@@ -6,7 +6,7 @@
 #include "Point2d.h"
 #include "Vector2d.h"
 #include "Polygon.h"
-#include "PolygonTreeModel.h"
+#include "LevelDesignerModel.h"
 #include "ParserXML.h"
 
 class Test {

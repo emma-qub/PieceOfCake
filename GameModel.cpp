@@ -1,4 +1,5 @@
 #include "GameModel.h"
+#include <QDebug>
 
 GameModel::GameModel(QObject* parent) :
   QStandardItemModel(parent) {
@@ -26,30 +27,29 @@ void GameModel::populate(void) {
 }
 
 void GameModel::insertPolygon(int polygonRow, const Polygon& polygon) {
-  // Get polygon index
-  QModelIndex polygonIndex = index(polygonRow, 0);
+  int r = std::rand()%255;
+  int g = std::rand()%255;
+  int b = std::rand()%255;
+  QColor randomColor(r, g, b);
+
+  QStandardItem* polygonItem = new QStandardItem("Polygon"+QString::number(polygonRow));
+  polygonItem->setData(randomColor, Qt::DecorationRole);
+  insertRow(polygonRow, polygonItem);
 
   // Add every vertex
   std::vector<Point2d> vertices = polygon.getVertices();
   for (const Point2d& vertex: vertices) {
-    insertVertex(polygonRow, rowCount(polygonIndex), vertex);
+    insertVertex(polygonRow, rowCount(index(polygonRow, 0)), vertex);
   }
 }
 
 void GameModel::insertVertex(int polygonRow, int vertexRow, const Point2d& vertex) {
-  // Get polygon index
-  QModelIndex polygonIndex = index(polygonRow, 0);
-
   // Insert a row to store vertex
-  insertRow(vertexRow, polygonIndex);
-
-  // Get vertex index
-  QModelIndex vertexIndex = index(vertexRow, 0, polygonIndex);
+  QStandardItem* vertexItem = new QStandardItem("Vertex"+QString::number(vertexRow));
+  item(polygonRow, 0)->insertRow(vertexRow, vertexItem);
 
   // Insert two rows to store x and y coordinates
-  insertRows(0, 2, vertexIndex);
-
-  // Insert cooridnates
-  setData(index(0, 0, vertexIndex), QString::number(vertex.getX()));
-  setData(index(1, 0, vertexIndex), QString::number(vertex.getY()));
+  QStandardItem* xItem = new QStandardItem(QString::number(vertex.getX()));
+  QStandardItem* yItem = new QStandardItem(QString::number(vertex.getY()));
+  vertexItem->insertRows(0, QList<QStandardItem*>() << xItem << yItem);
 }

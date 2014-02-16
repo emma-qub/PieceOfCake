@@ -3,17 +3,17 @@
 
 #include <QTreeView>
 #include <QUndoStack>
-#include "PolygonTreeModel.h"
-#include "PolygonController.h"
-#include "PolygonItemDelegate.h"
+#include "LevelDesignerModel.h"
+#include "LevelDesignerController.h"
+#include "LevelDesignerTreeItemDelegate.h"
 
-class PolygonTreeView : public QTreeView {
+class LevelDesignerTreeView : public QTreeView {
     Q_OBJECT
 
 public:
-    PolygonTreeView(PolygonController* controller, QWidget* parent = 0);
+    LevelDesignerTreeView(LevelDesignerController* controller, QWidget* parent = 0);
 
-    virtual void setModel(PolygonTreeModel* model);
+    virtual void setModel(LevelDesignerModel* model);
     QAbstractItemModel* model() const { return _model; }
 
     virtual void keyPressEvent(QKeyEvent* event);
@@ -29,9 +29,9 @@ signals:
 
 protected:
     QUndoStack* _undoStack;
-    PolygonTreeModel* _model;
-    PolygonController* _controller;
-    PolygonItemDelegate* _delegate;
+    LevelDesignerModel* _model;
+    LevelDesignerController* _controller;
+    LevelDesignerTreeItemDelegate* _delegate;
     int _oldX;
     int _oldY;
 };

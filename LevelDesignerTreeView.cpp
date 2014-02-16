@@ -1,15 +1,15 @@
-#include "PolygonTreeView.h"
-#include "PolygonItemDelegate.h"
-#include "PolygonTreeModel.h"
+#include "LevelDesignerTreeView.h"
+#include "LevelDesignerTreeItemDelegate.h"
+#include "LevelDesignerModel.h"
 #include "Commands.h"
 
-PolygonTreeView::PolygonTreeView(PolygonController* controller, QWidget* parent) :
+LevelDesignerTreeView::LevelDesignerTreeView(LevelDesignerController* controller, QWidget* parent) :
     QTreeView(parent),
     _controller(controller),
     _oldX(-1),
     _oldY(-1) {
 
-    _delegate = new PolygonItemDelegate;
+    _delegate = new LevelDesignerTreeItemDelegate;
     setItemDelegate(_delegate);
 
     setStyleSheet("QTreeView:branch { border-image: url(none.png); }");
@@ -22,7 +22,7 @@ PolygonTreeView::PolygonTreeView(PolygonController* controller, QWidget* parent)
     setFixedWidth(400);
 }
 
-void PolygonTreeView::setModel(PolygonTreeModel* model) {
+void LevelDesignerTreeView::setModel(LevelDesignerModel* model) {
     QTreeView::setModel(model);
     _model = model;
 
@@ -35,7 +35,7 @@ void PolygonTreeView::setModel(PolygonTreeModel* model) {
     connect(_model, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(debugDataChanged(QModelIndex,QModelIndex)));
 }
 
-void PolygonTreeView::keyPressEvent(QKeyEvent* event) {
+void LevelDesignerTreeView::keyPressEvent(QKeyEvent* event) {
     if (event->key() == Qt::Key_Delete) {
 
         QModelIndex polygonIndex;
@@ -43,7 +43,7 @@ void PolygonTreeView::keyPressEvent(QKeyEvent* event) {
 
         QModelIndex currIndex = currentIndex();
         if (!currIndex.isValid()) {
-            qDebug() << "Error within PolygonTreeView::keyPressEvent: index is not valid";
+            qDebug() << "Error within LevelDesignerTreeView::keyPressEvent: index is not valid";
             return;
         }
 
@@ -64,13 +64,13 @@ void PolygonTreeView::keyPressEvent(QKeyEvent* event) {
         } else if (fstData.startsWith("Polygon ")) {
             _controller->removePolygon(currIndex.row(), _model->polygonFromIndex(currIndex));
         } else {
-            qDebug() << "Error within PolygonTreeView::keyPressEvent: cannot know whether it's a polygon or a vertex";
+            qDebug() << "Error within LevelDesignerTreeView::keyPressEvent: cannot know whether it's a polygon or a vertex";
             return;
         }
     }
 }
 
-void PolygonTreeView::movingVertex(QModelIndex vertexIndex, int value, bool editModel) {
+void LevelDesignerTreeView::movingVertex(QModelIndex vertexIndex, int value, bool editModel) {
     int column = vertexIndex.column();
     TreeItem* currVertex = _model->getItem(vertexIndex);
 
@@ -87,7 +87,7 @@ void PolygonTreeView::movingVertex(QModelIndex vertexIndex, int value, bool edit
         newX = _oldX;
         newY = value;
     } else
-        qDebug() << "Error: cannot edit this column within PolygonTreeView::movingVertex";
+        qDebug() << "Error: cannot edit this column within LevelDesignerTreeView::movingVertex";
 
     if (editModel) {
         _controller->moveVertex(vertexIndex.parent().row(), vertexIndex.row(), _oldX, _oldY, newX, newY);
@@ -102,16 +102,16 @@ void PolygonTreeView::movingVertex(QModelIndex vertexIndex, int value, bool edit
     }
 }
 
-void PolygonTreeView::debugDataChanged(QModelIndex, QModelIndex) {
+void LevelDesignerTreeView::debugDataChanged(QModelIndex, QModelIndex) {
     qDebug() << "debugDataChanged";
 }
 
-void PolygonTreeView::updateAll(void) {
+void LevelDesignerTreeView::updateAll(void) {
     collapseAll();
     expandAll();
 }
 
-void PolygonTreeView::selection(void) {
+void LevelDesignerTreeView::selection(void) {
     QStack<QPair<int, int>> selections = _model->getSelections();
 
     if (selections.isEmpty()) {

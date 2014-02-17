@@ -53,10 +53,11 @@ public:
     float createFloat(const QDomElement& element, const QString& attributeName);
     Point2d createPoint(const QDomElement& element);
     Segment createSegment(const QDomElement& element);
-    int createPartsCount(const QDomElement& element);
-    int createLinesCount(const QDomElement& element);
-    int createStarsCount(const QDomElement& element);
-    int createTolerances(const QDomElement& element);
+    int getIntValue(const QString& tagName, const QString& attributeName = "value");
+    int getPartsCount(void);
+    int getLinesCount(void);
+    int getStarsCount(void);
+    int getTolerances(void);
     Polygon createPolygon(const QDomElement& element);
     Hint createHint(const QDomElement& element);
 

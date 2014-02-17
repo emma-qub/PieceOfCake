@@ -17,12 +17,18 @@ public:
   inline PolygonList getPolygonList(void) const { return _polygonList; }
   void setPolygonList(const PolygonList& polygonList);
 
+  inline int getPoligonsCount(void) const {return _polygonsCount; }
+
+  inline QColor getColor(void) const { return _color; }
+
   void populate(void);
   void insertPolygon(int polygonRow, const Polygon& polygon);
   void insertVertex(int polygonRow, int vertexRow, const Point2d& vertex);
 
 private:
+  QColor _color;
   PolygonList _polygonList;
+  int _polygonsCount;
 };
 
 #endif // GAMEMODEL_HXX

@@ -236,32 +236,29 @@ Segment ParserXML::createSegment(const QDomElement& element) {
     return Segment(createPoint(bounds.at(0).toElement()), createPoint(bounds.at(1).toElement()));
 }
 
-int ParserXML::createPartsCount(const QDomElement& element) {
-    if (element.tagName() != "partscount")
-        return -1;
+int ParserXML::getIntValue(const QString& tagName, const QString& attributeName) {
+  QDomNodeList nodeList = _doc.elementsByTagName(tagName);
+  if (nodeList.size() != 1)
+    return -1;
 
-    return createInt(element, "value");
+  const QDomElement& element = nodeList.at(0).toElement();
+  return createInt(element, attributeName);
 }
 
-int ParserXML::createLinesCount(const QDomElement& element) {
-    if (element.tagName() != "linescount")
-        return -1;
-
-    return createInt(element, "value");
+int ParserXML::getPartsCount(void) {
+  return getIntValue("partscount");
 }
 
-int ParserXML::createStarsCount(const QDomElement& element) {
-    if (element.tagName() != "starscount")
-        return -1;
-
-    return createInt(element, "value");
+int ParserXML::getLinesCount(void) {
+  return getIntValue("linescount");
 }
 
-int ParserXML::createTolerances(const QDomElement& element) {
-    if (element.tagName() != "tolerances")
-        return -1;
+int ParserXML::getStarsCount(void) {
+  return getIntValue("starscount");
+}
 
-    return createInt(element, "value");
+int ParserXML::getTolerances(void) {
+  return getIntValue("tolerances");
 }
 
 Polygon ParserXML::createPolygon(const QDomElement& element) {
@@ -306,7 +303,6 @@ HintList ParserXML::createHintList(void) {
 
     return hintList;
 }
-
 
 ParserXML& ParserXML::operator=(const ParserXML& parser) {
     _xmlFileName = parser._xmlFileName;

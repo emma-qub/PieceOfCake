@@ -1,9 +1,5 @@
 #include "GameView.h"
 
-//#include <QPropertyAnimation>
-
-
-
 GameView::GameView(GameController* controller, QWidget* parent) :
     QWidget(parent),
     _scribbling(false),
@@ -80,8 +76,6 @@ void GameView::mouseReleaseEvent(QMouseEvent* event) {
     }
 }
 
-
-
 void GameView::paintEvent(QPaintEvent* event) {
     QPainter painter(this);
     QRect dirtyRect = event->rect();
@@ -126,10 +120,8 @@ void GameView::drawFromModel(void) {
 
     PolygonList polygons = _model->getPolygonList();
 
-    int i = 0;
     for (const Polygon& polygon: polygons) {
-        QColor color(_model->data(_model->index(i, 0), Qt::DecorationRole).value<QColor>());
-        i++;
+        QColor color(_model->getColor());
 
         std::vector<Point2d> vertices = polygon.getVertices();
         for (unsigned k = 0; k < vertices.size(); k++) {

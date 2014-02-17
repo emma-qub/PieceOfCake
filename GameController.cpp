@@ -1,11 +1,17 @@
 #include "ParserXML.h"
 #include "GameController.h"
 
+#include <QMessageBox>
+
 GameController::GameController(GameModel* model, QWidget* tabWidget, QUndoStack* undoStack, QObject* parent) :
   AbstractController(model, tabWidget, undoStack, parent),
   _model(model),
   _newVertices(),
-  _cuttingSegments() {
+  _cuttingSegments(),
+  _linesCount(-1),
+  _partsCount(-1),
+  _linesDrawn(-1),
+  _polygonsCount(-1) {
 
 }
 
@@ -23,30 +29,17 @@ PolygonList GameController::splitSmartVertices(const std::vector<std::pair<Point
         std::vector<std::pair<Point2d, bool>> smartVerticesMutable;
         unsigned int smartVerticesCount = smartVerticesTmp.size();
 
-
-//        QString mess = "";
-//        for (const std::pair<Point2d, bool>& p: smartVerticesTmp)
-//            mess += " ("+QString::number(p.first.getX())+"; "+QString::number(p.first.getY())+" "+QString::number(p.second)+") ";
-//        std::cerr << "## " << mess.toStdString() << std::endl << std::endl;
-
-
         for (unsigned int k = 0; k < smartVerticesCount; k++) {
             std::pair<Point2d, bool> fstSmartVertex = smartVerticesTmp.at(k);
 
-//            std::cerr << "Seek next new vertex: " << std::boolalpha << seekNextNewVertex << std::endl;
 
             if (fstSmartVertex.second && seekNextNewVertex) {
                 Segment segment(prevNewVertex, fstSmartVertex.first);
-//                std::cerr << "Segment: " << segment << std::endl;
-                if (isACuttingSegment(segment)) {
-//                    std::cerr << "Is a cutting segment: true" << std::endl;
+               if (isACuttingSegment(segment)) {
                     polygon << fstSmartVertex.first;
-//                    std::cerr << "Adding " << fstSmartVertex.first << " to polygon" << std::endl;
                     seekNextNewVertex = false;
                 } else {
-//                    std::cerr << "Is a cutting segment: false" << std::endl;
                     smartVerticesMutable.push_back(fstSmartVertex);
-//                    std::cerr << "Adding " << fstSmartVertex.first << " to smart vertices" << std::endl;
                 }
             } else if (fstSmartVertex.second && !seekNextNewVertex) {
                 if (k != 0) {
@@ -54,13 +47,10 @@ PolygonList GameController::splitSmartVertices(const std::vector<std::pair<Point
                     prevNewVertex = fstSmartVertex.first;
                 }
                 polygon << fstSmartVertex.first;
-//                std::cerr << "Adding " << fstSmartVertex.first << " to polygon" << std::endl;
             } else if (!fstSmartVertex.second && seekNextNewVertex) {
                 smartVerticesMutable.push_back(fstSmartVertex);
-//                std::cerr << "Adding " << fstSmartVertex.first << " to smart vertices" << std::endl;
             } else if (!fstSmartVertex.second && !seekNextNewVertex) {
                 polygon << fstSmartVertex.first;
-//                std::cerr << "Adding " << fstSmartVertex.first << " to polygon" << std::endl;
             }
         }
 
@@ -92,7 +82,6 @@ PolygonList GameController::cutPolygon(const Polygon& currPolygon, const Segment
 
     if (!currPolygon.isCrossing(line)) {
         polygons << currPolygon;
-        std::cerr << currPolygon << std::endl;
         return polygons;
     }
 
@@ -103,83 +92,59 @@ PolygonList GameController::cutPolygon(const Polygon& currPolygon, const Segment
     for (unsigned int k = 0; k < verticesCount; k++) {
         Point2d fstPoint(currVertices.at(k));
         Point2d sndPoint(currVertices.at((k+1)%verticesCount));
-//        std::cerr << "Dealing with " << fstPoint << " " << sndPoint << std::endl;
         Segment currSegment(fstPoint, sndPoint);
         Segment::Intersection intersection = currSegment.computeIntersection(line);
 
         switch (intersection) {
         case Segment::Regular: {
-//            std::cerr << "Intersection: Regular" << std::endl;
             Point2d intersectionPoint(Segment::intersectionPoint(currSegment, line));
             if (onLeft) {
                 smartVerticesLeft.push_back(std::pair<Point2d, bool>(fstPoint, false));
                 smartVerticesLeft.push_back(std::pair<Point2d, bool>(intersectionPoint, true));
-//                std::cerr << "Adding " << fstPoint << " to left vertices" << std::endl;
-//                std::cerr << "Adding " << intersectionPoint << " to left vertices" << std::endl;
                 smartVerticesRight.push_back(std::pair<Point2d, bool>(intersectionPoint, true));
-//                std::cerr << "Adding " << intersectionPoint << " to right vertices" << std::endl;
                 smartVerticesRight.push_back(std::pair<Point2d, bool>(sndPoint, false));
-//                std::cerr << "Adding " << sndPoint << " to right vertices" << std::endl;
             } else {
                 smartVerticesRight.push_back(std::pair<Point2d, bool>(intersectionPoint, true));
-//                std::cerr << "Adding " << intersectionPoint << " to right vertices" << std::endl;
                 smartVerticesLeft.push_back(std::pair<Point2d, bool>(intersectionPoint, true));
-//                std::cerr << "Adding " << intersectionPoint << " to left vertices" << std::endl;
             }
             _newVertices.push_back(intersectionPoint);
             onLeft = !onLeft;
             break;
         }
         case Segment::None:
-//            std::cerr << "Intersection: None" << std::endl;
             if (onLeft) {
-//                std::cerr << "Adding " << fstPoint << " to left vertices" << std::endl;
                 smartVerticesLeft.push_back(std::pair<Point2d, bool>(fstPoint, false));
             } else {
-//                std::cerr << "Adding " << sndPoint << " to right vertices" << std::endl;
                 smartVerticesRight.push_back(std::pair<Point2d, bool>(sndPoint, false));
             }
             break;
         case Segment::FirstVertexRegular:
             break;
         case Segment::SecondVertexRegular: {
-//            std::cerr << "Intersection: SecondVertexRegular" << std::endl;
             Point2d nextPoint(currVertices.at((k+2)%verticesCount));
             bool isCutting = !line.sameSide(fstPoint, nextPoint);
 
             if (onLeft && isCutting) {
                 smartVerticesLeft.push_back(std::pair<Point2d, bool>(fstPoint, false));
                 smartVerticesLeft.push_back(std::pair<Point2d, bool>(sndPoint, true));
-//                std::cerr << "Adding " << fstPoint << " to left vertices" << std::endl;
-//                std::cerr << "Adding " << sndPoint << " to left vertices" << std::endl;
                 smartVerticesRight.push_back(std::pair<Point2d, bool>(sndPoint, true));
                 smartVerticesRight.push_back(std::pair<Point2d, bool>(nextPoint, false));
-//                std::cerr << "Adding " << sndPoint << " to right vertices" << std::endl;
-//                std::cerr << "Adding " << nextPoint << " to right vertices" << std::endl;
                 _newVertices.push_back(sndPoint);
             } else if (onLeft && !isCutting) {
                 smartVerticesLeft.push_back(std::pair<Point2d, bool>(fstPoint, false));
                 smartVerticesLeft.push_back(std::pair<Point2d, bool>(sndPoint, true));
                 smartVerticesLeft.push_back(std::pair<Point2d, bool>(sndPoint, true));
-//                std::cerr << "Adding " << fstPoint << " to left vertices" << std::endl;
-//                std::cerr << "Adding " << sndPoint << " to left vertices" << std::endl;
-//                std::cerr << "Adding " << sndPoint << " to left vertices" << std::endl;
                 _newVertices.push_back(sndPoint);
                 _newVertices.push_back(sndPoint);
             } else if (!onLeft && !isCutting) {
                 smartVerticesRight.push_back(std::pair<Point2d, bool>(sndPoint, true));
                 smartVerticesRight.push_back(std::pair<Point2d, bool>(sndPoint, true));
                 smartVerticesRight.push_back(std::pair<Point2d, bool>(nextPoint, false));
-//                std::cerr << "Adding " << sndPoint << " to right vertices" << std::endl;
-//                std::cerr << "Adding " << sndPoint << " to right vertices" << std::endl;
-//                std::cerr << "Adding " << nextPoint << " to right vertices" << std::endl;
                 _newVertices.push_back(sndPoint);
                 _newVertices.push_back(sndPoint);
             } else if (!onLeft && isCutting) {
                 smartVerticesRight.push_back(std::pair<Point2d, bool>(sndPoint, true));
                 smartVerticesLeft.push_back(std::pair<Point2d, bool>(sndPoint, true));
-//                std::cerr << "Adding " << sndPoint << " to right vertices" << std::endl;
-//                std::cerr << "Adding " << sndPoint << " to left vertices" << std::endl;
                 _newVertices.push_back(sndPoint);
             }
 
@@ -190,18 +155,6 @@ PolygonList GameController::cutPolygon(const Polygon& currPolygon, const Segment
         }
         }
     }
-
-//    std::cerr << std::endl;
-
-//    QString mess = "";
-//    for (const std::pair<Point2d, bool>& p: smartVerticesLeft)
-//        mess += " ("+QString::number(p.first.getX())+"; "+QString::number(p.first.getY())+" | ("+QString::number(p.second)+"))";
-//    std::cerr << "Left vertices:" << mess.toStdString() << std::endl;
-
-//    mess = "";
-//    for (const std::pair<Point2d, bool>& p: smartVerticesRight)
-//        mess += " ("+QString::number(p.first.getX())+"; "+QString::number(p.first.getY())+" | ("+QString::number(p.second)+"))";
-//    std::cerr << "Right vertices:" << mess.toStdString() << std::endl << std::endl;
 
     computeCuttingSegments();
 
@@ -239,7 +192,20 @@ void GameController::computeCuttingSegments(void) {
 
 void GameController::sliceIt(const Segment& line) {
     _model->setPolygonList(cutPolygons(line));
+
+    _polygonsCount = _model->getPoligonsCount();
+    _linesDrawn++;
+
     emit update();
+
+    if (_polygonsCount > _partsCount) {
+      QMessageBox::critical(_tabWidget, tr("Too many parts"), tr("There are too many parts"));
+    } else if (_linesDrawn == _linesCount && _polygonsCount < _partsCount) {
+      QMessageBox::critical(_tabWidget, tr("Too few parts"), tr("There are too few parts"));
+    } else if (_linesDrawn == _linesCount && _polygonsCount == _partsCount) {
+      QMessageBox::information(_tabWidget, tr("Success"), tr("Well done!"));
+    }
+
 }
 
 bool GameController::isACuttingSegment(const Segment& segment) const {
@@ -290,7 +256,12 @@ void GameController::openLevel(const QString& fileName) {
     ParserXML parser(fileName);
 
     PolygonList polygonList(parser.createPolygonList());
-
     _model->setPolygonList(polygonList);
+
+    _linesCount = parser.getLinesCount();
+    _partsCount = parser.getPartsCount();
+    _linesDrawn = 0;
+    _polygonsCount = _model->getPoligonsCount();
+
     emit update();
 }

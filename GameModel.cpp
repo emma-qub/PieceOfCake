@@ -2,7 +2,13 @@
 #include <QDebug>
 
 GameModel::GameModel(QObject* parent) :
-  QStandardItemModel(parent) {
+  QStandardItemModel(parent),
+  _polygonsCount(-1) {
+
+  int r = std::rand()%255;
+  int g = std::rand()%255;
+  int b = std::rand()%255;
+  _color = QColor(r, g, b);
 }
 
 void GameModel::setPolygonList(const PolygonList& polygonList) {
@@ -11,6 +17,9 @@ void GameModel::setPolygonList(const PolygonList& polygonList) {
 
   // Fill polygon list with new polygons
   _polygonList = polygonList;
+
+  // Update polygons count
+  _polygonsCount = _polygonList.size();
 
   // Populate model with new polygons
   populate();
@@ -27,13 +36,8 @@ void GameModel::populate(void) {
 }
 
 void GameModel::insertPolygon(int polygonRow, const Polygon& polygon) {
-  int r = std::rand()%255;
-  int g = std::rand()%255;
-  int b = std::rand()%255;
-  QColor randomColor(r, g, b);
-
   QStandardItem* polygonItem = new QStandardItem("Polygon"+QString::number(polygonRow));
-  polygonItem->setData(randomColor, Qt::DecorationRole);
+//  polygonItem->setData(_color, Qt::DecorationRole);
   insertRow(polygonRow, polygonItem);
 
   // Add every vertex

@@ -18,14 +18,17 @@ public:
 
   GameController(GameModel* model, QWidget* tabWidget, QUndoStack* undoStack, QObject* parent = 0);
 
+  inline int getLinesCount(void) const { return _linesCount; }
+  inline int getPartsCount(void) const { return _partsCount; }
+  inline int getLinesDrawn(void) const { return _linesDrawn; }
+  inline int getPolygonsCount(void) const { return _polygonsCount; }
+
   PolygonList splitSmartVertices(const std::vector<std::pair<Point2d, bool>>& smartVertices) const;
   PolygonList cutPolygon(const Polygon& currPolygon, const Segment& line);
   PolygonList cutPolygons(const Segment& line);
   void computeCuttingSegments(void);
   void sliceIt(const Segment& line);
-
   bool isACuttingSegment(const Segment& segment) const;
-
   inline std::vector<Segment> getCuttingSegments(void) { return _cuttingSegments; }
 
   LineType computeLineType(const Segment& line) const;
@@ -43,6 +46,10 @@ private:
   GameModel* _model;
   std::vector<Point2d> _newVertices;
   std::vector<Segment> _cuttingSegments;
+  int _linesCount;
+  int _partsCount;
+  int _linesDrawn;
+  int _polygonsCount;
 };
 
 #endif // GAMECONTROLLER_HXX

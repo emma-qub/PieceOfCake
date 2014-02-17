@@ -37,7 +37,7 @@ MainWindow::MainWindow(QWidget* parent) :
 
     // Init game widgets
     _gameModel = new GameModel;
-    _gameController = new GameController(_gameModel, _gameView, _undoStack, this);
+    _gameController = new GameController(_gameModel, gameSplitter, _undoStack, this);
     _gameView = new GameView(_gameController, gameSplitter);
     _gameView->setModel(_gameModel);
 

@@ -24,6 +24,8 @@
             <vertex x="400" y="400"/>
         </polygon>
     </polygons>
+    <partscount value="7" />
+    <linescount value="5" />
     <hints>
         <hint id="0">
             <line>

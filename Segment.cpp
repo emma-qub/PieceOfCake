@@ -65,7 +65,12 @@ Segment::Intersection Segment::computeIntersection(const Point2d& P, const Point
 
     // Deal with colinear
     if (Vector2d::areColinear(vAB, vPQ) || A == P || A == Q || B == P || B == Q) {
-        return None;
+      Vector2d vAP(P - A);
+      Vector2d vAQ(Q - A);
+      if (Vector2d::areColinear(vAP, vAQ) && Point2d::distance(P, Q) > Point2d::distance(A, B))
+            return Edge;
+        else
+            return None;
     }
 
     Segment PQ(P, Q);

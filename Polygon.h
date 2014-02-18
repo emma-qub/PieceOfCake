@@ -18,6 +18,7 @@ public:
     Polygon(const Polygon& polygon);
     virtual ~Polygon(void) {}
 
+    inline bool hasEnoughVertices(void) const { return _vertices.size() > 2; }
     inline std::vector<Point2d> getVertices(void) const { return _vertices; }
     inline void setVertices(const std::vector<Point2d>& vertices) { _vertices = vertices; }
 

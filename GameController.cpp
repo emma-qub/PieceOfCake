@@ -56,7 +56,8 @@ PolygonList GameController::splitSmartVertices(const std::vector<std::pair<Point
 
         seekNextNewVertex = false;
 
-        polygons << polygon;
+        //if (polygon.hasEnoughVertices())
+            polygons << polygon;
         polygon.clear();
 
         smartVerticesTmp.clear();
@@ -66,7 +67,7 @@ PolygonList GameController::splitSmartVertices(const std::vector<std::pair<Point
 
         if (stop == smartVertices.size()) {
             break;
-            std::cerr << "Stopping infinite loop from Polygon::splitSmartVertices." << std::endl;
+            std::cerr << "Stop infinite loop from Polygon::splitSmartVertices." << std::endl;
         }
     }
 
@@ -96,6 +97,43 @@ PolygonList GameController::cutPolygon(const Polygon& currPolygon, const Segment
         Segment::Intersection intersection = currSegment.computeIntersection(line);
 
         switch (intersection) {
+        case Segment::Edge: {
+          qDebug() << "Edge";
+          Point2d prevPoint(currVertices.at((k-1)%verticesCount));
+          Point2d nextNextPoint(currVertices.at((k+2)%verticesCount));
+          bool isCutting = !line.sameSide(prevPoint, nextNextPoint);
+
+          if (onLeft && isCutting) {
+//              smartVerticesLeft.push_back(std::pair<Point2d, bool>(fstPoint, false));
+//              smartVerticesLeft.push_back(std::pair<Point2d, bool>(sndPoint, true));
+//              smartVerticesRight.push_back(std::pair<Point2d, bool>(sndPoint, true));
+              smartVerticesRight.push_back(std::pair<Point2d, bool>(nextNextPoint, false));
+              _newVertices.push_back(nextNextPoint);
+          } else if (onLeft && !isCutting) {
+//              smartVerticesLeft.push_back(std::pair<Point2d, bool>(fstPoint, false));
+//              smartVerticesLeft.push_back(std::pair<Point2d, bool>(sndPoint, true));
+//              smartVerticesLeft.push_back(std::pair<Point2d, bool>(sndPoint, true));
+              _newVertices.push_back(nextNextPoint);
+              _newVertices.push_back(nextNextPoint);
+          } else if (!onLeft && !isCutting) {
+//              smartVerticesRight.push_back(std::pair<Point2d, bool>(sndPoint, true));
+//              smartVerticesRight.push_back(std::pair<Point2d, bool>(sndPoint, true));
+              smartVerticesRight.push_back(std::pair<Point2d, bool>(nextNextPoint, false));
+              _newVertices.push_back(nextNextPoint);
+              _newVertices.push_back(nextNextPoint);
+          } else if (!onLeft && isCutting) {
+//              smartVerticesLeft.push_back(std::pair<Point2d, bool>(sndPoint, true));
+//              smartVerticesRight.push_back(std::pair<Point2d, bool>(sndPoint, true));
+              _newVertices.push_back(nextNextPoint);
+          }
+
+          if (isCutting) {
+              onLeft = !onLeft;
+          }
+
+          k++;
+          break;
+        }
         case Segment::Regular: {
             Point2d intersectionPoint(Segment::intersectionPoint(currSegment, line));
             if (onLeft) {
@@ -143,8 +181,8 @@ PolygonList GameController::cutPolygon(const Polygon& currPolygon, const Segment
                 _newVertices.push_back(sndPoint);
                 _newVertices.push_back(sndPoint);
             } else if (!onLeft && isCutting) {
-                smartVerticesRight.push_back(std::pair<Point2d, bool>(sndPoint, true));
                 smartVerticesLeft.push_back(std::pair<Point2d, bool>(sndPoint, true));
+                smartVerticesRight.push_back(std::pair<Point2d, bool>(sndPoint, true));
                 _newVertices.push_back(sndPoint);
             }
 
@@ -198,13 +236,13 @@ void GameController::sliceIt(const Segment& line) {
 
     emit update();
 
-    if (_polygonsCount > _partsCount) {
-      QMessageBox::critical(_tabWidget, tr("Too many parts"), tr("There are too many parts"));
-    } else if (_linesDrawn == _linesCount && _polygonsCount < _partsCount) {
-      QMessageBox::critical(_tabWidget, tr("Too few parts"), tr("There are too few parts"));
-    } else if (_linesDrawn == _linesCount && _polygonsCount == _partsCount) {
-      QMessageBox::information(_tabWidget, tr("Success"), tr("Well done!"));
-    }
+//    if (_polygonsCount > _partsCount) {
+//      QMessageBox::critical(_tabWidget, tr("Too many parts"), tr("There are too many parts"));
+//    } else if (_linesDrawn == _linesCount && _polygonsCount < _partsCount) {
+//      QMessageBox::critical(_tabWidget, tr("Too few parts"), tr("There are too few parts"));
+//    } else if (_linesDrawn == _linesCount && _polygonsCount == _partsCount) {
+//      QMessageBox::information(_tabWidget, tr("Success"), tr("Well done!"));
+//    }
 
 }
 

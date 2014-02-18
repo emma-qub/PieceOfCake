@@ -11,6 +11,9 @@ GameView::GameView(GameController* controller, QWidget* parent) :
     _goodSegment(false),
     _controller(controller) {
 
+    _mousePositionLabel = new QLabel(this);
+    _mousePositionLabel->setFixedSize(300, 50);
+
     setMouseTracking(true);
 
     connect(_controller, SIGNAL(update()), this, SLOT(drawFromModel()));
@@ -30,6 +33,8 @@ void GameView::mousePressEvent(QMouseEvent* event) {
 
 void GameView::mouseMoveEvent(QMouseEvent* event) {
     emit position(event->pos().x(), event->pos().y());
+
+   _mousePositionLabel->setText(QString::number(event->pos().x())+QString("   ")+QString::number(event->pos().y()));
 
     if (_scribbling) {
         QPoint currPoint(event->pos());
@@ -128,6 +133,7 @@ void GameView::drawFromModel(void) {
             Point2d fstVertex(vertices.at(k));
             Point2d sndVertex(vertices.at((k+1)%vertices.size()));
 
+            drawText(QPoint(fstVertex.getX(), fstVertex.getY()), QString::number(k));
             drawLine(QPoint(fstVertex.getX(), fstVertex.getY()), QPoint(sndVertex.getX(), sndVertex.getY()), color);
         }
     }

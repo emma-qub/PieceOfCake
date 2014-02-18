@@ -47,6 +47,7 @@ protected:
     bool _goodSegment;
     GameModel* _model;
     GameController* _controller;
+    QLabel* _mousePositionLabel;
 };
 
 #endif // GAMEVIEW_H

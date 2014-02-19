@@ -96,3 +96,7 @@ float Point2d::distance(const Point2d& point1, const Point2d& point2) {
 std::ostream& operator<<(std::ostream& os, const Point2d& point) {
     return os << "(Point) (" << point._coords[0] << "; " << point._coords[1] << ")";
 }
+
+QDebug operator<<(QDebug d, const Point2d& point) {
+  return d << "(" << point._coords[0] << "; " << point._coords[1] << ")";
+}

@@ -1,0 +1,16 @@
+<!DOCTYPE SliceItML>
+<level>
+    <polygons>
+        <polygon id="0">
+            <vertex y="205" x="105"/>
+            <vertex y="305" x="205"/>
+            <vertex y="405" x="105"/>
+            <vertex y="505" x="205"/>
+            <vertex y="305" x="405"/>
+            <vertex y="105" x="205"/>
+        </polygon>
+    </polygons>
+    <partscount value="7" />
+    <linescount value="5" />
+    <hints/>
+</level>

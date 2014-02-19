@@ -148,3 +148,7 @@ Segment& Segment::operator=(const Segment& segment) {
     _boundaries[1] = segment._boundaries[1];
     return *this;
 }
+
+QDebug operator<<(QDebug d, const Segment& segment) {
+  return d << "[" << segment.getA() << " " << segment.getB() << "]";
+}

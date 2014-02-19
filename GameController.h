@@ -23,13 +23,13 @@ public:
   inline int getLinesDrawn(void) const { return _linesDrawn; }
   inline int getPolygonsCount(void) const { return _polygonsCount; }
 
-  PolygonList splitSmartVertices(const std::vector<std::pair<Point2d, bool>>& smartVertices) const;
+  PolygonList splitSmartVertices(const QVector<QPair<Point2d, bool> >& smartVertices) const;
   PolygonList cutPolygon(const Polygon& currPolygon, const Segment& line);
   PolygonList cutPolygons(const Segment& line);
   void computeCuttingSegments(void);
   void sliceIt(const Segment& line);
   bool isACuttingSegment(const Segment& segment) const;
-  inline std::vector<Segment> getCuttingSegments(void) { return _cuttingSegments; }
+  inline QVector<Segment> getCuttingSegments(void) { return _cuttingSegments; }
 
   LineType computeLineType(const Segment& line) const;
 
@@ -44,8 +44,8 @@ signals:
 
 private:
   GameModel* _model;
-  std::vector<Point2d> _newVertices;
-  std::vector<Segment> _cuttingSegments;
+  QVector<Point2d> _newVertices;
+  QVector<Segment> _cuttingSegments;
   int _linesCount;
   int _partsCount;
   int _linesDrawn;

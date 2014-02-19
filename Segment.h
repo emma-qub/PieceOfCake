@@ -34,6 +34,8 @@ public:
 
     friend std::ostream& operator<<(std::ostream& os, const Segment& segment);
 
+    friend QDebug operator<<(QDebug d, const Segment& segment);
+
 private:
     Point2d _boundaries[2];
 };

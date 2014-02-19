@@ -2,6 +2,7 @@
 #define POINT2D_H
 
 #include <iostream>
+#include <QDebug>
 
 class Vector2d;
 
@@ -43,6 +44,8 @@ public:
     static float distance(const Point2d& point1, const Point2d& point2);
 
     friend std::ostream& operator<<(std::ostream& os, const Point2d& point);
+
+    friend QDebug operator<<(QDebug d, const Point2d& point);
 
 private:
     float _coords[2];

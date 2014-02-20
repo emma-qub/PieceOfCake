@@ -41,10 +41,10 @@ PolygonList GameController::splitSmartVertices(const QVector<QPair<Point2d, bool
                     smartVerticesMutable.push_back(fstSmartVertex);
                 }
             } else if (fstSmartVertex.second && !seekNextNewVertex) {
-//                if (k != 0) {
+                if (k != 0) {
                     seekNextNewVertex = true;
                     prevNewVertex = fstSmartVertex.first;
-//                }
+                }
                 polygon << fstSmartVertex.first;
             } else if (!fstSmartVertex.second && seekNextNewVertex) {
                 smartVerticesMutable.push_back(fstSmartVertex);
@@ -134,15 +134,24 @@ PolygonList GameController::cutPolygon(const Polygon& currPolygon, const Segment
             Point2d prevPoint(currVertices.at((k-1)%verticesCount));
             bool isCutting = !line.sameSide(prevPoint, sndPoint);
             if (!isCutting && onLeft) {
-              smartVerticesLeft.push_back(QPair<Point2d, bool>(fstPoint, true));
-//              smartVerticesRight.push_back(QPair<Point2d, bool>(fstPoint, false));
-              _newVertices.push_back(fstPoint);
+              smartVerticesLeft.removeLast();
+              smartVerticesLeft.push_back(QPair<Point2d, bool>(fstPoint, false));
+              _newVertices.removeLast();
+            } else if (!isCutting && !onLeft) {
+              smartVerticesRight.removeLast();
+              smartVerticesRight.push_back(QPair<Point2d, bool>(fstPoint, false));
+              _newVertices.removeLast();
             }
-            else if (!isCutting && !onLeft) {
-//              smartVerticesLeft.push_back(QPair<Point2d, bool>(fstPoint, false));
-              smartVerticesRight.push_back(QPair<Point2d, bool>(fstPoint, true));
-              _newVertices.push_back(fstPoint);
-            }
+//            if (!isCutting && onLeft) {
+//              smartVerticesLeft.push_back(QPair<Point2d, bool>(fstPoint, true));
+////              smartVerticesRight.push_back(QPair<Point2d, bool>(fstPoint, false));
+//              _newVertices.push_back(fstPoint);
+//            }
+//            else if (!isCutting && !onLeft) {
+////              smartVerticesLeft.push_back(QPair<Point2d, bool>(fstPoint, false));
+//              smartVerticesRight.push_back(QPair<Point2d, bool>(fstPoint, true));
+//              _newVertices.push_back(fstPoint);
+//            }
             break;
         }
         case Segment::SecondVertexRegular: {

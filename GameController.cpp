@@ -138,8 +138,8 @@ PolygonList GameController::cutPolygon(const Polygon& currPolygon, const Segment
               smartVerticesLeft.push_back(QPair<Point2d, bool>(fstPoint, false));
               _newVertices.removeLast();
             } else if (!isCutting && !onLeft) {
-              smartVerticesRight.removeLast();
-              smartVerticesRight.push_back(QPair<Point2d, bool>(fstPoint, false));
+              smartVerticesRight.removeAt(smartVerticesRight.size()-2);
+              smartVerticesRight.insert(smartVerticesRight.end()-1, QPair<Point2d, bool>(fstPoint, false));
               _newVertices.removeLast();
             }
 //            if (!isCutting && onLeft) {

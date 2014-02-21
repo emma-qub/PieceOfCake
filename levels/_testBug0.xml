@@ -1,0 +1,58 @@
+<!DOCTYPE SliceItML>
+<level>
+    <polygons>
+        <polygon id="0">
+            <vertex x="55" y="5"/>
+            <vertex x="155" y="5"/>
+            <vertex x="255" y="55"/>
+            <vertex x="155" y="55"/>
+            <vertex x="205" y="105"/>
+            <vertex x="155" y="155"/>
+            <vertex x="105" y="155"/>
+            <vertex x="155" y="205"/>
+            <vertex x="255" y="255"/>
+            <vertex x="155" y="305"/>
+            <vertex x="55" y="305"/>
+        </polygon>
+        <polygon id="1">
+            <vertex x="355" y="5"/>
+            <vertex x="355" y="305"/>
+            <vertex x="455" y="305"/>
+            <vertex x="555" y="255"/>
+            <vertex x="455" y="205"/>
+            <vertex x="405" y="155"/>
+            <vertex x="455" y="155"/>
+            <vertex x="505" y="105"/>
+            <vertex x="455" y="55"/>
+            <vertex x="555" y="55"/>
+            <vertex x="455" y="5"/>
+        </polygon>
+        <polygon id="2">
+            <vertex x="255" y="355"/>
+            <vertex x="155" y="355"/>
+            <vertex x="55" y="405"/>
+            <vertex x="155" y="405"/>
+            <vertex x="105" y="455"/>
+            <vertex x="155" y="505"/>
+            <vertex x="205" y="505"/>
+            <vertex x="155" y="555"/>
+            <vertex x="55" y="605"/>
+            <vertex x="155" y="655"/>
+            <vertex x="255" y="655"/>
+        </polygon>
+        <polygon id="3">
+            <vertex x="555" y="355"/>
+            <vertex x="555" y="655"/>
+            <vertex x="455" y="655"/>
+            <vertex x="355" y="605"/>
+            <vertex x="455" y="555"/>
+            <vertex x="505" y="505"/>
+            <vertex x="455" y="505"/>
+            <vertex x="405" y="455"/>
+            <vertex x="455" y="405"/>
+            <vertex x="355" y="405"/>
+            <vertex x="455" y="355"/>
+        </polygon>
+    </polygons>
+    <hints/>
+</level>

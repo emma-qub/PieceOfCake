@@ -2,6 +2,7 @@
 #include "GameController.h"
 
 #include <QMessageBox>
+#include <QDoubleValidator>
 
 GameController::GameController(GameModel* model, QWidget* tabWidget, QUndoStack* undoStack, QObject* parent) :
   AbstractController(model, tabWidget, undoStack, parent),
@@ -102,6 +103,29 @@ PolygonList GameController::cutPolygon(const Polygon& currPolygon, const Segment
         switch (intersection) {
         case Segment::Edge: {
           qDebug() << "Intersection: Edge";
+          Point2d prevPoint(currVertices.at((k-1)%verticesCount));
+          Point2d nextPoint(currVertices.at((k+2)%verticesCount));
+          bool isCutting = !line.sameSide(prevPoint, nextPoint);
+          qDebug() << "is cutting?" << isCutting;
+          if (isCutting && onLeft) {
+            smartVerticesLeft.removeLast();
+            smartVerticesLeft.push_back(QPair<Point2d, bool>(sndPoint, true));
+            _newVertices.push_back(fstPoint);
+            _newVertices.push_back(sndPoint);
+          } else if (isCutting && !onLeft) {
+            if (smartVerticesRight.size() >= 1) {
+              smartVerticesRight.removeLast();
+              if (smartVerticesRight.size() >= 1) {
+                smartVerticesRight.removeLast();
+              }
+            }
+            smartVerticesRight.push_back(QPair<Point2d, bool>(sndPoint, true));
+            smartVerticesRight.push_back(QPair<Point2d, bool>(nextPoint, false));
+            _newVertices.push_back(sndPoint);
+            _newVertices.push_back(sndPoint);
+          } else {
+
+          }
 
           break;
         }
@@ -158,6 +182,7 @@ PolygonList GameController::cutPolygon(const Polygon& currPolygon, const Segment
           qDebug() << "Intersection: SecondVertexRegular";
             Point2d nextPoint(currVertices.at((k+2)%verticesCount));
             bool isCutting = !line.sameSide(fstPoint, nextPoint);
+            qDebug() << "isCutting?" << isCutting;
 
             if (onLeft && isCutting) {
                 smartVerticesLeft.push_back(QPair<Point2d, bool>(fstPoint, false));

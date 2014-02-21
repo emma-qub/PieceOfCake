@@ -282,7 +282,7 @@ GameController::LineType GameController::computeLineType(const Segment& line) co
     bool badCrossing = false;
 
     foreach (const Polygon& polygon, polygonList) {
-        if (!polygon.isCrossing(line) && !polygon.isPointInside(line.getA())) {
+        if (!polygon.isCrossing(line) && !polygon.isPointInside2(line.getA())) {
             noCrossing = true;
         } else if (polygon.isGoodSegment(line)) {
             goodCrossing = true;

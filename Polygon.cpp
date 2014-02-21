@@ -162,7 +162,7 @@ bool Polygon::isCrossing(const Segment& line) const {
 }
 
 bool Polygon::isGoodSegment(const Segment& line) const {
-    return (!isPointInside(line.getA()) && isCrossing(line) && !isPointInside(line.getB()));
+    return (!isPointInside2(line.getA()) && isCrossing(line) && !isPointInside2(line.getB()));
 }
 
 float Polygon::orientedArea(void) const {

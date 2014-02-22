@@ -152,13 +152,40 @@ bool Polygon::isPointInside2(const Point2d& point) const {
 bool Polygon::isCrossing(const Segment& line) const {
     unsigned int verticesCount = _vertices.size();
 
+    int regularCount = 0;
+    int fstVertexCount = 0;
+    int sndVertexCount = 0;
+    int edgeCount = 0;
+    int noneCount = 0;
+    int otherCount = 0;
+
     for (unsigned int k = 0; k < verticesCount; k++) {
         Segment segment(_vertices.at(k), _vertices.at((k+1)%verticesCount));
-        if (segment.computeIntersection(line) != Segment::None)
-            return true;
+        Segment::Intersection intersection = segment.computeIntersection(line);
+        switch (intersection) {
+        case Segment::Regular:
+            regularCount++;
+            break;
+        case Segment::FirstVertexRegular:
+            fstVertexCount++;
+            break;
+        case Segment::SecondVertexRegular:
+            sndVertexCount++;
+            break;
+        case Segment::Edge:
+            edgeCount++;
+            break;
+        case Segment::None:
+            noneCount++;
+            break;
+        default:
+            break;
+        }
     }
 
-    return false;
+    otherCount = fstVertexCount + sndVertexCount + regularCount;
+
+    return ((edgeCount == 0 && otherCount > 0)  || (edgeCount != 0 && regularCount > 0));
 }
 
 bool Polygon::isGoodSegment(const Segment& line) const {

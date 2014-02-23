@@ -67,7 +67,7 @@ Segment::Intersection Segment::computeIntersection(const Point2d& P, const Point
     if (Vector2d::areColinear(vAB, vPQ) || A == P || A == Q || B == P || B == Q) {
         Vector2d vAP(P - A);
         Vector2d vAQ(Q - A);
-        qDebug() << Vector2d::areColinear(vAP, vAQ) << Point2d::distance(P, Q) << Point2d::distance(A, B);
+//        qDebug() << Vector2d::areColinear(vAP, vAQ) << Point2d::distance(P, Q) << Point2d::distance(A, B);
         if (Vector2d::areColinear(vAP, vAQ) && Point2d::distance(P, Q) > Point2d::distance(A, B)) {
             return Edge;
         } else {

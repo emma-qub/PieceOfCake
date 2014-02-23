@@ -44,7 +44,7 @@ void GameView::mouseMoveEvent(QMouseEvent* event) {
         _goodSegment = false;
 
         Segment line(firstPoint, Point2d(currPoint.x(), currPoint.y()));
-        qDebug() << "#GameView::mouseMoveEvent";
+//        qDebug() << "#GameView::mouseMoveEvent";
         GameController::LineType lineType = _controller->computeLineType(line);
         QColor color;
         switch (lineType) {

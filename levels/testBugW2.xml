@@ -1,0 +1,21 @@
+<!DOCTYPE SliceItML>
+<level>
+    <polygons>
+        <polygon id="0">
+            <vertex x="55" y="105"/>
+            <vertex x="155" y="305"/>
+            <vertex x="255" y="305"/>
+            <vertex x="305" y="205"/>
+            <vertex x="355" y="305"/>
+            <vertex x="455" y="305"/>
+            <vertex x="555" y="105"/>
+            <vertex x="455" y="105"/>
+            <vertex x="405" y="205"/>
+            <vertex x="355" y="105"/>
+            <vertex x="255" y="105"/>
+            <vertex x="205" y="205"/>
+            <vertex x="155" y="105"/>
+        </polygon>
+    </polygons>
+    <hints/>
+</level>

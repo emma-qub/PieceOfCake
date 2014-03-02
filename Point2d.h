@@ -22,6 +22,8 @@ public:
 
     void move(const float& x = 0.0, const float& y = 0.0);
 
+    void symetry(void);
+
     Point2d& homothetie(const Point2d& origin, const float &scale);
 
     Point2d operator/(const float& k) const;

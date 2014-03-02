@@ -24,6 +24,12 @@ void Point2d::move(const float &x, const float &y) {
     _coords[1] += y;
 }
 
+void Point2d::symetry(void) {
+    float tmp = _coords[1];
+    _coords[1] = _coords[0];
+    _coords[0] = tmp;
+}
+
 Point2d& Point2d::homothetie(const Point2d& origin, const float& scale) {
     _coords[0] = scale*(_coords[0] - origin._coords[0]) + origin._coords[0];
     _coords[1] = scale*(_coords[1] - origin._coords[1]) + origin._coords[1];

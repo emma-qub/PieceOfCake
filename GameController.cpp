@@ -3,6 +3,7 @@
 
 #include <QMessageBox>
 #include <QDoubleValidator>
+#include <QMap>
 
 GameController::GameController(GameModel* model, QWidget* tabWidget, QUndoStack* undoStack, QObject* parent) :
   AbstractController(model, tabWidget, undoStack, parent),
@@ -219,6 +220,8 @@ PolygonList GameController::cutPolygon(const Polygon& currPolygon, const Segment
             }
             break;
         }
+        default:
+            break;
         }
         qDebug() << "SVLeft:" << smartVerticesLeft;
         qDebug() << "SVRight:" << smartVerticesRight;
@@ -272,13 +275,156 @@ void GameController::computeCuttingSegments(void) {
     qDebug() << "###################################################";
 }
 
+QVector<QPair<Point2d, Segment::Intersection>> GameController::computeIntersections(const Polygon& polygon, const Segment& line) const {
+    QVector<QPair<Point2d, Segment::Intersection>> res;
+    QMap<Point2d, Segment::Intersection> tmp;
+
+    QVector<Point2d> intersectionPoints;
+    QVector<Segment::Intersection> intersectionTypes;
+
+    std::vector<Point2d> vertices = polygon.getVertices();
+    unsigned int vertexCount = vertices.size();
+    for (unsigned int k = 0; k < vertexCount; ++k) {
+        Point2d vertex0 = vertices.at(k);
+        Point2d vertex1 = vertices.at((k+1)%vertexCount);
+        Segment edge(vertex0, vertex1);
+
+        Segment::Intersection currIntersectionType = edge.computeIntersection(line);
+        if (currIntersectionType == Segment::None)
+            continue;
+
+        if (currIntersectionType == Segment::Edge) {
+//            intersectionPoints.push_back(vertex0);
+//            intersectionTypes.push_back(currIntersectionType);
+//            tmp.insert(vertex0, currIntersectionType);
+//            intersectionPoints.push_back(vertex1);
+//            intersectionTypes.push_back(currIntersectionType);
+//            tmp.insert(vertex1, currIntersectionType);
+            continue;
+        }
+
+        Point2d currIntersectionPoint;
+        if (currIntersectionType == Segment::FirstVertexRegular) {
+            currIntersectionPoint = vertices.at(k);
+        } else if(currIntersectionType == Segment::SecondVertexRegular) {
+            currIntersectionPoint = vertices.at((k+1)%vertexCount);
+        } else {
+            currIntersectionPoint = Segment::intersectionPoint(edge, line);
+        }
+
+        intersectionPoints.push_back(currIntersectionPoint);
+        intersectionTypes.push_back(currIntersectionType);
+        tmp.insert(currIntersectionPoint, currIntersectionType);
+    }
+
+    if (qAbs(intersectionPoints.first().getX() - intersectionPoints.last().getX()) < 2) {
+        qDebug() << "bouuh";
+        for (int k = 0; k < intersectionPoints.count(); ++k) {
+            Point2d currPoint = intersectionPoints.at(k);
+            currPoint.symetry();
+            intersectionPoints.replace(k, currPoint);
+        }
+        qSort(intersectionPoints);
+        for (int k = 0; k < intersectionPoints.count(); ++k) {
+            Point2d currPoint = intersectionPoints.at(k);
+            currPoint.symetry();
+            intersectionPoints.replace(k, currPoint);
+        }
+    } else {
+        qSort(intersectionPoints);
+    }
+    qDebug() << intersectionPoints;
+
+//    for (unsigned int k = 0; k < vertexCount; ++k) {
+
+//        Point2d vertex1 = vertices.at((k+1)%vertexCount);
+//        Point2d vertex2 = vertices.at((k+2)%vertexCount);
+//        Segment edge1(vertex1, vertex2);
+
+//        Segment::Intersection currIntersectionType = edge1.computeIntersection(line);
+//        if (currIntersectionType == Segment::SecondVertexRegular) {
+//            Point2d vertex3 = vertices.at((k+3)%vertexCount);
+//            Segment edge2(vertex2, vertex3);
+//            Segment::Intersection nextIntersectionType = edge2.computeIntersection(line);
+//            if (nextIntersectionType == Segment::Edge) {
+//                Point2d vertex0 = vertices.at(k);
+//                if (edge2.sameSide(vertex0, vertex3)) {
+//                    QMap<Point2d, Segment::Intersection>::iterator it = tmp.find(vertex1);
+//                    it.value() = Segment::EdgeUseless;
+//                    it = tmp.find(vertex2);
+//                    it.value() = Segment::EdgeUseless;
+//                }
+//            }
+//        }
+//    }
+
+    for (int k = 0; k < intersectionPoints.size(); ++k) {
+        Point2d currIntersectionPoint = intersectionPoints.at(k);
+
+        Segment::Intersection currIntersectionType = tmp.value(currIntersectionPoint);
+
+        res.push_back(QPair<Point2d, Segment::Intersection>(currIntersectionPoint, currIntersectionType));
+
+        qDebug() << "##" << currIntersectionPoint;
+        qDebug() << "##" << res;
+    }
+
+    qDebug() << res;
+
+    return res;
+}
+
+QList<Segment> GameController::computeSegments(const Polygon& polygon, const QVector<QPair<Point2d, Segment::Intersection>>& intersections) const {
+    QList<Segment> res;
+
+    int size = intersections.count();
+    for (int k = 0; k < size; ++k) {
+        QPair<Point2d, Segment::Intersection> intersection = intersections.at(k);
+
+        Point2d fstPoint = intersection.first;
+        if (k < size-1) {
+            QPair<Point2d, Segment::Intersection> nextIntersection = intersections.at(k+1);
+            Point2d sndPoint = nextIntersection.first;
+            Segment::Intersection sndIntersection = nextIntersection.second;
+
+            Point2d middlePoint = (fstPoint+sndPoint)/2;
+            if (polygon.isPointInside2(middlePoint)) {
+                res << Segment(fstPoint, sndPoint);
+            }
+
+            if (sndIntersection == Segment::FirstVertexRegular) {
+                if (k < size-2) {
+                    QPair<Point2d, Segment::Intersection> nextNextIntersection = intersections.at(k+2);
+                    Point2d thdPoint = nextNextIntersection.first;
+
+                    Point2d sndMiddlePoint = (sndPoint+thdPoint)/2;
+                    if (polygon.isPointInside2(sndMiddlePoint)) {
+                        res << Segment(fstPoint, thdPoint);
+                    }
+                }
+            }
+        }
+    }
+
+    qDebug() << res;
+
+    return res;
+}
+
 void GameController::sliceIt(const Segment& line) {
-    _model->setPolygonList(cutPolygons(line));
+    for (const Polygon& polygon: _model->getPolygonList()) {
+        QVector<QPair<Point2d, Segment::Intersection>> intersections = computeIntersections(polygon, line);
+        computeSegments(polygon, intersections);
+
+
+    }
+
+//    _model->setPolygonList(cutPolygons(line));
 
     _polygonsCount = _model->getPoligonsCount();
     _linesDrawn++;
 
-    emit update();
+//    emit update();
 
 //    if (_polygonsCount > _partsCount) {
 //      QMessageBox::critical(_tabWidget, tr("Too many parts"), tr("There are too many parts"));

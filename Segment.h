@@ -7,7 +7,7 @@ class Segment {
 
 public:
     enum Side { OnLeft, OnSegmentInside, OnSegmentOutside, OnRight, IsBoundA, IsBoundB };
-    enum Intersection { Regular, FirstVertexRegular, SecondVertexRegular, Edge, None };
+    enum Intersection { Regular, FirstVertexRegular, SecondVertexRegular, Edge, VertexUseless, EdgeUseless, None };
 
     Segment(const Point2d& a = Point2d(), const Point2d& b = Point2d());
     Segment(const Segment& segment);

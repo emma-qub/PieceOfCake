@@ -27,6 +27,8 @@ public:
   PolygonList cutPolygon(const Polygon& currPolygon, const Segment& line);
   PolygonList cutPolygons(const Segment& line);
   void computeCuttingSegments(void);
+  QVector<QPair<Point2d, Segment::Intersection> > computeIntersections(const Polygon& polygon, const Segment& line) const;
+  QList<Segment> computeSegments(const Polygon& polygon, const QVector<QPair<Point2d, Segment::Intersection> >& intersections) const;
   void sliceIt(const Segment& line);
   bool isACuttingSegment(const Segment& segment) const;
   inline QVector<Segment> getCuttingSegments(void) { return _cuttingSegments; }

@@ -5,6 +5,7 @@
             <vertex x="55" y="305"/>
             <vertex x="155" y="305"/>
             <vertex x="155" y="455"/>
+            <vertex x="205" y="505"/>
             <vertex x="305" y="455"/>
             <vertex x="205" y="405"/>
             <vertex x="305" y="355"/>
@@ -38,6 +39,7 @@
             <vertex x="655" y="355"/>
             <vertex x="555" y="405"/>
             <vertex x="655" y="455"/>
+            <vertex x="555" y="505"/>
             <vertex x="505" y="455"/>
             <vertex x="505" y="305"/>
         </polygon>

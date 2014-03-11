@@ -36,6 +36,10 @@ Point2d& Point2d::homothetie(const Point2d& origin, const float& scale) {
     return *this;
 }
 
+Point2d Point2d::applyVector(const Vector2d& vector) const {
+    return Point2d(_coords[0] + vector.getX(), _coords[1] + vector.getY());
+}
+
 Point2d Point2d::operator/(const float& k) const {
     return Point2d(_coords[0]/k, _coords[1]/k);
 }

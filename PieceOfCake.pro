@@ -19,7 +19,10 @@ HEADERS += \
     TreeItem.h \
     TreeModel.h \
     Vector2d.h \
-    tests.h
+    tests.h \
+    LineModifier.h \
+    Tape.h \
+    Portal.h
 
 SOURCES += \
     AbstractController.cpp \
@@ -43,7 +46,10 @@ SOURCES += \
     TreeModel.cpp \
     Vector2d.cpp \
     tests.cpp \
-    main.cpp
+    main.cpp \
+    LineModifier.cpp \
+    Tape.cpp \
+    Portal.cpp
 
 CONFIG += c++11
 

@@ -25,6 +25,7 @@ public:
     void symetry(void);
 
     Point2d& homothetie(const Point2d& origin, const float &scale);
+    Point2d applyVector(const Vector2d& vector) const;
 
     Point2d operator/(const float& k) const;
     Point2d& operator/=(const float& k);

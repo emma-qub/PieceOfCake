@@ -406,7 +406,7 @@ QList<Segment> GameController::computeSegments(const Polygon& polygon, const QVe
         }
     }
 
-    qDebug() << res;
+    qDebug() << "<<" << res;
 
     return res;
 }

@@ -23,16 +23,17 @@ public:
   inline int getLinesDrawn(void) const { return _linesDrawn; }
   inline int getPolygonsCount(void) const { return _polygonsCount; }
 
-  PolygonList splitSmartVertices(const QVector<QPair<Point2d, bool> >& smartVertices) const;
-  PolygonList cutPolygon(const Polygon& currPolygon, const Segment& line);
-  PolygonList cutPolygons(const Segment& line);
-  void computeCuttingSegments(void);
-  QVector<QPair<Point2d, Segment::Intersection> > computeIntersections(const Polygon& polygon, const Segment& line) const;
-  QList<Segment> computeSegments(const Polygon& polygon, const QVector<QPair<Point2d, Segment::Intersection> >& intersections) const;
-  void sliceIt(const Segment& line);
-  bool isACuttingSegment(const Segment& segment) const;
-  inline QVector<Segment> getCuttingSegments(void) { return _cuttingSegments; }
+//  PolygonList splitSmartVertices(const QVector<QPair<Point2d, bool> >& smartVertices) const;
+//  PolygonList cutPolygon(const Polygon& currPolygon, const Segment& line);
+//  PolygonList cutPolygons(const Segment& line);
+//  void computeCuttingSegments(void);
+//  QVector<QPair<Point2d, Segment::Intersection> > computeIntersections(const Polygon& polygon, const Segment& line) const;
+//  QList<Segment> computeSegments(const Polygon& polygon, const QVector<QPair<Point2d, Segment::Intersection> >& intersections) const;
+//  bool isACuttingSegment(const Segment& segment) const;
+//  inline QVector<Segment> getCuttingSegments(void) { return _cuttingSegments; }
 
+  QVector<Point2d> newComputeIntersections(const Polygon& polygon, const Segment& line) const;
+  void sliceIt(const Segment& line);
   LineType computeLineType(const Segment& line) const;
 
 public slots:

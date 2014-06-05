@@ -35,7 +35,8 @@ public:
   QVector<QPair<Point2d, Segment::Intersection>> newComputeIntersections(const Polygon& polygon, const Segment& line) const;
   void splitVertices(const Polygon& polygon, const Segment& line, QVector<Point2d>& rightVertices, QVector<Point2d>& leftVertices) const;
   QVector<Segment> computeNewEdges(const QVector<QPair<Point2d, Segment::Intersection>>& intersections) const;
-  void sliceIt(const Segment& line);
+  void sliceIt(Segment& line);
+  void shiftLineIfEdgeCut(const Polygon& polygon, Segment& line) const;
   LineType computeLineType(const Segment& line) const;
 
 public slots:

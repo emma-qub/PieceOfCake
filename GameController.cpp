@@ -445,6 +445,19 @@ QVector<QPair<Point2d, Segment::Intersection>> GameController::newComputeInterse
 //        intersections << QPair<Point2d, Segment::Intersection>(v1, intersectionType);
 //      break;
 //    }
+    case Segment::Edge:
+    {
+      Point2d v_1 = vertices.at((k-1)%verticesCount);
+      Point2d v2 = vertices.at((k+2)%verticesCount);
+      if (line.sameSide(v_1, v2)) {
+        intersections << QPair<Point2d, Segment::Intersection>(v1, Segment::EdgeUseless);
+        qDebug() << "EdgeUseless" << v0 << v1;
+      } else {
+        intersections << QPair<Point2d, Segment::Intersection>(v1, intersectionType);
+        qDebug() << "Edge" << v0 << v1;
+      }
+      break;
+    }
     default:
       break;
     }
@@ -474,6 +487,7 @@ QVector<Segment> GameController::computeNewEdges(const QVector<QPair<Point2d, Se
   bool isInside = false;
 
   for (const QPair<Point2d, Segment::Intersection>& intersection: intersections) {
+    qDebug() << "Dealing with" << intersection;
     Point2d currPoint = intersection.first;
     Segment::Intersection currIntersectionType = intersection.second;
     if (!isInside && currIntersectionType == Segment::Regular) {
@@ -482,20 +496,29 @@ QVector<Segment> GameController::computeNewEdges(const QVector<QPair<Point2d, Se
     } else if (isInside && currIntersectionType == Segment::Regular) {
       newEdges << Segment(fstPoint, currPoint);
       isInside = false;
-    } else if (!isInside && currIntersectionType != Segment::Regular) {
-      if (currIntersectionType == Segment::FirstVertexRegular || currIntersectionType == Segment::SecondVertexRegular) {
+    } else if (isInside && (currIntersectionType == Segment::Edge || currIntersectionType == Segment::EdgeUseless)) {
+      if (currIntersectionType == Segment::Edge) {
+        qDebug() << "########### Edge" << fstPoint << currPoint;
+        newEdges << Segment(fstPoint, currPoint);
+        isInside = false;
+      } else if (currIntersectionType == Segment::EdgeUseless) {
+        qDebug() << "########### EdgeUseless" << fstPoint << currPoint;
+        newEdges << Segment(fstPoint, currPoint);
+        isInside = true;
+      }
+    } else if (!isInside && (currIntersectionType == Segment::FirstVertexRegular || currIntersectionType == Segment::VertexUseless)) {
+      if (currIntersectionType == Segment::FirstVertexRegular) {
         fstPoint = currPoint;
         isInside = true;
       }
-    } else if (isInside && currIntersectionType != Segment::Regular) {
-      if (currIntersectionType != Segment::VertexUseless) {
+    } else if (isInside && (currIntersectionType == Segment::FirstVertexRegular || currIntersectionType == Segment::VertexUseless)) {
+      if (currIntersectionType == Segment::FirstVertexRegular) {
         newEdges << Segment(fstPoint, currPoint);
         isInside = false;
-      } else {  // currIntersectionType == Segment::FirstVertexRegular || currIntersectionType == Segment::SecondVertexRegular
+      } else if (currIntersectionType == Segment::VertexUseless) {
         newEdges << Segment(fstPoint, currPoint);
         fstPoint = currPoint;
       }
-      //isInside = true;
     }
   }
 

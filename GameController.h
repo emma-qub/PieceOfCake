@@ -32,7 +32,9 @@ public:
 //  bool isACuttingSegment(const Segment& segment) const;
 //  inline QVector<Segment> getCuttingSegments(void) { return _cuttingSegments; }
 
-  QVector<Point2d> newComputeIntersections(const Polygon& polygon, const Segment& line) const;
+  QVector<QPair<Point2d, Segment::Intersection>> newComputeIntersections(const Polygon& polygon, const Segment& line) const;
+  void splitVertices(const Polygon& polygon, const Segment& line, QVector<Point2d>& rightVertices, QVector<Point2d>& leftVertices) const;
+  QVector<Segment> computeNewEdges(const QVector<QPair<Point2d, Segment::Intersection>>& intersections) const;
   void sliceIt(const Segment& line);
   LineType computeLineType(const Segment& line) const;
 
@@ -54,5 +56,7 @@ private:
   int _linesDrawn;
   int _polygonsCount;
 };
+
+bool pairCompare(const QPair<Point2d, Segment::Intersection>& fstElem, const QPair<Point2d, Segment::Intersection>& sndElem);
 
 #endif // GAMECONTROLLER_HXX

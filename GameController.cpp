@@ -411,9 +411,7 @@ GameController::GameController(GameModel* model, QWidget* tabWidget, QUndoStack*
 //    return res;
 //}
 
-QVector<QPair<Point2d, Segment::Intersection>> GameController::newComputeIntersections(const Polygon& polygon, const Segment& line) const {
-  QVector<QPair<Point2d, Segment::Intersection>> intersections;
-
+void GameController::newComputeIntersections(const Polygon& polygon, const Segment& line, QVector<QPair<Point2d, Segment::Intersection>>& intersections, QMap<Segment, Point2d>& mapSegmentIntersection) const {
   std::vector<Point2d> vertices = polygon.getVertices();
   unsigned int verticesCount = vertices.size();
 
@@ -425,15 +423,22 @@ QVector<QPair<Point2d, Segment::Intersection>> GameController::newComputeInterse
     Segment::Intersection intersectionType = currEdge.computeIntersection(line);
     switch (intersectionType) {
     case Segment::Regular:
-      intersections << QPair<Point2d, Segment::Intersection>(Segment::intersectionPoint(currEdge, line), intersectionType);
+    {
+      Point2d currIntersection = Segment::intersectionPoint(currEdge, line);
+      intersections << QPair<Point2d, Segment::Intersection>(currIntersection, intersectionType);
+      //mapSegmentIntersection.insert(currEdge, currIntersection);
       break;
+    }
     case Segment::FirstVertexRegular:
     {
       Point2d v_1 = vertices.at((k-1)%verticesCount);
-      if (line.sameSide(v_1, v1))
-        intersections << QPair<Point2d, Segment::Intersection>(v0, Segment::VertexUseless);
-      else
+      if (!line.sameSide(v_1, v1)) {
+        Point2d currIntersection = Segment::intersectionPoint(currEdge, line);
         intersections << QPair<Point2d, Segment::Intersection>(v0, intersectionType);
+        //mapSegmentIntersection.insert(Segment(v0, v1), currIntersection);
+      }
+//      else
+//        intersections << QPair<Point2d, Segment::Intersection>(v0, Segment::VertexUseless);
       break;
     }
 //    case Segment::SecondVertexRegular:
@@ -464,8 +469,6 @@ QVector<QPair<Point2d, Segment::Intersection>> GameController::newComputeInterse
   }
 
   qSort(intersections.begin(), intersections.end(), pairCompare);
-
-  return intersections;
 }
 
 void GameController::splitVertices(const Polygon& polygon, const Segment& line, QVector<Point2d>& rightVertices, QVector<Point2d>& leftVertices) const {
@@ -506,19 +509,19 @@ QVector<Segment> GameController::computeNewEdges(const QVector<QPair<Point2d, Se
         newEdges << Segment(fstPoint, currPoint);
         isInside = true;
       }
-    }*/ else if (!isInside && (currIntersectionType == Segment::FirstVertexRegular || currIntersectionType == Segment::VertexUseless)) {
+    }*/ else if (!isInside && (currIntersectionType == Segment::FirstVertexRegular/* || currIntersectionType == Segment::VertexUseless*/)) {
       if (currIntersectionType == Segment::FirstVertexRegular) {
         fstPoint = currPoint;
         isInside = true;
       }
-    } else if (isInside && (currIntersectionType == Segment::FirstVertexRegular || currIntersectionType == Segment::VertexUseless)) {
+    } else if (isInside && (currIntersectionType == Segment::FirstVertexRegular/* || currIntersectionType == Segment::VertexUseless*/)) {
       if (currIntersectionType == Segment::FirstVertexRegular) {
         newEdges << Segment(fstPoint, currPoint);
         isInside = false;
-      } else if (currIntersectionType == Segment::VertexUseless) {
+      }/* else if (currIntersectionType == Segment::VertexUseless) {
         newEdges << Segment(fstPoint, currPoint);
         fstPoint = currPoint;
-      }
+      }*/
     }
   }
 
@@ -537,6 +540,56 @@ void GameController::shiftLineIfEdgeCut(const Polygon& polygon, Segment& line) c
     if (currEdge.computeIntersection(line) == Segment::Edge) {
       line.setA(line.getA()+Point2d(1.0, 1.0));
       return;
+    }
+  }
+}
+
+Point2d GameController::findOtherBound(const Point2d& fstBound, const QVector<Segment>& newEdges) const {
+  for (const Segment& currSegment: newEdges) {
+    if (currSegment.getA() == fstBound) {
+      return currSegment.getB();
+    } else if (currSegment.getB() == fstBound) {
+      return currSegment.getA();
+    }
+  }
+
+  return Point2d(-1.0, -1.0);
+}
+
+void GameController::createPolygons(QVector<Point2d>& oldPolygonVertices, std::vector<Point2d>& newPolygonVertices, const Polygon& oldPolygon, const QMap<Segment, Point2d>& mapSegmentIntersection, const QVector<Segment>& newEdges) const {
+  std::vector<Point2d> polygonVertices = oldPolygon.getVertices();
+  int verticesCount = polygonVertices.size();
+  bool seekNewVertex = false;
+  Point2d otherBound(-1.0, -1.0);
+
+  for (int k = 0; k < verticesCount; ++k) {
+    Point2d v0 = oldPolygonVertices.at(k);
+    Point2d v1 = oldPolygonVertices.at((k+1)%verticesCount);
+    Segment currSegment(v0, v1);
+
+    bool v0IsToBeAdd = oldPolygonVertices.contains(v0);
+    bool v1IsToBeAdd = oldPolygonVertices.contains(v1);
+
+    if (v0IsToBeAdd && v1IsToBeAdd) {
+      newPolygonVertices.push_back(v0);
+    } else if (v0IsToBeAdd && !v1IsToBeAdd) {
+      //Point2d currIntersection = mapSegmentIntersection.value(Segment(v0, v1));
+      newPolygonVertices.push_back(v0);
+      //newPolygonVertices.push_back(currIntersection);
+      seekNewVertex = true;
+      //otherBound = findOtherBound(currIntersection, newEdges);
+    } else if (!v0IsToBeAdd && v1IsToBeAdd) {
+      //newPolygonVertices.push_back(mapSegmentIntersection.value(Segment(v0, v1)));
+      seekNewVertex = false;
+    }
+
+    if (!seekNewVertex) {
+      newPolygonVertices.push_back(v0);
+//      Point2d currIntersection = mapSegmentIntersection.value(currSegment, Point2d(-1.0, -1.0));
+//      if (currIntersection != Point2d(-1.0, -1.0)) {
+//        newPolygonVertices.push_back(currIntersection);
+//        seekNewVertex = true;
+//      }
     }
   }
 }
@@ -570,7 +623,9 @@ void GameController::sliceIt(Segment& line) {
     shiftLineIfEdgeCut(polygon, line);
     std::cerr << line << std::endl;
 
-    QVector<QPair<Point2d, Segment::Intersection>> intersections = newComputeIntersections(polygon, line);
+    QVector<QPair<Point2d, Segment::Intersection>> intersections;
+    QMap<Segment, Point2d> mapSegmentIntersection;
+    newComputeIntersections(polygon, line, intersections, mapSegmentIntersection);
     qDebug() << "### Intersections ###\n" << intersections << "\n";
 
     QVector<Point2d> rightVertices;
@@ -581,6 +636,18 @@ void GameController::sliceIt(Segment& line) {
 
     QVector<Segment> newEdges = computeNewEdges(intersections);
     qDebug() << "### New Edges ###\n" << newEdges << "\n";
+
+    std::vector<Point2d> newPolygonVertices;
+    createPolygons(leftVertices, newPolygonVertices, polygon, mapSegmentIntersection, newEdges);
+
+    Polygon newPolygon(newPolygonVertices);
+    _model->setPolygonList(PolygonList() << newPolygon);
+
+    _polygonsCount = _model->getPolygonsCount();
+    _linesDrawn++;
+
+    emit update();
+
   }
 }
 
@@ -637,7 +704,7 @@ void GameController::openLevel(const QString& fileName) {
     _linesCount = parser.getLinesCount();
     _partsCount = parser.getPartsCount();
     _linesDrawn = 0;
-    _polygonsCount = _model->getPoligonsCount();
+    _polygonsCount = _model->getPolygonsCount();
 
     emit update();
 }

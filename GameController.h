@@ -32,11 +32,13 @@ public:
 //  bool isACuttingSegment(const Segment& segment) const;
 //  inline QVector<Segment> getCuttingSegments(void) { return _cuttingSegments; }
 
-  QVector<QPair<Point2d, Segment::Intersection>> newComputeIntersections(const Polygon& polygon, const Segment& line) const;
+  void newComputeIntersections(const Polygon& polygon, const Segment& line, QVector<QPair<Point2d, Segment::Intersection>>& intersections, QMap<Segment, Point2d>& mapSegmentIntersection) const;
   void splitVertices(const Polygon& polygon, const Segment& line, QVector<Point2d>& rightVertices, QVector<Point2d>& leftVertices) const;
   QVector<Segment> computeNewEdges(const QVector<QPair<Point2d, Segment::Intersection>>& intersections) const;
-  void sliceIt(Segment& line);
+  Point2d findOtherBound(const Point2d& fstBound, const QVector<Segment>& newEdges) const;
+  void createPolygons(QVector<Point2d>& oldPolygonVertices, std::vector<Point2d>& newPolygonVertices, const Polygon& oldPolygon, const QMap<Segment, Point2d>& mapSegmentIntersection, const QVector<Segment>& newEdges) const;
   void shiftLineIfEdgeCut(const Polygon& polygon, Segment& line) const;
+  void sliceIt(Segment& line);
   LineType computeLineType(const Segment& line) const;
 
 public slots:

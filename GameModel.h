@@ -17,7 +17,7 @@ public:
   inline PolygonList getPolygonList(void) const { return _polygonList; }
   void setPolygonList(const PolygonList& polygonList);
 
-  inline int getPoligonsCount(void) const {return _polygonsCount; }
+  inline int getPolygonsCount(void) const {return _polygonsCount; }
 
   inline QColor getColor(void) const { return _color; }
 

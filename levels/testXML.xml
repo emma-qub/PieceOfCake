@@ -1,0 +1,61 @@
+<!DOCTYPE SliceItML>
+<level>
+    <polygons>
+        <polygon id="0">
+            <vertex x="100" y="100"/>
+            <vertex x="400" y="100"/>
+            <vertex x="400" y="400"/>
+            <vertex x="100" y="400"/>
+        </polygon>
+        <polygon id="1">
+            <vertex x="100" y="300"/>
+            <vertex x="420" y="350"/>
+            <vertex x="140" y="780"/>
+        </polygon>
+        <polygon id="2">
+            <vertex x="100" y="300"/>
+            <vertex x="420" y="350"/>
+            <vertex x="140" y="780"/>
+        </polygon>
+        <polygon id="3">
+            <vertex x="100" y="300"/>
+            <vertex x="420" y="350"/>
+            <vertex x="140" y="780"/>
+        </polygon>
+        <polygon id="4">
+            <vertex x="100" y="100"/>
+            <vertex x="400" y="100"/>
+            <vertex x="400" y="400"/>
+            <vertex x="100" y="400"/>
+        </polygon>
+        <polygon id="5">
+            <vertex x="100" y="100"/>
+            <vertex x="100" y="400"/>
+            <vertex x="400" y="400"/>
+            <vertex x="400" y="100"/>
+        </polygon>
+        <polygon id="6">
+            <vertex x="100" y="300"/>
+            <vertex x="420" y="350"/>
+            <vertex x="140" y="780"/>
+        </polygon>
+    </polygons>
+    <partscount value="5"/>
+    <linescount value="3"/>
+    <hints>
+        <hint id="0">
+            <Line>
+                <bound x="23" y="45"/>
+                <bound x="362" y="495"/>
+            </Line>
+            <cost value="3"/>
+        </hint>
+        <hint id="1">
+            <Line>
+                <bound x="32" y="55"/>
+                <bound x="562" y="395"/>
+            </Line>
+            <cost value="2"/>
+        </hint>
+    </hints>
+</level>

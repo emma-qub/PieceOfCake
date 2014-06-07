@@ -29,6 +29,7 @@ public:
     float orientedArea(void) const;
 
     friend bool operator==(const Segment& segment1, const Segment& segment2);
+    friend bool operator<(const Segment& segment1, const Segment& segment2);
 
     Segment& operator=(const Segment& segment);
 

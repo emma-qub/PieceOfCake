@@ -26,6 +26,11 @@ ParserXML::ParserXML(QString xmlFileName) :
     _doc(QDomDocument("SliceItML")) {
 
     QFile XMLDoc(_xmlFileName);
+    if (!XMLDoc.exists()) {
+        qDebug() << "Error:" << _xmlFileName << "file not found";
+        return;
+    }
+
     if(!XMLDoc.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qDebug() << "Cannot open XML file in ParserXML::ParserXML(QString xmlFileName)";
         return;

@@ -141,6 +141,19 @@ bool operator==(const Segment& segment1, const Segment& segment2) {
     return (segment1.getA() == segment2.getA() && segment1.getB() == segment2.getB());
 }
 
+bool operator<(const Segment& segment1, const Segment& segment2) {
+  Point2d A = segment1.getA();
+  Point2d B = segment1.getB();
+  Point2d C = segment2.getA();
+  Point2d D = segment2.getB();
+
+  if (A != C) {
+    return A < C;
+  } else {
+    return B < D;
+  }
+}
+
 std::ostream& operator<<(std::ostream& os, const Segment& segment) {
     return os << "(Segment) [" << segment.getA() << " " << segment.getB() << "]";
 }

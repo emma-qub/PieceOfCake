@@ -3,12 +3,11 @@
 
 #include <LineModifier.h>
 
-class Tape : public LineModifier {
-
+class Tape: public LineModifier {
 public:
-    Tape();
+  Tape(void);
 
-    std::vector<Segment> transform(const Segment&);
+  std::vector<Segment> transform(const Segment&);
 };
 
 #endif // TAPE_H

@@ -1,9 +1,9 @@
 #include "Tape.h"
 
-Tape::Tape() :
-    LineModifier() {
+Tape::Tape(void):
+  LineModifier() {
 }
 
 std::vector<Segment> Tape::transform(const Segment&) {
-    return std::vector<Segment>();
+  return std::vector<Segment>();
 }

@@ -8,7 +8,7 @@
 
 typedef QList<Polygon> PolygonList;
 
-class GameModel : public QStandardItemModel {
+class GameModel: public QStandardItemModel {
   Q_OBJECT
 
 public:
@@ -18,7 +18,6 @@ public:
   void setPolygonList(const PolygonList& polygonList);
 
   inline int getPolygonsCount(void) const {return _polygonsCount; }
-
   inline QColor getColor(void) const { return _color; }
 
   void populate(void);

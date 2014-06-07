@@ -1,7 +1,7 @@
 #include "GameModel.h"
 #include <QDebug>
 
-GameModel::GameModel(QObject* parent) :
+GameModel::GameModel(QObject* parent):
   QStandardItemModel(parent),
   _polygonsCount(-1) {
 

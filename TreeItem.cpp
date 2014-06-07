@@ -49,131 +49,112 @@
 #include <QStringList>
 #include <QDebug>
 
-TreeItem::TreeItem(const QVector<QPair<QVariant, QVariant>> &data, TreeItem *parent)
-{
-    parentItem = parent;
-    itemData = data;
+TreeItem::TreeItem(const QVector<QPair<QVariant, QVariant>> &data, TreeItem *parent) {
+  parentItem = parent;
+  itemData = data;
 }
 
-TreeItem::~TreeItem()
-{
-    qDeleteAll(childItems);
+TreeItem::~TreeItem() {
+  qDeleteAll(childItems);
 }
 
-TreeItem *TreeItem::child(int number) const
-{
-    return childItems.value(number);
+TreeItem *TreeItem::child(int number) const {
+  return childItems.value(number);
 }
 
-int TreeItem::childCount() const
-{
-    return childItems.count();
+int TreeItem::childCount() const {
+  return childItems.count();
 }
 
-int TreeItem::childNumber() const
-{
-//    qDebug() << "-----------------------------";
-//    qDebug() << "#" << parentItem;
-//    qDebug() << "#" << parentItem->childItems;
-//    qDebug() << "#" << itemData;
-//    qDebug() << "-----------------------------";
+int TreeItem::childNumber() const {
+  if (parentItem)
+    return parentItem->childItems.indexOf(const_cast<TreeItem*>(this));
 
-    if (parentItem)
-        return parentItem->childItems.indexOf(const_cast<TreeItem*>(this));
-
-    return 0;
+  return 0;
 }
 
-int TreeItem::columnCount() const
-{
-    return itemData.count();
+int TreeItem::columnCount() const {
+  return itemData.count();
 }
 
-QVariant TreeItem::data(int column, int role) const
-{
-    if (role == Qt::EditRole || role == Qt::DisplayRole)
-        return itemData.value(column).first;
-    else if (role == Qt::DecorationRole)
-        return itemData.value(column).second;
+QVariant TreeItem::data(int column, int role) const {
+  if (role == Qt::EditRole || role == Qt::DisplayRole)
+    return itemData.value(column).first;
+  else if (role == Qt::DecorationRole)
+    return itemData.value(column).second;
 
-    return QVariant();
+  return QVariant();
 }
 
-bool TreeItem::insertChildren(int position, int count, int columns)
-{
-    if (position < 0 || position > childItems.size())
-        return false;
+bool TreeItem::insertChildren(int position, int count, int columns) {
+  if (position < 0 || position > childItems.size())
+    return false;
 
-    for (int row = 0; row < count; ++row) {
-        QVector<QPair<QVariant, QVariant>> data(columns);
-        TreeItem *item = new TreeItem(data, this);
-        childItems.insert(position, item);
-    }
+  for (int row = 0; row < count; ++row) {
+    QVector<QPair<QVariant, QVariant>> data(columns);
+    TreeItem *item = new TreeItem(data, this);
+    childItems.insert(position, item);
+  }
 
-    return true;
+  return true;
 }
 
-bool TreeItem::insertColumns(int position, int columns)
-{
-    if (position < 0 || position > itemData.size())
-        return false;
+bool TreeItem::insertColumns(int position, int columns) {
+  if (position < 0 || position > itemData.size())
+    return false;
 
-    for (int column = 0; column < columns; ++column)
-        itemData.insert(position, QPair<QVariant, QVariant>());
+  for (int column = 0; column < columns; ++column)
+    itemData.insert(position, QPair<QVariant, QVariant>());
 
-    foreach (TreeItem *child, childItems)
-        child->insertColumns(position, columns);
+  foreach (TreeItem *child, childItems)
+    child->insertColumns(position, columns);
 
-    return true;
+  return true;
 }
 
-TreeItem *TreeItem::parent() const
-{
-    return parentItem;
+TreeItem *TreeItem::parent() const {
+  return parentItem;
 }
 
-bool TreeItem::removeChildren(int position, int count)
-{
-    if (position < 0 || position + count > childItems.size())
-        return false;
+bool TreeItem::removeChildren(int position, int count) {
+  if (position < 0 || position + count > childItems.size())
+    return false;
 
-    for (int row = 0; row < count; ++row)
-        delete childItems.takeAt(position);
+  for (int row = 0; row < count; ++row)
+    delete childItems.takeAt(position);
 
-    return true;
+  return true;
 }
 
-bool TreeItem::removeColumns(int position, int columns)
-{
-    if (position < 0 || position + columns > itemData.size())
-        return false;
+bool TreeItem::removeColumns(int position, int columns) {
+  if (position < 0 || position + columns > itemData.size())
+    return false;
 
-    for (int column = 0; column < columns; ++column)
-        itemData.remove(position);
+  for (int column = 0; column < columns; ++column)
+    itemData.remove(position);
 
-    foreach (TreeItem *child, childItems)
-        child->removeColumns(position, columns);
+  foreach (TreeItem *child, childItems)
+    child->removeColumns(position, columns);
 
-    return true;
+  return true;
 }
 
-bool TreeItem::setData(int column, const QVariant &value, int role)
-{
-    if ((column < 0 || column >= itemData.size()) && (role != Qt::EditRole || role != Qt::DecorationRole))
-        return false;
+bool TreeItem::setData(int column, const QVariant &value, int role) {
+  if ((column < 0 || column >= itemData.size()) && (role != Qt::EditRole || role != Qt::DecorationRole))
+    return false;
 
-    if (role == Qt::EditRole)
-        itemData[column].first = value;
-    else if (role == Qt::DecorationRole)
-        itemData[column].second = value;
+  if (role == Qt::EditRole)
+    itemData[column].first = value;
+  else if (role == Qt::DecorationRole)
+    itemData[column].second = value;
 
-    return true;
+  return true;
 }
 
 std::ostream& operator<<(std::ostream& os, const TreeItem& item) {
-    for (int k = 0; k < item.columnCount(); k++) {
-        os << item.child(0)->data(k, Qt::EditRole).toString().toStdString() << std::endl;
-    }
+  for (int k = 0; k < item.columnCount(); k++) {
+    os << item.child(0)->data(k, Qt::EditRole).toString().toStdString() << std::endl;
+  }
 
-    return os;
+  return os;
 }

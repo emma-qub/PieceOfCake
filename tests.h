@@ -10,19 +10,18 @@
 #include "ParserXML.h"
 
 class Test {
-
 public:
-    Test(void) {}
-    virtual ~Test(void) {}
+  Test(void) {}
+  virtual ~Test(void) {}
 
-    static void testPoint2d(void);
-    static void testVector2d(void);
-    static void testPolygon(void);
-    static void testModelView(void);
-    static void testXML(void);
+  static void testPoint2d(void);
+  static void testVector2d(void);
+  static void testPolygon(void);
+  static void testModelView(void);
+  static void testXML(void);
 
 private:
-    static void permute(std::vector<Point2d>& v);
+  static void permute(std::vector<Point2d>& v);
 };
 
 

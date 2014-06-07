@@ -48,30 +48,29 @@
 
 #include <iostream>
 
-class TreeItem
-{
+class TreeItem {
 public:
-    explicit TreeItem(const QVector<QPair<QVariant, QVariant>> &data, TreeItem *parent = 0);
-    ~TreeItem();
+  explicit TreeItem(const QVector<QPair<QVariant, QVariant>> &data, TreeItem *parent = 0);
+  ~TreeItem();
 
-    TreeItem *child(int number) const;
-    int childCount() const;
-    int columnCount() const;
-    QVariant data(int column, int role = Qt::DisplayRole) const;
-    bool insertChildren(int position, int count, int columns);
-    bool insertColumns(int position, int columns);
-    TreeItem *parent() const;
-    bool removeChildren(int position, int count);
-    bool removeColumns(int position, int columns);
-    int childNumber() const;
-    bool setData(int column, const QVariant &value, int role = Qt::EditRole);
+  TreeItem *child(int number) const;
+  int childCount() const;
+  int columnCount() const;
+  QVariant data(int column, int role = Qt::DisplayRole) const;
+  bool insertChildren(int position, int count, int columns);
+  bool insertColumns(int position, int columns);
+  TreeItem *parent() const;
+  bool removeChildren(int position, int count);
+  bool removeColumns(int position, int columns);
+  int childNumber() const;
+  bool setData(int column, const QVariant &value, int role = Qt::EditRole);
 
-    friend std::ostream& operator<<(std::ostream& os, const TreeItem& item);
+  friend std::ostream& operator<<(std::ostream& os, const TreeItem& item);
 
 private:
-    QList<TreeItem*> childItems;
-    QVector<QPair<QVariant, QVariant>> itemData;
-    TreeItem *parentItem;
+  QList<TreeItem*> childItems;
+  QVector<QPair<QVariant, QVariant>> itemData;
+  TreeItem *parentItem;
 };
 
 #endif // TREEITEM_H

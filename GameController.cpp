@@ -5,11 +5,9 @@
 #include <QDoubleValidator>
 #include <QMap>
 
-GameController::GameController(GameModel* model, QWidget* tabWidget, QUndoStack* undoStack, QObject* parent) :
+GameController::GameController(GameModel* model, QWidget* tabWidget, QUndoStack* undoStack, QObject* parent):
   AbstractController(model, tabWidget, undoStack, parent),
   _model(model),
-  _newVertices(),
-  _cuttingSegments(),
   _linesCount(-1),
   _partsCount(-1),
   _linesDrawn(-1),
@@ -265,6 +263,8 @@ void GameController::openLevel(const QString& fileName) {
 
     emit update();
 }
+
+
 
 bool pairCompare(const QPair<Point2d, Segment::Intersection>& fstElem, const QPair<Point2d, Segment::Intersection>& sndElem) {
   return fstElem.first < sndElem.first;

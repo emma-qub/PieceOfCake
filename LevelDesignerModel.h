@@ -9,51 +9,51 @@
 
 typedef QList<Polygon> PolygonList;
 
-class  LevelDesignerModel : public TreeModel {
-    Q_OBJECT
+class  LevelDesignerModel: public TreeModel {
+  Q_OBJECT
 
 public:
-    explicit LevelDesignerModel(const QStringList& headers = QStringList(), const QString& data = QString(), QObject* parent = 0);
-    virtual ~ LevelDesignerModel(void);
+  explicit LevelDesignerModel(const QStringList& headers = QStringList(), const QString& data = QString(), QObject* parent = 0);
+  virtual ~ LevelDesignerModel(void);
 
-    void setPolygonList(const PolygonList& polygonList);
-    PolygonList getPolygonList(void) const { return _polygonList; }
+  void setPolygonList(const PolygonList& polygonList);
+  PolygonList getPolygonList(void) const { return _polygonList; }
 
-    inline QStack<QPair<int, int>> getSelections(void) const { return _selections; }
-    inline void addSelection(QPair<int, int> selection) { _selections << selection; }
-    inline void addSelection(int polygonRow, int vertexRow) { addSelection(QPair<int, int>(polygonRow, vertexRow)); }
-    inline QPair<int, int> popSelection(void) { return _selections.pop(); }
+  inline QStack<QPair<int, int>> getSelections(void) const { return _selections; }
+  inline void addSelection(QPair<int, int> selection) { _selections << selection; }
+  inline void addSelection(int polygonRow, int vertexRow) { addSelection(QPair<int, int>(polygonRow, vertexRow)); }
+  inline QPair<int, int> popSelection(void) { return _selections.pop(); }
 
-    void clear(void);
+  void clear(void);
 
-    bool polygonHasVertex(int polygonRow);
+  bool polygonHasVertex(int polygonRow);
 
-    Polygon polygonFromIndex(const QModelIndex& polygonIndex);
-    Point2d vertexFromIndex(const QModelIndex& vertexIndex);
+  Polygon polygonFromIndex(const QModelIndex& polygonIndex);
+  Point2d vertexFromIndex(const QModelIndex& vertexIndex);
 
-    bool appendPolygon(const Polygon& polygon);
-    bool insertPolygon(int polygonRow, const Polygon& polygon);
-    bool removePolygon(int polygonRow);
-    bool replacePolygon(int polygonRow, const Polygon& polygon);
-    bool translatePolygon(int polygonRow, const Vector2d& direction);
+  bool appendPolygon(const Polygon& polygon);
+  bool insertPolygon(int polygonRow, const Polygon& polygon);
+  bool removePolygon(int polygonRow);
+  bool replacePolygon(int polygonRow, const Polygon& polygon);
+  bool translatePolygon(int polygonRow, const Vector2d& direction);
 
-    bool insertVertex(int polygonRow, int vertexRow, const Point2d& vertex, bool exist = false);
-    bool removeVertex(int polygonRow, int vertexRow);
-    bool replaceVertex(int polygonRow, int vertexRow, const Point2d& vertex);
+  bool insertVertex(int polygonRow, int vertexRow, const Point2d& vertex, bool exist = false);
+  bool removeVertex(int polygonRow, int vertexRow);
+  bool replaceVertex(int polygonRow, int vertexRow, const Point2d& vertex);
 
-    void updatePolygons(void);
-    void updateVertices(QModelIndex polygonIndex);
+  void updatePolygons(void);
+  void updateVertices(QModelIndex polygonIndex);
 
-    void description(QString& desc, TreeItem* item, int shift);
-    void description(void);
+  void description(QString& desc, TreeItem* item, int shift);
+  void description(void);
 
 
 public slots:
-    void debug(QModelIndex,QModelIndex);
+  void debug(QModelIndex,QModelIndex);
 
 protected:
-    PolygonList _polygonList;
-    QStack<QPair<int, int>> _selections;
+  PolygonList _polygonList;
+  QStack<QPair<int, int>> _selections;
 };
 
 #endif // POLYGONTREEMODEL_H

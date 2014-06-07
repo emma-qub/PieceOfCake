@@ -4,12 +4,11 @@
 #include "Segment.h"
 #include <vector>
 
-class LineModifier
-{
+class LineModifier {
 public:
-    LineModifier();
+  LineModifier(void);
 
-    virtual std::vector<Segment> transform(const Segment& line) = 0;
+  virtual std::vector<Segment> transform(const Segment& line) = 0;
 };
 
 #endif // LINEMODIFIER_H

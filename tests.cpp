@@ -396,8 +396,6 @@ void Test::testPolygon(void) {
 }
 
 void Test::testXML(void) {
-  QDir currDir(QDir::current());
-  currDir.cdUp();
   ParserXML parser("../PieceOfCake/levels/testXML.xml");
 
   parser.setLinesCount(3);

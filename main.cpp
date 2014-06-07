@@ -34,8 +34,8 @@ int main(int argc, char** argv) {
 #if GUI
   QApplication app(argc, argv);
 
-  QFontDatabase::addApplicationFont("../SliceIt/fonts/edosz.ttf");
-  QFontDatabase::addApplicationFont("../SliceIt/fonts/watermark.ttf");
+  QFontDatabase::addApplicationFont("../PieceOfCake/fonts/edosz.ttf");
+  QFontDatabase::addApplicationFont("../PieceOfCake/fonts/watermark.ttf");
 
   MainWindow window;
   window.show();

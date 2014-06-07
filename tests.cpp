@@ -109,9 +109,9 @@ void Test::testPoint2d(void) {
   std::cerr << p << std::endl;
 
   // Operator<
-  Point2d p1(10, 20), p2(30, 60), p3(40, 80), p4(5, 10);
-  std::cerr << (p1 < p2 && p2 < p3) << std::endl;
-  std::cerr << (p4 < p3 && p3 < p2) << std::endl;
+  Point2d p1(10, 20), p2(30, 60), p3(40, 80), p4(5, 10), p5(5, 30);
+  assert(p1 < p2 && p2 < p3);
+  assert(p4 < p1 && p4 < p2 && p4 < p3 && p4 < p5);
 
   unsigned int last;
 
@@ -156,7 +156,7 @@ void Test::permute(std::vector<Point2d>& v) {
   unsigned int last = v.size()-1;
   unsigned int k = 0;
   while (!((v.at(0) < v.at(1) && v.at(1) < v.at(2)) && (v.at(last-2) < v.at(last-1) && v.at(last-1) < v.at(last)))
-         && !((v.at(2) < v.at(1) && v.at(1) < v.at(0)) && (v.at(last) < v.at(last-1) && v.at(last-1) < v.at(last-2)))) {
+      && !((v.at(2) < v.at(1) && v.at(1) < v.at(0)) && (v.at(last) < v.at(last-1) && v.at(last-1) < v.at(last-2)))) {
     Point2d p(v.at(0));
     v.erase(v.begin());
     v.push_back(p);
@@ -188,7 +188,7 @@ void Test::testVector2d(void) {
   u.setY(4.2);
 
   assert(std::abs(u.getX() - 3.0) < EPS);
-  //    std::cerr << std::setprecision(10) << u.getY() << " " << 4.2 << std::endl;
+  //std::cerr << std::setprecision(10) << u.getY() << " " << 4.2 << std::endl;
   assert(std::abs(u.getY() - 4.2) < EPS);
 
 
@@ -396,7 +396,9 @@ void Test::testPolygon(void) {
 }
 
 void Test::testXML(void) {
-  ParserXML parser("../SliceIt/levels/testXML.xml");
+  QDir currDir(QDir::current());
+  currDir.cdUp();
+  ParserXML parser("../PieceOfCake/levels/testXML.xml");
 
   parser.setLinesCount(3);
   parser.setPartsCount(5);

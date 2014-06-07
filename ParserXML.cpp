@@ -7,7 +7,7 @@
  ****************/
 ParserXML::ParserXML(void):
   _xmlFileName(),
-  _doc("SliceItML"),
+  _doc("PieceOfCakeML"),
   _polygonNodesCount(0),
   _hintNodesCount(0) {
 
@@ -23,7 +23,7 @@ ParserXML::ParserXML(void):
 
 ParserXML::ParserXML(QString xmlFileName):
   _xmlFileName(xmlFileName),
-  _doc(QDomDocument("SliceItML")) {
+  _doc(QDomDocument("PieceOfCakeML")) {
 
   QFile XMLDoc(_xmlFileName);
   if (!XMLDoc.exists()) {

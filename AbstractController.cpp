@@ -98,7 +98,7 @@ void AbstractController::saveFile(void) {
 }
 
 void AbstractController::saveAsFile(void) {
-  QString fileName = QFileDialog::getSaveFileName(_tabWidget, "Save file as", "../SliceIt/levels/", "XML files (*.xml)");
+  QString fileName = QFileDialog::getSaveFileName(_tabWidget, "Save file as", "../PieceOfCake/levels/", "XML files (*.xml)");
   if (!fileName.isEmpty()) {
     if (!fileName.endsWith(".xml", Qt::CaseInsensitive))
       fileName += ".xml";

@@ -7,7 +7,7 @@
 
 class LineModifier {
 public:
-  LineModifier();
+  LineModifier(void);
 
   virtual std::string getName(void) const = 0;
 };

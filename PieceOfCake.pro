@@ -31,7 +31,8 @@ HEADERS += \
   Hint.h \
   MainWindow.h \
   ParserXML.h \
-  tests.h
+  tests.h \
+    LineModifier/Mirror.h
 
 SOURCES += \
   # Controller
@@ -66,7 +67,8 @@ SOURCES += \
   Hint.cpp \
   MainWindow.cpp \
   ParserXML.cpp \
-  main.cpp
+  main.cpp \
+    LineModifier/Mirror.cpp
 
 INCLUDEPATH += \
   Controller \

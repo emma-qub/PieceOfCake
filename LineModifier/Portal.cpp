@@ -2,15 +2,14 @@
 
 //int Portal::_length = 10;
 
-//Portal::Portal():
-//  LineModifier(Polygon()),
-//  _fstPosition(),
-//  _sndPosition(),
-//  _fstDirection(),
-//  _sndDirection() {
+Portal::Portal(void):
+  Deviation()/*,
+  _fstPosition(),
+  _sndPosition(),
+  _fstDirection(),
+  _sndDirection()*/ {
 
-//  _shape.
-//}
+}
 
 //std::vector<Segment> Portal::transform(const Segment& line) {
 //  std::vector<Segment> res;

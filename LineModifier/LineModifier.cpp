@@ -1,4 +1,4 @@
 #include "LineModifier.h"
 
-LineModifier::LineModifier() {
+LineModifier::LineModifier(void) {
 }

@@ -4,10 +4,10 @@
 #include "Deviation.h"
 
 class Portal: Deviation {
-//public:
+public:
 //  static int _width;
 
-//  Portal();
+  Portal(void);
 
 //  virtual std::vector<Segment> deviateLine(const Segment& line);
 

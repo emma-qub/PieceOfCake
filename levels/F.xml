@@ -14,7 +14,8 @@
             <vertex x="105" y="305"/>
         </polygon>
     </polygons>
-    <partscount value="7" />
-    <linescount value="5" />
+    <partscount value="2" />
+    <linescount value="1" />
+    <maxgaptowin value="25" />
     <hints/>
 </level>

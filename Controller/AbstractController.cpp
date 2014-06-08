@@ -75,12 +75,21 @@ void AbstractController::openFile(void) {
 
   if (canOpen) {
     QString fileName = QFileDialog::getOpenFileName(_tabWidget, "Open file", "../PieceOfCake/levels/", "XML Files (*.xml)");
+    if (!checkFileExists) {
+      qDebug() << "Error:" << fileName << "file not found in AbstractController::openFile";
+      return;
+    }
 
     if (!fileName.isEmpty()) {
       initNewDocument(false, fileName);
       openLevel(fileName);
     }
   }
+}
+
+bool AbstractController::checkFileExists(const QString& fileName) {
+  QFile file(fileName);
+  return file.exists();
 }
 
 void AbstractController::saveFile(void) {

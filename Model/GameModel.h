@@ -24,6 +24,8 @@ public:
   void insertPolygon(int polygonRow, const Polygon& polygon);
   void insertVertex(int polygonRow, int vertexRow, const Point2d& vertex);
 
+  void clearPolygons(void);
+
 private:
   QColor _color;
   PolygonList _polygonList;

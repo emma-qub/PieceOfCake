@@ -266,6 +266,10 @@ int ParserXML::getTolerances(void) {
   return getIntValue("tolerances");
 }
 
+int ParserXML::getmaxGapToWin(void) {
+  return getIntValue("maxgaptowin");
+}
+
 Polygon ParserXML::createPolygon(const QDomElement& element) {
   Polygon polygon;
 

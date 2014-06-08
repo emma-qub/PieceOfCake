@@ -57,6 +57,7 @@ public:
   int getLinesCount(void);
   int getStarsCount(void);
   int getTolerances(void);
+  int getmaxGapToWin(void);
   Polygon createPolygon(const QDomElement& element);
   Hint createHint(const QDomElement& element);
 

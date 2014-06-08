@@ -57,3 +57,9 @@ void GameModel::insertVertex(int polygonRow, int vertexRow, const Point2d& verte
   QStandardItem* yItem = new QStandardItem(QString::number(vertex.getY()));
   vertexItem->insertRows(0, QList<QStandardItem*>() << xItem << yItem);
 }
+
+void GameModel::clearPolygons(void) {
+  QStandardItemModel::clear();
+  _polygonList.clear();
+  _polygonsCount = 0;
+}

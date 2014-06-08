@@ -11,8 +11,10 @@ GameController::GameController(GameModel* model, QWidget* tabWidget, QUndoStack*
   _linesCount(-1),
   _partsCount(-1),
   _linesDrawn(-1),
-  _polygonsCount(-1) {
-
+  _polygonsCount(-1),
+  _orientedAreaTotal(0.0),
+  _maxGapToWin(0),
+  _fileName("") {
 }
 
 void GameController::newComputeIntersections(const Polygon& polygon, const Segment& line, QVector<QPair<Point2d, Segment::Intersection>>& intersections, QMap<Segment, Point2d>& mapSegmentIntersection) const {
@@ -219,6 +221,7 @@ void GameController::sliceIt(Segment& line) {
 
   emit update();
 
+  checkWinning();
 }
 
 GameController::LineType GameController::computeLineType(const Segment& line) const {
@@ -248,18 +251,64 @@ GameController::LineType GameController::computeLineType(const Segment& line) co
         return GameController::unknownCrossing;
 }
 
+void GameController::checkWinning(void) {
+  qDebug() << _linesDrawn << "/" << _linesCount;
+
+  if (_linesDrawn >= _linesCount) {
+    QList<float> orientedAreas;
+    for (const Polygon& polygon: _model->getPolygonList()) {
+      orientedAreas << qRound(10.0*polygon.orientedArea() * 100.0 / _orientedAreaTotal)/10.0;
+    }
+    qSort(orientedAreas);
+
+    float gap = qAbs(orientedAreas.last() - orientedAreas.first());
+    qDebug() << "Gap:" << gap << "%";
+
+    if (_polygonsCount != _partsCount || gap > _maxGapToWin)
+      emit levelEnd(_polygonsCount, _partsCount, orientedAreas, fail);
+    else {
+      qDebug() << gap << _maxGapToWin << gap / _maxGapToWin << gap / _maxGapToWin * 5;
+      int rank = qCeil(gap / _maxGapToWin * 5);
+      emit levelEnd(_polygonsCount, _partsCount, orientedAreas, Ranking(6-rank));
+    }
+  }
+}
+
+void GameController::replay(void) {
+  openLevel(_fileName);
+}
+
+void GameController::clearGame(void) {
+  _model->clearPolygons();
+  _linesCount = 0;
+  _partsCount = 0;
+  _linesDrawn = 0;
+  _polygonsCount = 0;
+  _orientedAreaTotal = 0.0;
+  _maxGapToWin = 0.0;
+
+  emit update();
+}
+
 void GameController::openLevel(const QString& fileName) {
     clear();
+    clearGame();
 
     ParserXML parser(fileName);
+
+    _fileName = QString(fileName);
 
     PolygonList polygonList(parser.createPolygonList());
     _model->setPolygonList(polygonList);
 
     _linesCount = parser.getLinesCount();
     _partsCount = parser.getPartsCount();
-    _linesDrawn = 0;
     _polygonsCount = _model->getPolygonsCount();
+    _maxGapToWin = parser.getmaxGapToWin();
+
+    for (const Polygon& polygon: _model->getPolygonList()) {
+      _orientedAreaTotal += polygon.orientedArea();
+    }
 
     emit update();
 }

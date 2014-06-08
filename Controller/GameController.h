@@ -15,6 +15,15 @@ public:
     noCrossing,
     unknownCrossing
   };
+  enum Ranking {
+    fail = 0,
+    poor = 1,
+    average = 2,
+    nice = 3,
+    good = 4,
+    great = 5,
+    perfect = 6
+  };
 
   GameController(GameModel* model, QWidget* tabWidget, QUndoStack* undoStack, QObject* parent = 0);
 
@@ -31,6 +40,9 @@ public:
   void shiftLineIfEdgeCut(const Polygon& polygon, Segment& line) const;
   void sliceIt(Segment& line);
   LineType computeLineType(const Segment& line) const;
+  void checkWinning(void);
+  void replay(void);
+  void clearGame(void);
 
 public slots:
   virtual void openLevel(const QString& fileName);
@@ -39,6 +51,7 @@ public slots:
 signals:
   void updateLine(LineType);
   void update(void);
+  void levelEnd(int, int, QList<float>, GameController::Ranking);
 
 private:
   GameModel* _model;
@@ -46,6 +59,9 @@ private:
   int _partsCount;
   int _linesDrawn;
   int _polygonsCount;
+  float _orientedAreaTotal;
+  int _maxGapToWin;
+  QString _fileName;
 };
 
 bool pairCompare(const QPair<Point2d, Segment::Intersection>& fstElem, const QPair<Point2d, Segment::Intersection>& sndElem);

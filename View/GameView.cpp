@@ -19,6 +19,7 @@ GameView::GameView(GameController* controller, QWidget* parent):
   setMouseTracking(true);
 
   connect(_controller, SIGNAL(update()), this, SLOT(drawFromModel()));
+  connect(_controller, SIGNAL(levelEnd(int, int, QList<float>, GameController::Ranking)), this, SLOT(levelEnd(int, int, QList<float>, GameController::Ranking)));
 }
 
 void GameView::setSelectionModel(QItemSelectionModel* selectionModel) {
@@ -148,7 +149,7 @@ void GameView::drawFromModel(void) {
       Point2d fstVertex(vertices.at(k));
       Point2d sndVertex(vertices.at((k+1)%vertices.size()));
 
-      drawText(QPoint(fstVertex.getX(), fstVertex.getY()), QString::number(k));
+      //drawText(QPoint(fstVertex.getX(), fstVertex.getY()), QString::number(k));
       drawLine(QPoint(fstVertex.getX(), fstVertex.getY()), QPoint(sndVertex.getX(), sndVertex.getY()), color);
     }
   }
@@ -157,8 +158,11 @@ void GameView::drawFromModel(void) {
 void GameView::drawText(const QPoint& position, const QString& text, const QColor &color) {
   QPainter painter(&_image);
   painter.setPen(QPen(color, _myPenWidth, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-  painter.setFont(QFont("", 3));
-  painter.drawText(position, text);
+  painter.setFont(QFont("", 25));
+  QFontMetrics fm = painter.fontMetrics();
+  int leftShift = -fm.width(text)/2;
+  int topShift = fm.height()/4;
+  painter.drawText(position+QPoint(leftShift, topShift), text);
 }
 
 void GameView::clearImage(void) {
@@ -175,4 +179,61 @@ void GameView::currentChanged(QModelIndex currentIndex, QModelIndex /*previousIn
     Point2d currentVertex = _model->getPolygonList().at(currentIndex.parent().row()).getVertices().at(currentIndex.row());
     circlePoint(QPoint(currentVertex.getX(), currentVertex.getY()));
   }
+}
+
+void GameView::drawAreaValues(QList<float> orientedAreas) {
+  PolygonList polygons = _model->getPolygonList();
+  for (int k = 0; k < polygons.size(); ++k) {
+    Polygon polygon = polygons.at(k);
+    Point2d areaPoint = polygon.barycenter();
+    drawText(QPoint(areaPoint.getX(), areaPoint.getY()), QString::number(orientedAreas.at(k)), Qt::black);
+  }
+}
+
+void GameView::levelEnd(int polygonsCount, int partsCount, QList<float> orientedAreas, GameController::Ranking ranking) {
+  QString rankingMessage;
+  QString starsMessage;
+
+  drawAreaValues(orientedAreas);
+
+  switch (ranking) {
+  case GameController::fail:
+    rankingMessage = "Fail";
+    starsMessage = "";
+    break;
+  case GameController::poor:
+    rankingMessage = "Poor";
+    starsMessage = "*";
+    break;
+  case GameController::average:
+    rankingMessage = "Average";
+    starsMessage = "**";
+    break;
+  case GameController::nice:
+    rankingMessage = "Nice";
+    starsMessage = "***";
+    break;
+  case GameController::good:
+    rankingMessage = "Good";
+    starsMessage = "****";
+    break;
+  case GameController::great:
+    rankingMessage = "Great";
+    starsMessage = "*****";
+    break;
+  case GameController::perfect:
+    rankingMessage = "Perfect";
+    starsMessage = "***** P";
+    break;
+  default:
+    rankingMessage = "Fail";
+    break;
+  }
+
+  QMessageBox::StandardButton buttonClicked = QMessageBox::information(this, rankingMessage, starsMessage+"\nReplay?", QMessageBox::Yes, QMessageBox::No);
+
+  if (buttonClicked == QMessageBox::Yes)
+    _controller->replay();
+  else
+    _controller->clearGame();
 }

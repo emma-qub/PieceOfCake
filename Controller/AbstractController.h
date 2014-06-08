@@ -25,6 +25,8 @@ public slots:
   virtual void saveLevel(const QString& fileName) = 0;
 
 protected:
+  virtual bool checkFileExists(const QString& fileName);
+
   QAbstractItemModel* _model;
   QWidget* _tabWidget;
   QUndoStack* _undoStack;

@@ -1,14 +1,15 @@
 #ifndef LINEMODIFIER_H
 #define LINEMODIFIER_H
 
-#include "Segment.h"
-#include <vector>
+#include "Polygon.h"
+
+#include <string>
 
 class LineModifier {
 public:
-  LineModifier(void);
+  LineModifier();
 
-  virtual std::vector<Segment> transform(const Segment& line) = 0;
+  virtual std::string getName(void) const = 0;
 };
 
 #endif // LINEMODIFIER_H

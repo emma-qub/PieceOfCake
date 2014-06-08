@@ -22,7 +22,9 @@ HEADERS += \
     tests.h \
     LineModifier.h \
     Tape.h \
-    Portal.h
+    Portal.h \
+    Obstacle.h \
+    Deviation.h
 
 SOURCES += \
     AbstractController.cpp \
@@ -49,7 +51,9 @@ SOURCES += \
     main.cpp \
     LineModifier.cpp \
     Tape.cpp \
-    Portal.cpp
+    Portal.cpp \
+    Obstacle.cpp \
+    Deviation.cpp
 
 CONFIG += c++11
 

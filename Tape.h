@@ -1,13 +1,11 @@
 #ifndef TAPE_H
 #define TAPE_H
 
-#include <LineModifier.h>
+#include "Obstacle.h"
 
-class Tape: public LineModifier {
+class Tape: public Obstacle {
 public:
   Tape(void);
-
-  std::vector<Segment> transform(const Segment&);
 };
 
 #endif // TAPE_H

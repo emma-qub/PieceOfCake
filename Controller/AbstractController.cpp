@@ -2,6 +2,7 @@
 
 #include <QMessageBox>
 #include <QFileDialog>
+#include <QDebug>
 
 AbstractController::AbstractController(QAbstractItemModel* model, QWidget* tabWidget, QUndoStack* undoStack, QObject* parent):
   QObject(parent),
@@ -75,7 +76,7 @@ void AbstractController::openFile(void) {
 
   if (canOpen) {
     QString fileName = QFileDialog::getOpenFileName(_tabWidget, "Open file", "../PieceOfCake/levels/", "XML Files (*.xml)");
-    if (!checkFileExists) {
+    if (!checkFileExists(fileName)) {
       qDebug() << "Error:" << fileName << "file not found in AbstractController::openFile";
       return;
     }

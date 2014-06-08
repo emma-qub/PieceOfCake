@@ -14,9 +14,16 @@ GameView::GameView(GameController* controller, QWidget* parent):
   _mousePositionLabel = new QLabel(this);
   _mousePositionLabel->setFixedSize(300, 50);
 
+  setMinimumWidth(600);
+
   setMouseTracking(true);
 
   connect(_controller, SIGNAL(update()), this, SLOT(drawFromModel()));
+}
+
+void GameView::setSelectionModel(QItemSelectionModel* selectionModel) {
+  _selectionModel = selectionModel;
+  connect(_selectionModel, SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(currentChanged(QModelIndex,QModelIndex)));
 }
 
 void GameView::setModel(GameModel* model) {
@@ -120,6 +127,14 @@ void GameView::drawLine(const QPoint& begin, const QPoint& end, const QColor& co
   update();
 }
 
+void GameView::circlePoint(const QPoint& point, const QColor& color, Qt::PenStyle penStyle) {
+  QPainter painter(&_image);
+  painter.setPen(QPen(color, 2, penStyle, Qt::RoundCap, Qt::BevelJoin));
+  painter.drawEllipse(point, 5, 5);
+
+  update();
+}
+
 void GameView::drawFromModel(void) {
   clearImage();
 
@@ -148,4 +163,16 @@ void GameView::drawText(const QPoint& position, const QString& text, const QColo
 
 void GameView::clearImage(void) {
   _image.fill(Qt::white);
+}
+
+void GameView::currentChanged(QModelIndex currentIndex, QModelIndex /*previousIndex*/) {
+  drawFromModel();
+  if (currentIndex.parent() != QModelIndex()) {
+    if (currentIndex.parent().parent() != QModelIndex()) {
+      currentIndex = currentIndex.parent();
+    }
+
+    Point2d currentVertex = _model->getPolygonList().at(currentIndex.parent().row()).getVertices().at(currentIndex.row());
+    circlePoint(QPoint(currentVertex.getX(), currentVertex.getY()));
+  }
 }

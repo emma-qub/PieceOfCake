@@ -46,6 +46,7 @@ MainWindow::MainWindow(QWidget* parent):
 
   QTreeView* gameView = new QTreeView(gameSplitter);
   gameView->setModel(_gameModel);
+  _gameView->setSelectionModel(gameView->selectionModel());
 
 
 

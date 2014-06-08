@@ -15,6 +15,7 @@ HEADERS += \
   # LineModifier
   LineModifier/Deviation.h \
   LineModifier/LineModifier.h \
+  LineModifier/Mirror.h \
   LineModifier/Obstacle.h \
   LineModifier/Portal.h \
   LineModifier/Tape.h \
@@ -24,6 +25,7 @@ HEADERS += \
   Model/TreeModel.h \
   # View
   View/GameView.h \
+  View/LevelDesignerGameStatView.h \
   View/LevelDesignerScribbleView.h \
   View/LevelDesignerTreeView.h \
   # Root
@@ -31,8 +33,7 @@ HEADERS += \
   Hint.h \
   MainWindow.h \
   ParserXML.h \
-  tests.h \
-    LineModifier/Mirror.h
+  tests.h
 
 SOURCES += \
   # Controller
@@ -51,6 +52,7 @@ SOURCES += \
   # LineModifier
   LineModifier/Deviation.cpp \
   LineModifier/LineModifier.cpp \
+  LineModifier/Mirror.cpp \
   LineModifier/Obstacle.cpp \
   LineModifier/Portal.cpp \
   LineModifier/Tape.cpp \
@@ -60,6 +62,7 @@ SOURCES += \
   Model/TreeModel.cpp \
   # View
   View/GameView.cpp \
+  View/LevelDesignerGameStatView.cpp \
   View/LevelDesignerScribbleView.cpp \
   View/LevelDesignerTreeView.cpp \
   # Root
@@ -67,8 +70,7 @@ SOURCES += \
   Hint.cpp \
   MainWindow.cpp \
   ParserXML.cpp \
-  main.cpp \
-    LineModifier/Mirror.cpp
+  main.cpp
 
 INCLUDEPATH += \
   Controller \

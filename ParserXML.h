@@ -39,6 +39,7 @@ public:
 
   void setPartsCount(int partscount);
   void setLinesCount(int linescount);
+  void setMaxGapToWin(int maxgaptowin);
   void setStarsCount(int starscount);
   void setTolerances(int tolerances);
   void replacePolygon(const Polygon& polygon, int id);
@@ -55,9 +56,9 @@ public:
   int getIntValue(const QString& tagName, const QString& attributeName = "value");
   int getPartsCount(void);
   int getLinesCount(void);
+  int getMaxGapToWin(void);
   int getStarsCount(void);
   int getTolerances(void);
-  int getmaxGapToWin(void);
   Polygon createPolygon(const QDomElement& element);
   Hint createHint(const QDomElement& element);
 

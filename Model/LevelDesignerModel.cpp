@@ -6,7 +6,10 @@
 LevelDesignerModel::LevelDesignerModel(const QStringList& headers, const QString& data, QObject *parent):
   TreeModel(headers, data, parent),
   _polygonList(),
-  _selections() {
+  _selections(),
+  _partsCount(-1),
+  _linesCount(-1),
+  _maxGapToWin(-1) {
 
   _selections << QPair<int, int>(-1, -1);
 

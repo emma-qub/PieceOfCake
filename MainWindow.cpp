@@ -24,6 +24,8 @@ MainWindow::MainWindow(QWidget* parent):
   _levelDesignerScribbleView->setModel(_levelDesignerModel);
   _levelDesignerScribbleView->setSelectionModel(_levelDesignerTreeView->selectionModel());
 
+  _levelDesignerGameStatView = new LevelDesignerGameStatView(_levelDesignerController, _levelDesignerWidget);
+
   // Init current controller
   _currentController = _levelDesignerController;
 

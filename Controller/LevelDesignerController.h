@@ -24,6 +24,10 @@ public:
   void removeVertex(int polygonRow, int vertexRow, const Point2d& vertex);
   void moveVertex(int polygonRow, int vertexRow, int oldX, int oldY, int newX, int newY, bool pushToStack = true);
 
+  void updateLinesCount(int linesCount);
+  void updatePartsCount(int partsCount);
+  void updateMaxGapToWin(int maxGapToWin);
+
   void clear(void);
 
 public slots:

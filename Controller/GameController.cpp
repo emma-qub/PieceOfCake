@@ -252,8 +252,6 @@ GameController::LineType GameController::computeLineType(const Segment& line) co
 }
 
 void GameController::checkWinning(void) {
-  qDebug() << _linesDrawn << "/" << _linesCount;
-
   if (_linesDrawn >= _linesCount) {
     QList<float> orientedAreas;
     for (const Polygon& polygon: _model->getPolygonList()) {
@@ -262,12 +260,10 @@ void GameController::checkWinning(void) {
     qSort(orientedAreas);
 
     float gap = qAbs(orientedAreas.last() - orientedAreas.first());
-    qDebug() << "Gap:" << gap << "%";
 
     if (_polygonsCount != _partsCount || gap > _maxGapToWin)
       emit levelEnd(_polygonsCount, _partsCount, orientedAreas, fail);
     else {
-      qDebug() << gap << _maxGapToWin << gap / _maxGapToWin << gap / _maxGapToWin * 5;
       int rank = qCeil(gap / _maxGapToWin * 5);
       emit levelEnd(_polygonsCount, _partsCount, orientedAreas, Ranking(6-rank));
     }
@@ -304,7 +300,7 @@ void GameController::openLevel(const QString& fileName) {
     _linesCount = parser.getLinesCount();
     _partsCount = parser.getPartsCount();
     _polygonsCount = _model->getPolygonsCount();
-    _maxGapToWin = parser.getmaxGapToWin();
+    _maxGapToWin = parser.getMaxGapToWin();
 
     for (const Polygon& polygon: _model->getPolygonList()) {
       _orientedAreaTotal += polygon.orientedArea();

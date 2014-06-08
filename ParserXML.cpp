@@ -17,6 +17,12 @@ ParserXML::ParserXML(void):
   _polygons = _doc.createElement("polygons");
   root.appendChild(_polygons);
 
+  root.appendChild(_doc.createElement("linescount"));
+
+  root.appendChild(_doc.createElement("partscount"));
+
+  root.appendChild(_doc.createElement("maxgaptowin"));
+
   _hints = _doc.createElement("hints");
   root.appendChild(_hints);
 }
@@ -168,6 +174,10 @@ void ParserXML::setLinesCount(int linescount) {
   _doc.elementsByTagName("linescount").at(0).toElement().setAttribute("value", linescount);
 }
 
+void ParserXML::setMaxGapToWin(int maxgaptowin) {
+  _doc.elementsByTagName("maxgaptowin").at(0).toElement().setAttribute("value", maxgaptowin);
+}
+
 void ParserXML::setStarsCount(int starscount) {
   _doc.elementsByTagName("starscount").at(0).toElement().setAttribute("value", starscount);
 }
@@ -258,16 +268,16 @@ int ParserXML::getLinesCount(void) {
   return getIntValue("linescount");
 }
 
+int ParserXML::getMaxGapToWin(void) {
+  return getIntValue("maxgaptowin");
+}
+
 int ParserXML::getStarsCount(void) {
   return getIntValue("starscount");
 }
 
 int ParserXML::getTolerances(void) {
   return getIntValue("tolerances");
-}
-
-int ParserXML::getmaxGapToWin(void) {
-  return getIntValue("maxgaptowin");
 }
 
 Polygon ParserXML::createPolygon(const QDomElement& element) {

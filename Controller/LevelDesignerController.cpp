@@ -72,6 +72,18 @@ void LevelDesignerController::moveVertex(int polygonRow, int vertexRow, int oldX
   }
 }
 
+void LevelDesignerController::updateLinesCount(int linesCount) {
+  _model->setLinesCount(linesCount);
+}
+
+void LevelDesignerController::updatePartsCount(int partsCount) {
+  _model->setPartsCount(partsCount);
+}
+
+void LevelDesignerController::updateMaxGapToWin(int maxGapToWin) {
+  _model->setMaxGapToWin(maxGapToWin);
+}
+
 void LevelDesignerController::clear(void) {
   _model->clear();
   _undoStack->clear();
@@ -87,6 +99,13 @@ void LevelDesignerController::saveLevel(const QString& fileName) {
   foreach (const Polygon& polygon, polygonList) {
     parser.addPolygon(polygon);
   }
+
+  parser.setLinesCount(_model->getLinesCount());
+  parser.setPartsCount(_model->getPartsCount());
+  parser.setMaxGapToWin(_model->getMaxGapToWin());
+  parser.setStarsCount(0);
+  parser.setTolerances(0);
+
   parser.writeXML();
 }
 

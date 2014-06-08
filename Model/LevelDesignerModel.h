@@ -16,8 +16,15 @@ public:
   explicit LevelDesignerModel(const QStringList& headers = QStringList(), const QString& data = QString(), QObject* parent = 0);
   virtual ~ LevelDesignerModel(void);
 
+  inline PolygonList getPolygonList(void) const { return _polygonList; }
+  inline int getPartsCount() const { return _partsCount; }
+  inline int getLinesCount() const { return _linesCount; }
+  inline int getMaxGapToWin() const { return _maxGapToWin; }
+
   void setPolygonList(const PolygonList& polygonList);
-  PolygonList getPolygonList(void) const { return _polygonList; }
+  inline void setPartsCount(int partsCount) { _partsCount = partsCount; }
+  inline void setLinesCount(int linesCount) { _linesCount = linesCount; }
+  inline void setMaxGapToWin(int maxGapToWin) { _maxGapToWin = maxGapToWin; }
 
   inline QStack<QPair<int, int>> getSelections(void) const { return _selections; }
   inline void addSelection(QPair<int, int> selection) { _selections << selection; }
@@ -47,13 +54,15 @@ public:
   void description(QString& desc, TreeItem* item, int shift);
   void description(void);
 
-
 public slots:
   void debug(QModelIndex,QModelIndex);
 
 protected:
   PolygonList _polygonList;
   QStack<QPair<int, int>> _selections;
+  int _partsCount;
+  int _linesCount;
+  int _maxGapToWin;
 };
 
 #endif // POLYGONTREEMODEL_H

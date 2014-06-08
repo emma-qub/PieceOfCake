@@ -1,0 +1,11 @@
+<!DOCTYPE PieceOfCakeML>
+<level>
+    <polygons>
+        <polygon id="0">
+            <vertex x="55" y="55"/>
+            <vertex x="455" y="55"/>
+            <vertex x="55" y="455"/>
+        </polygon>
+    </polygons>
+    <hints/>
+</level>

@@ -14,6 +14,15 @@ GameView::GameView(GameController* controller, QWidget* parent):
   _mousePositionLabel = new QLabel(this);
   _mousePositionLabel->setFixedSize(300, 50);
 
+  _linesCountLabel = new QLabel(this);
+  _linesCountLabel->setFixedSize(300, 50);
+  _linesCountLabel->move(100, 0);
+
+  _partsCountLabel = new QLabel(this);
+  _partsCountLabel->setFixedSize(300, 50);
+  _partsCountLabel->move(200, 0);
+
+
   setMinimumWidth(600);
 
   setMouseTracking(true);
@@ -140,6 +149,8 @@ void GameView::drawFromModel(void) {
   clearImage();
 
   PolygonList polygons = _model->getPolygonList();
+  _linesCountLabel->setText("Lines: "+QString::number(_controller->getLinesDrawn())+"/"+QString::number(_controller->getLinesCount()));
+  _partsCountLabel->setText("Parts: "+QString::number(_controller->getPolygonsCount())+"/"+QString::number(_controller->getPartsCount()));
 
   for (const Polygon& polygon: polygons) {
     QColor color(_model->getColor());

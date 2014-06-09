@@ -54,6 +54,8 @@ protected:
   QItemSelectionModel* _selectionModel;
   GameController* _controller;
   QLabel* _mousePositionLabel;
+  QLabel* _linesCountLabel;
+  QLabel* _partsCountLabel;
 };
 
 #endif // GAMEVIEW_H

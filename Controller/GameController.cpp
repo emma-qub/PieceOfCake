@@ -17,9 +17,13 @@ GameController::GameController(GameModel* model, QWidget* tabWidget, QUndoStack*
   _fileName("") {
 }
 
-void GameController::newComputeIntersections(const Polygon& polygon, const Segment& line, QVector<QPair<Point2d, Segment::Intersection>>& intersections, QMap<Segment, Point2d>& mapSegmentIntersection) const {
+void GameController::newComputeIntersections(
+  const Polygon& polygon, const Segment& line, QVector<QPair<Point2d, Segment::Intersection>>& intersections,
+  QMap<Segment, Point2d>& mapSegmentIntersection, QVector<Point2d>& rightVertices, QVector<Point2d>& leftVertices) const {
+
   std::vector<Point2d> vertices = polygon.getVertices();
   unsigned int verticesCount = vertices.size();
+  bool isRightVertex = true;
 
   for (unsigned int k = 0; k < verticesCount; ++k) {
     Point2d v0 = vertices.at(k);
@@ -27,12 +31,19 @@ void GameController::newComputeIntersections(const Polygon& polygon, const Segme
     Segment currEdge(v0, v1);
 
     Segment::Intersection intersectionType = currEdge.computeIntersection(line);
+    if (intersectionType == Segment::Regular || intersectionType == Segment::None)
+      if (isRightVertex)
+        rightVertices << v0;
+      else
+        leftVertices << v0;
+
     switch (intersectionType) {
     case Segment::Regular:
     {
       Point2d currIntersection = Segment::intersectionPoint(currEdge, line);
       intersections << QPair<Point2d, Segment::Intersection>(currIntersection, intersectionType);
       mapSegmentIntersection.insert(currEdge, currIntersection);
+      isRightVertex = !isRightVertex;
       break;
     }
     case Segment::FirstVertexRegular:
@@ -50,18 +61,6 @@ void GameController::newComputeIntersections(const Polygon& polygon, const Segme
   }
 
   qSort(intersections.begin(), intersections.end(), pairCompare);
-}
-
-void GameController::splitVertices(const Polygon& polygon, const Segment& line, QVector<Point2d>& rightVertices, QVector<Point2d>& leftVertices) const {
-  std::vector<Point2d> vertices = polygon.getVertices();
-  for (const Point2d& vertex: vertices) {
-    Segment::Side side = line.location(vertex);
-    if (side == Segment::OnLeft) {
-      leftVertices << vertex;
-    } else if (side == Segment::OnRight) {
-      rightVertices << vertex;
-    }
-  }
 }
 
 QVector<Segment> GameController::computeNewEdges(const QVector<QPair<Point2d, Segment::Intersection>>& intersections) const {
@@ -186,15 +185,13 @@ void GameController::sliceIt(Segment& line) {
 
     QVector<QPair<Point2d, Segment::Intersection>> intersections;
     QMap<Segment, Point2d> mapSegmentIntersection;
-    newComputeIntersections(polygon, line, intersections, mapSegmentIntersection);
+    QVector<Point2d> rightVertices;
+    QVector<Point2d> leftVertices;
+    newComputeIntersections(polygon, line, intersections, mapSegmentIntersection, rightVertices, leftVertices);
     if (intersections.size() == 0) {
       newPolygonList << polygon;
       continue;
     }
-
-    QVector<Point2d> rightVertices;
-    QVector<Point2d> leftVertices;
-    splitVertices(polygon, line, rightVertices, leftVertices);
 
     QVector<Segment> newEdges = computeNewEdges(intersections);
 

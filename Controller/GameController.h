@@ -32,8 +32,9 @@ public:
   inline int getLinesDrawn(void) const { return _linesDrawn; }
   inline int getPolygonsCount(void) const { return _polygonsCount; }
 
-  void newComputeIntersections(const Polygon& polygon, const Segment& line, QVector<QPair<Point2d, Segment::Intersection>>& intersections, QMap<Segment, Point2d>& mapSegmentIntersection) const;
-  void splitVertices(const Polygon& polygon, const Segment& line, QVector<Point2d>& rightVertices, QVector<Point2d>& leftVertices) const;
+  void newComputeIntersections(
+    const Polygon& polygon, const Segment& line, QVector<QPair<Point2d, Segment::Intersection>>& intersections,
+    QMap<Segment, Point2d>& mapSegmentIntersection, QVector<Point2d>& rightVertices, QVector<Point2d>& leftVertices) const;
   QVector<Segment> computeNewEdges(const QVector<QPair<Point2d, Segment::Intersection>>& intersections) const;
   Point2d findOtherBound(const Point2d& fstBound, const QVector<Segment>& newEdges) const;
   void createPolygons(QVector<Point2d>& oldPolygonVertices, std::vector<Point2d>& newPolygonVertices, const Polygon& oldPolygon, const QMap<Segment, Point2d>& mapSegmentIntersection, const QVector<Segment>& newEdges) const;

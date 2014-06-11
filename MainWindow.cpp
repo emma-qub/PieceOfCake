@@ -58,14 +58,15 @@ MainWindow::MainWindow(QWidget* parent):
 
 
 
-  // Init tab widget
-  _tabWidget = new QTabWidget;
-  _tabWidget->addTab(_homeMenu, "Home menu");
-  _tabWidget->addTab(_levelDesignerWidget, "Level Designer");
-  _tabWidget->addTab(gameSplitter, "Game");
+//  // Init tab widget
+//  _tabWidget = new QTabWidget;
+//  _tabWidget->addTab(_homeMenu, "Home menu");
+//  _tabWidget->addTab(_levelDesignerWidget, "Level Designer");
+//  _tabWidget->addTab(gameSplitter, "Game");
 
   // Set central widget
-  setCentralWidget(_tabWidget);
+//  setCentralWidget(_tabWidget);
+  setCentralWidget(_homeMenu);
 
   // File menu
   QMenu* fileMenu = menuBar()->addMenu("&File");
@@ -113,7 +114,7 @@ MainWindow::MainWindow(QWidget* parent):
   setWindowTitle("Graphical tests");
 
   // Resize
-  resize(1200, 756);
+  setFixedSize(1200, 756);
 }
 
 void MainWindow::openFile(void) {

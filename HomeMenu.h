@@ -13,10 +13,21 @@ protected:
   virtual void OnUpdate();
 
 private:
+  void drawMenuItem(sf::Text& text, bool isHightlighted);
+
+private:
   sf::Texture myImage;
   sf::Sprite mySprite;
   sf::Text _title;
+  sf::Text _play;
+  sf::Text _editLevel;
+  sf::Text _options;
+  sf::Text _credits;
+  sf::Text _quit;
   sf::Font _font;
+  int _index;
 };
+
+void centerText(sf::Text& text);
 
 #endif // HOMEMENU_H

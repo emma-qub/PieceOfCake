@@ -14,8 +14,8 @@ QSFMLCanvas::QSFMLCanvas(const QPoint& position, const QSize& size, QWidget* par
   setFocusPolicy(Qt::StrongFocus);
 
   // Set position and size
-  move(position);
-  resize(size);
+  QWidget::move(position);
+  QWidget::resize(size);
 
   _timer.setInterval(frameTime);
 }
@@ -24,15 +24,15 @@ QSFMLCanvas::~QSFMLCanvas(void) {
 }
 
 #ifdef Q_WS_X11
-    #include <Qt/qx11info_x11.h>
-    #include <X11/Xlib.h>
+# include <qt/QtX11Extras/QX11Info>
+# include <X11/Xlib.h>
 #endif
 
-void QSFMLCanvas::onInit(void) {
+void QSFMLCanvas::OnInit(void) {
   // Let the sub class define it
 }
 
-void QSFMLCanvas::onUpdate(void) {
+void QSFMLCanvas::OnUpdate(void) {
   // Let the sub class define it
 }
 
@@ -42,7 +42,7 @@ QPaintEngine* QSFMLCanvas::paintEngine(void) const {
 }
 
 void QSFMLCanvas::showEvent(QShowEvent*) {
-  if (_initialized) {
+  if (!_initialized) {
     // With X11, commands that have been sent to the server have to be checked
     // in order to make sure that the SFML will have the up-to-date window
 #ifdef Q_WS_X11
@@ -53,7 +53,7 @@ void QSFMLCanvas::showEvent(QShowEvent*) {
     sf::Window::create(winId());
 
     // Initialize
-    onInit();
+    OnInit();
 
     // Set timer to refresh with the right frequency
     connect(&_timer, SIGNAL(timeout()), this, SLOT(repaint()));
@@ -65,7 +65,7 @@ void QSFMLCanvas::showEvent(QShowEvent*) {
 
 void QSFMLCanvas::paintEvent(QPaintEvent*) {
   // Let the sub class handle it
-  onInit();
+  OnUpdate();
 
   // Refresh widget
   display();

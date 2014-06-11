@@ -11,9 +11,9 @@ public:
   QSFMLCanvas(const QPoint& position, const QSize& size, QWidget* parent = 0, unsigned int frameTime = 0);
   virtual ~QSFMLCanvas(void);
 
-private:
-  virtual void onInit(void);
-  virtual void onUpdate(void);
+protected:
+  virtual void OnInit(void);
+  virtual void OnUpdate(void);
   virtual QPaintEngine* paintEngine(void) const;
   virtual void showEvent(QShowEvent*);
   virtual void paintEvent(QPaintEvent*);

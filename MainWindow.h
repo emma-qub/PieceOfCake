@@ -13,6 +13,7 @@
 #include "GameController.h"
 #include "GameView.h"
 #include "GameModel.h"
+#include "HomeMenu.h"
 
 class MainWindow: public QMainWindow {
   Q_OBJECT
@@ -50,6 +51,8 @@ private:
   GameController* _gameController;
   GameView* _gameView;
   GameModel* _gameModel;
+
+  HomeMenu* _homeMenu;
 
   QTabWidget* _tabWidget;
   //QStackedWidget* _stackWidget;

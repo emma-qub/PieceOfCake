@@ -34,7 +34,8 @@ HEADERS += \
   MainWindow.h \
   ParserXML.h \
   QSFMLCanvas.h \
-  tests.h
+  tests.h \
+    HomeMenu.h
 
 SOURCES += \
   # Controller
@@ -72,7 +73,8 @@ SOURCES += \
   MainWindow.cpp \
   ParserXML.cpp \
   QSFMLCanvas.cpp \
-  main.cpp
+  main.cpp \
+    HomeMenu.cpp
 
 INCLUDEPATH += \
   Controller \

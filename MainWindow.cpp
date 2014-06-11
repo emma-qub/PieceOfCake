@@ -4,6 +4,7 @@
 #include "Point2d.h"
 #include "Vector2d.h"
 #include "ParserXML.h"
+#include "HomeMenu.h"
 
 #include <iostream>
 #include <fstream>
@@ -52,9 +53,14 @@ MainWindow::MainWindow(QWidget* parent):
 
 
 
+  _homeMenu = new HomeMenu(QPoint(0, 0), QSize(1200, 756));
+
+
+
 
   // Init tab widget
   _tabWidget = new QTabWidget;
+  _tabWidget->addTab(_homeMenu, "Home menu");
   _tabWidget->addTab(_levelDesignerWidget, "Level Designer");
   _tabWidget->addTab(gameSplitter, "Game");
 

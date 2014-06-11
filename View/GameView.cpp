@@ -201,7 +201,7 @@ void GameView::drawAreaValues(QList<float> orientedAreas) {
   }
 }
 
-void GameView::levelEnd(int polygonsCount, int partsCount, QList<float> orientedAreas, GameController::Ranking ranking) {
+void GameView::levelEnd(QList<float> orientedAreas, GameController::Ranking ranking) {
   QString rankingMessage;
   QString starsMessage;
 

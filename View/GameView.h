@@ -35,7 +35,7 @@ public slots:
   void clearImage(void);
   void currentChanged(QModelIndex currentIndex, QModelIndex previousIndex);
   void drawAreaValues(QList<float> orientedAreas);
-  void levelEnd(int, int, QList<float>, GameController::Ranking);
+  void levelEnd(QList<float>, GameController::Ranking);
 
 signals:
   void boundaries(QPoint, QPoint);

@@ -31,11 +31,12 @@ void GameController::newComputeIntersections(
     Segment currEdge(v0, v1);
 
     Segment::Intersection intersectionType = currEdge.computeIntersection(line);
-    if (intersectionType == Segment::Regular || intersectionType == Segment::None)
+    if (intersectionType == Segment::Regular || intersectionType == Segment::None) {
       if (isRightVertex)
         rightVertices << v0;
       else
         leftVertices << v0;
+    }
 
     switch (intersectionType) {
     case Segment::Regular:
@@ -251,18 +252,22 @@ GameController::LineType GameController::computeLineType(const Segment& line) co
 void GameController::checkWinning(void) {
   if (_linesDrawn >= _linesCount) {
     QList<float> orientedAreas;
+    float minArea = 100.0;
+    float maxArea = 0.0;
     for (const Polygon& polygon: _model->getPolygonList()) {
-      orientedAreas << qRound(10.0*polygon.orientedArea() * 100.0 / _orientedAreaTotal)/10.0;
+      float currArea = qRound(10.0*polygon.orientedArea() * 100.0 / _orientedAreaTotal)/10.0;
+      orientedAreas << currArea;
+      minArea = qMin(currArea, minArea);
+      maxArea = qMax(currArea, maxArea);
     }
-    qSort(orientedAreas);
 
-    float gap = qAbs(orientedAreas.last() - orientedAreas.first());
+    float gap = qAbs(maxArea - minArea);
 
     if (_polygonsCount != _partsCount || gap > _maxGapToWin)
-      emit levelEnd(_polygonsCount, _partsCount, orientedAreas, fail);
+      emit levelEnd(orientedAreas, fail);
     else {
       int rank = qCeil(gap / _maxGapToWin * 5);
-      emit levelEnd(_polygonsCount, _partsCount, orientedAreas, Ranking(6-rank));
+      emit levelEnd(orientedAreas, Ranking(6-rank));
     }
   }
 }

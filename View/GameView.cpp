@@ -28,7 +28,7 @@ GameView::GameView(GameController* controller, QWidget* parent):
   setMouseTracking(true);
 
   connect(_controller, SIGNAL(update()), this, SLOT(drawFromModel()));
-  connect(_controller, SIGNAL(levelEnd(int, int, QList<float>, GameController::Ranking)), this, SLOT(levelEnd(int, int, QList<float>, GameController::Ranking)));
+  connect(_controller, SIGNAL(levelEnd(QList<float>, GameController::Ranking)), this, SLOT(levelEnd(QList<float>, GameController::Ranking)));
 }
 
 void GameView::setSelectionModel(QItemSelectionModel* selectionModel) {

@@ -52,7 +52,7 @@ public slots:
 signals:
   void updateLine(LineType);
   void update(void);
-  void levelEnd(int, int, QList<float>, GameController::Ranking);
+  void levelEnd(QList<float>, GameController::Ranking);
 
 private:
   GameModel* _model;

@@ -147,3 +147,63 @@ void MoveVertexCommand::redo(void) {
   _model->replaceVertex(_polygonRow, _vertexRow, Point2d(_newX, _newY));
   _model->addSelection(_polygonRow, _vertexRow);
 }
+
+
+
+
+UpdateLinesCountCommand::UpdateLinesCountCommand(LevelDesignerModel* model, int oldLinesCount, int newLinesCount, QUndoCommand* parent):
+  QUndoCommand(parent),
+  _model(model),
+  _oldLinesCount(oldLinesCount),
+  _newLinesCount(newLinesCount) {
+
+  setText("Update lines count: "+QString::number(_oldLinesCount)+" -> "+QString::number(_newLinesCount));
+}
+
+void UpdateLinesCountCommand::undo(void) {
+  _model->setLinesCount(_oldLinesCount);
+}
+
+void UpdateLinesCountCommand::redo(void) {
+  _model->setLinesCount(_newLinesCount);
+}
+
+
+
+
+UpdatePartsCountCommand::UpdatePartsCountCommand(LevelDesignerModel* model, int oldPartsCount, int newPartsCount, QUndoCommand* parent):
+  QUndoCommand(parent),
+  _model(model),
+  _oldPartsCount(oldPartsCount),
+  _newPartsCount(newPartsCount) {
+
+  setText("Update parts count: "+QString::number(_oldPartsCount)+" -> "+QString::number(_newPartsCount));
+}
+
+void UpdatePartsCountCommand::undo(void) {
+  _model->setPartsCount(_oldPartsCount);
+}
+
+void UpdatePartsCountCommand::redo(void) {
+  _model->setPartsCount(_newPartsCount);
+}
+
+
+
+
+UpdateMaxGapToWinCommand::UpdateMaxGapToWinCommand(LevelDesignerModel* model, int oldMaxGapToWin, int newMaxGapToWin, QUndoCommand* parent):
+  QUndoCommand(parent),
+  _model(model),
+  _oldMaxGapToWin(oldMaxGapToWin),
+  _newMaxGapToWin(newMaxGapToWin) {
+
+  setText("Update difficulty: "+QString::number(_oldMaxGapToWin)+" -> "+QString::number(_newMaxGapToWin));
+}
+
+void UpdateMaxGapToWinCommand::undo(void) {
+  _model->setMaxGapToWin(_oldMaxGapToWin);
+}
+
+void UpdateMaxGapToWinCommand::redo(void) {
+  _model->setMaxGapToWin(_newMaxGapToWin);
+}

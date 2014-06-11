@@ -73,15 +73,18 @@ void LevelDesignerController::moveVertex(int polygonRow, int vertexRow, int oldX
 }
 
 void LevelDesignerController::updateLinesCount(int linesCount) {
-  _model->setLinesCount(linesCount);
+  QUndoCommand* updateLinesCountCommand = new UpdateLinesCountCommand(_model, _model->getLinesCount(), linesCount);
+  _undoStack->push(updateLinesCountCommand);
 }
 
 void LevelDesignerController::updatePartsCount(int partsCount) {
-  _model->setPartsCount(partsCount);
+  QUndoCommand* updatePartsCountCommand = new UpdatePartsCountCommand(_model, _model->getPartsCount(), partsCount);
+  _undoStack->push(updatePartsCountCommand);
 }
 
 void LevelDesignerController::updateMaxGapToWin(int maxGapToWin) {
-  _model->setMaxGapToWin(maxGapToWin);
+  QUndoCommand* updateMaxGapToWinCommand = new UpdateMaxGapToWinCommand(_model, _model->getMaxGapToWin(), maxGapToWin);
+  _undoStack->push(updateMaxGapToWinCommand);
 }
 
 void LevelDesignerController::clear(void) {

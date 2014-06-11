@@ -113,4 +113,49 @@ private:
   int _selectionVertexRow;
 };
 
+
+
+class UpdateLinesCountCommand: public QUndoCommand {
+public:
+  UpdateLinesCountCommand(LevelDesignerModel* model, int oldLinesCount, int newLinesCount, QUndoCommand* parent = NULL);
+
+  virtual void undo(void);
+  virtual void redo(void);
+
+private:
+  LevelDesignerModel* _model;
+  int _oldLinesCount;
+  int _newLinesCount;
+};
+
+
+
+class UpdatePartsCountCommand: public QUndoCommand {
+public:
+  UpdatePartsCountCommand(LevelDesignerModel* model, int oldPartsCount, int newPartsCount, QUndoCommand* parent = NULL);
+
+  virtual void undo(void);
+  virtual void redo(void);
+
+private:
+  LevelDesignerModel* _model;
+  int _oldPartsCount;
+  int _newPartsCount;
+};
+
+
+
+class UpdateMaxGapToWinCommand: public QUndoCommand {
+public:
+  UpdateMaxGapToWinCommand(LevelDesignerModel* model, int oldMaxGapToWin, int newMaxGapToWin, QUndoCommand* parent = NULL);
+
+  virtual void undo(void);
+  virtual void redo(void);
+
+private:
+  LevelDesignerModel* _model;
+  int _oldMaxGapToWin;
+  int _newMaxGapToWin;
+};
+
 #endif // COMMANDS_H

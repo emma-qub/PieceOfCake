@@ -8,8 +8,8 @@
             <vertex x="55" y="505"/>
         </polygon>
     </polygons>
-    <partscount value="9" />
-    <linescount value="4" />
-    <maxgaptowin value="10" />
+    <linescount value="3"/>
+    <partscount value="6"/>
+    <maxgaptowin value="10"/>
     <hints/>
 </level>

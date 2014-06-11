@@ -33,6 +33,7 @@ HEADERS += \
   Hint.h \
   MainWindow.h \
   ParserXML.h \
+  QSFMLCanvas.h \
   tests.h
 
 SOURCES += \
@@ -70,6 +71,7 @@ SOURCES += \
   Hint.cpp \
   MainWindow.cpp \
   ParserXML.cpp \
+  QSFMLCanvas.cpp \
   main.cpp
 
 INCLUDEPATH += \
@@ -89,3 +91,8 @@ QT += \
   gui \
   widgets \
   xml
+
+LIBS += \
+  -lsfml-system \
+  -lsfml-window \
+  -lsfml-graphics

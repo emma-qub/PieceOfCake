@@ -1,18 +1,19 @@
-<!DOCTYPE SliceItML>
+<!DOCTYPE PieceOfCakeML>
 <level>
     <polygons>
         <polygon id="0">
-            <vertex x="105" y="55"/>
-            <vertex x="305" y="55"/>
-            <vertex x="305" y="105"/>
-            <vertex x="155" y="105"/>
-            <vertex x="155" y="255"/>
-            <vertex x="305" y="255"/>
-            <vertex x="305" y="305"/>
-            <vertex x="105" y="305"/>
+            <vertex y="55" x="105"/>
+            <vertex y="55" x="305"/>
+            <vertex y="105" x="305"/>
+            <vertex y="105" x="155"/>
+            <vertex y="255" x="155"/>
+            <vertex y="255" x="305"/>
+            <vertex y="305" x="305"/>
+            <vertex y="305" x="105"/>
         </polygon>
     </polygons>
-    <partscount value="7" />
-    <linescount value="5" />
+    <linescount value="1"/>
+    <partscount value="2"/>
+    <maxgaptowin value="10"/>
     <hints/>
 </level>

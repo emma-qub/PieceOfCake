@@ -81,11 +81,12 @@ void HomeMenu::OnUpdate(void) {
   sf::Event event;
   while (pollEvent(event))
   {
-    // évènement "fermeture demandée" : on ferme la fenêtre
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-      _index = (_index == 0) ? _index + 4 : _index - 1;
-    } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-      _index = (_index+1)%5;
+    if (event.type == sf::Event::KeyPressed) {
+      if (event.key.code == sf::Keyboard::Up) {
+        _index = (_index == 0) ? (_index + 4) : (_index - 1);
+      } else if (event.key.code == sf::Keyboard::Down) {
+        _index = (_index+1)%5;
+      }
     }
   }
 

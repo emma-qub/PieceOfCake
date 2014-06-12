@@ -66,7 +66,7 @@ MainWindow::MainWindow(QWidget* parent):
 
   // Set central widget
 //  setCentralWidget(_tabWidget);
-  setCentralWidget(_levelDesignerWidget);
+  setCentralWidget(_homeMenu);
 
   // File menu
   QMenu* fileMenu = menuBar()->addMenu("&File");

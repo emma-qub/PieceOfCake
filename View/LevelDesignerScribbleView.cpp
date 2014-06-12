@@ -283,17 +283,36 @@ void LevelDesignerScribbleView::drawText(const QString& text, const QPoint& posi
 
 void LevelDesignerScribbleView::drawGrid(void) {
   QPainter painter(&_image);
-  painter.setPen(QPen(Qt::gray, 1));
 
-  int caseSize = 50;
-  int xMin = 5, xMax = 755;
-  int yMin = 5, yMax = 655;
+  int xMin = 5, xMax = 805;
+  int yMin = 5, yMax = 705;
+  int subSubCaseSize = 10;
+  painter.setPen(QPen(Qt::lightGray, 1, Qt::DashLine));
+  for (int i = xMin; i <= xMax; i += subSubCaseSize) {
+    painter.drawLine(QPoint(i, yMin), QPoint(i, yMax));
+  }
+  for (int j = yMin; j <= yMax; j += subSubCaseSize) {
+    painter.drawLine(QPoint(xMin, j), QPoint(xMax, j));
+  }
+
+  int subCaseSize = 50;
+  painter.setPen(QPen(Qt::gray, 1, Qt::SolidLine));
+  for (int i = xMin; i <= xMax; i += subCaseSize) {
+    painter.drawLine(QPoint(i, yMin), QPoint(i, yMax));
+  }
+  for (int j = yMin; j <= yMax; j += subCaseSize) {
+    painter.drawLine(QPoint(xMin, j), QPoint(xMax, j));
+  }
+
+  int caseSize = 100;
+  painter.setPen(QPen(Qt::darkGray, 1));
   for (int i = xMin; i <= xMax; i += caseSize) {
     painter.drawLine(QPoint(i, yMin), QPoint(i, yMax));
   }
   for (int j = yMin; j <= yMax; j += caseSize) {
     painter.drawLine(QPoint(xMin, j), QPoint(xMax, j));
   }
+
 }
 
 void LevelDesignerScribbleView::drawPolygon(const QModelIndex& polygonIndex, const QModelIndex& vertexIndex, int value, const QColor& color) {

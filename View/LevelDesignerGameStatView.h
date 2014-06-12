@@ -19,6 +19,8 @@ public slots:
   void updateLinesCount(int linesCount);
   void updatePartsCount(int partsCount);
   void updateMaxGapToWin(int maxGapToWin);
+  void updateFields(void);
+  void resetFields(void);
 
 protected:
   LevelDesignerModel* _model;

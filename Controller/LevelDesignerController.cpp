@@ -120,6 +120,10 @@ void LevelDesignerController::openLevel(const QString& fileName) {
   PolygonList polygonList(parser.createPolygonList());
 
   _model->setPolygonList(polygonList);
+  _model->setLinesCount(parser.getLinesCount());
+  _model->setPartsCount(parser.getPartsCount());
+  _model->setMaxGapToWin(parser.getMaxGapToWin());
+  emit updateStats();
   emitUpdate(0);
 }
 

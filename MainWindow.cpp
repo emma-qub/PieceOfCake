@@ -24,8 +24,8 @@ MainWindow::MainWindow(QWidget* parent):
   _levelDesignerScribbleView = new LevelDesignerScribbleView(_levelDesignerController, _levelDesignerWidget);
   _levelDesignerScribbleView->setModel(_levelDesignerModel);
   _levelDesignerScribbleView->setSelectionModel(_levelDesignerTreeView->selectionModel());
-
   _levelDesignerGameStatView = new LevelDesignerGameStatView(_levelDesignerController, _levelDesignerWidget);
+  _levelDesignerGameStatView->setModel(_levelDesignerModel);
 
   // Init current controller
   _currentController = _levelDesignerController;
@@ -58,15 +58,15 @@ MainWindow::MainWindow(QWidget* parent):
 
 
 
-//  // Init tab widget
-//  _tabWidget = new QTabWidget;
-//  _tabWidget->addTab(_homeMenu, "Home menu");
-//  _tabWidget->addTab(_levelDesignerWidget, "Level Designer");
-//  _tabWidget->addTab(gameSplitter, "Game");
+  // Init tab widget
+  _tabWidget = new QTabWidget;
+  //_tabWidget->addTab(_homeMenu, "Home menu");
+  _tabWidget->addTab(_levelDesignerWidget, "Level Designer");
+  _tabWidget->addTab(gameSplitter, "Game");
 
   // Set central widget
-//  setCentralWidget(_tabWidget);
-  setCentralWidget(_homeMenu);
+  setCentralWidget(_tabWidget);
+//  setCentralWidget(_levelDesignerWidget);
 
   // File menu
   QMenu* fileMenu = menuBar()->addMenu("&File");

@@ -21,6 +21,10 @@ public slots:
   void updateMaxGapToWin(int maxGapToWin);
   void updateFields(void);
   void resetFields(void);
+  void enableStats(bool b);
+
+private:
+  void connectSignals(bool b);
 
 protected:
   LevelDesignerModel* _model;

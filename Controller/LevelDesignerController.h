@@ -39,6 +39,7 @@ public slots:
 signals:
   void update(void);
   void updateStats(void);
+  void enableStats(bool);
   void updateReset(void);
   void selection(void);
 

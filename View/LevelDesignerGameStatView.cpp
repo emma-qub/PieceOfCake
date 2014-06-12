@@ -39,6 +39,7 @@ LevelDesignerGameStatView::LevelDesignerGameStatView(LevelDesignerController* co
   connect(_partsCountSpinBox, SIGNAL(valueChanged(int)), this, SLOT(updatePartsCount(int)));
   connect(_maxGapToWinSlider, SIGNAL(valueChanged(int)), this, SLOT(updateMaxGapToWin(int)));
 
+  connect(_controller, SIGNAL(enableStats(bool)), this, SLOT(enableStats(bool)));
   connect(_controller, SIGNAL(updateStats()), this, SLOT(updateFields()));
   connect(_controller, SIGNAL(updateReset()), this, SLOT(resetFields()));
 }
@@ -60,31 +61,37 @@ void LevelDesignerGameStatView::updateMaxGapToWin(int maxGapToWin) {
 }
 
 void LevelDesignerGameStatView::updateFields(void) {
-  disconnect(_linesCountSpinBox, SIGNAL(valueChanged(int)), this, SLOT(updateLinesCount(int)));
-  disconnect(_partsCountSpinBox, SIGNAL(valueChanged(int)), this, SLOT(updatePartsCount(int)));
-  disconnect(_maxGapToWinSlider, SIGNAL(valueChanged(int)), this, SLOT(updateMaxGapToWin(int)));
+  connectSignals(false);
   _linesCountSpinBox->setValue(_model->getLinesCount());
   _partsCountSpinBox->setValue(_model->getPartsCount());
   _maxGapToWinSlider->setValue(_model->getMaxGapToWin());
-  connect(_linesCountSpinBox, SIGNAL(valueChanged(int)), this, SLOT(updateLinesCount(int)));
-  connect(_partsCountSpinBox, SIGNAL(valueChanged(int)), this, SLOT(updatePartsCount(int)));
-  connect(_maxGapToWinSlider, SIGNAL(valueChanged(int)), this, SLOT(updateMaxGapToWin(int)));
-  _linesCountSpinBox->setEnabled(true);
-  _partsCountSpinBox->setEnabled(true);
-  _maxGapToWinSlider->setEnabled(true);
+  connectSignals(true);
+  enableStats(true);
 }
 
 void LevelDesignerGameStatView::resetFields(void) {
-  disconnect(_linesCountSpinBox, SIGNAL(valueChanged(int)), this, SLOT(updateLinesCount(int)));
-  disconnect(_partsCountSpinBox, SIGNAL(valueChanged(int)), this, SLOT(updatePartsCount(int)));
-  disconnect(_maxGapToWinSlider, SIGNAL(valueChanged(int)), this, SLOT(updateMaxGapToWin(int)));
+  connectSignals(false);
   _linesCountSpinBox->setValue(1);
   _partsCountSpinBox->setValue(2);
   _maxGapToWinSlider->setValue(10);
-  connect(_linesCountSpinBox, SIGNAL(valueChanged(int)), this, SLOT(updateLinesCount(int)));
-  connect(_partsCountSpinBox, SIGNAL(valueChanged(int)), this, SLOT(updatePartsCount(int)));
-  connect(_maxGapToWinSlider, SIGNAL(valueChanged(int)), this, SLOT(updateMaxGapToWin(int)));
-  _linesCountSpinBox->setEnabled(false);
-  _partsCountSpinBox->setEnabled(false);
-  _maxGapToWinSlider->setEnabled(false);
+  connectSignals(true);
+  enableStats(false);
+}
+
+void LevelDesignerGameStatView::connectSignals(bool b) {
+  if (b) {
+    connect(_linesCountSpinBox, SIGNAL(valueChanged(int)), this, SLOT(updateLinesCount(int)));
+    connect(_partsCountSpinBox, SIGNAL(valueChanged(int)), this, SLOT(updatePartsCount(int)));
+    connect(_maxGapToWinSlider, SIGNAL(valueChanged(int)), this, SLOT(updateMaxGapToWin(int)));
+  } else {
+    disconnect(_linesCountSpinBox, SIGNAL(valueChanged(int)), this, SLOT(updateLinesCount(int)));
+    disconnect(_partsCountSpinBox, SIGNAL(valueChanged(int)), this, SLOT(updatePartsCount(int)));
+    disconnect(_maxGapToWinSlider, SIGNAL(valueChanged(int)), this, SLOT(updateMaxGapToWin(int)));
+  }
+}
+
+void LevelDesignerGameStatView::enableStats(bool b) {
+  _linesCountSpinBox->setEnabled(b);
+  _partsCountSpinBox->setEnabled(b);
+  _maxGapToWinSlider->setEnabled(b);
 }

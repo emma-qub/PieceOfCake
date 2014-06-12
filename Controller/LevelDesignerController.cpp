@@ -13,6 +13,10 @@ LevelDesignerController::LevelDesignerController(LevelDesignerModel *model, QWid
 void LevelDesignerController::addPolygon(int polygonRow, const Polygon& polygon) {
   QUndoCommand* addPolygonCommand = new AddPolygonCommand(_model, polygonRow, polygon, polygonRow, -1);
   _undoStack->push(addPolygonCommand);
+
+  if (_model->rowCount() == 1) {
+    emit enableStats(true);
+  }
 }
 
 void LevelDesignerController::removePolygon(int polygonRow, const Polygon& polygon) {
@@ -27,6 +31,10 @@ void LevelDesignerController::removePolygon(int polygonRow, const Polygon& polyg
 
   QUndoCommand* removePolygonCommand = new RemovePolygonCommand(_model, polygonRow, polygon, newPolygonRow, -1);
   _undoStack->push(removePolygonCommand);
+
+  if (_model->rowCount() == 0) {
+    emit enableStats(false);
+  }
 }
 
 void LevelDesignerController::movePolygon(int polygonRow, int oldX, int oldY, int newX, int newY, bool pushToStack) {

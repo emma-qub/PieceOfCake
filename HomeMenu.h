@@ -4,6 +4,8 @@
 #include "QSFMLCanvas.h"
 
 class HomeMenu: public QSFMLCanvas {
+  Q_OBJECT
+
 public:
   HomeMenu(const QPoint& position, const QSize& size, QWidget* parent = 0);
   virtual ~HomeMenu(void);
@@ -11,6 +13,9 @@ public:
 protected:
   virtual void OnInit();
   virtual void OnUpdate();
+
+signals:
+  void menuIndexSelected(int);
 
 private:
   void drawMenuItem(sf::Text& text, bool isHightlighted);

@@ -60,12 +60,11 @@ MainWindow::MainWindow(QWidget* parent):
 
   // Init tab widget
   _tabWidget = new QTabWidget;
-  //_tabWidget->addTab(_homeMenu, "Home menu");
   _tabWidget->addTab(_levelDesignerWidget, "Level Designer");
   _tabWidget->addTab(gameSplitter, "Game");
 
   // Set central widget
-  setCentralWidget(_tabWidget);
+  setCentralWidget(_homeMenu);
 //  setCentralWidget(_levelDesignerWidget);
 
   // File menu

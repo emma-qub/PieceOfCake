@@ -1,4 +1,5 @@
 #include "HomeMenu.h"
+#include "RoundedRectangleShape.h"
 
 #include <iostream>
 
@@ -86,6 +87,8 @@ void HomeMenu::OnUpdate(void) {
         _index = (_index == 0) ? (_index + 4) : (_index - 1);
       } else if (event.key.code == sf::Keyboard::Down) {
         _index = (_index+1)%5;
+      } else if (event.key.code == sf::Keyboard::Return) {
+        emit menuIndexSelected(_index);
       }
     }
   }
@@ -104,8 +107,8 @@ void HomeMenu::drawMenuItem(sf::Text& text, bool isHightlighted) {
     int border = 20;
 
     sf::FloatRect bbox = text.getGlobalBounds();
-    sf::RectangleShape rect(sf::Vector2f(bbox.width+border, bbox.height+border));
-    rect.setPosition(bbox.left-border/2, bbox.top-border/2);
+    sf::RoundedRectangleShape rect(sf::Vector2f(bbox.width+border, bbox.height+border), 10, 30);
+    rect.setPosition(bbox.left-border/2, bbox.top-border/2+75.f);
     rect.setFillColor(sf::Color(0, 0, 0));
     draw(rect);
     text.setColor(sf::Color(255, 255, 255));

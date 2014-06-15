@@ -53,7 +53,7 @@ MainWindow::MainWindow(QWidget* parent):
 
   // Init level selector
   _levelSelector = new LevelSelector("levelsPack1", QPoint(0, 0), QSize(1200, 756));
-  connect(_levelSelector, SIGNAL(levelIndexSelected(int)), this, SLOT(switchLevel(int)));
+  connect(_levelSelector, SIGNAL(levelIndexSelected(QString)), this, SLOT(switchLevel(QString)));
 
   // Init current controller
   _currentController = _levelDesignerController;
@@ -138,7 +138,10 @@ void MainWindow::switchView(int index) {
   }
 }
 
-void MainWindow::switchLevel(int index) {
+void MainWindow::switchLevel(QString levelName) {
   _levelSelector->setStopPress(false);
-  QMessageBox::information(this, "Level", "You selected level "+QString::number(index));
+  setCentralWidget(_gameView);
+  // Wait for process, and then open level. Otherwise the widget is blank.
+  qApp->processEvents();
+  _gameController->openLevel("../PieceOfCake/levels/levelsPack1/"+levelName);
 }

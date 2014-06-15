@@ -37,7 +37,7 @@ public slots:
   //void updateMenuActions(int);
   //void updateCurrentController(int currentIndex);
   void switchView(int);
-  void switchLevel(int);
+  void switchLevel(QString);
 
 private:
   AbstractController* _currentController;

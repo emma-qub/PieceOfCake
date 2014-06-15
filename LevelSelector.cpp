@@ -60,7 +60,7 @@ void LevelSelector::OnUpdate() {
           int xLevel = (mouse.x - 150)/200;
           int yLevel = (mouse.y - 130)/150;
           _stopPress = true;
-          emit levelIndexSelected(xLevel + 5*yLevel + 1);
+          emit levelIndexSelected(_levelsEntryList.at(xLevel + 5*yLevel));
         }
       } else {
         rectangle.setOutlineThickness(2);

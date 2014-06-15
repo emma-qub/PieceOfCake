@@ -15,7 +15,7 @@ public:
   void setStopPress(bool stopPress) { _stopPress = stopPress; }
 
 signals:
-  void levelIndexSelected(int);
+  void levelIndexSelected(QString);
 
 protected:
   virtual void OnInit();

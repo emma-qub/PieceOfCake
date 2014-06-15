@@ -70,3 +70,12 @@ void QSFMLCanvas::paintEvent(QPaintEvent*) {
   // Refresh widget
   display();
 }
+
+
+
+void centerText(sf::Text& text) {
+  sf::FloatRect textRect = text.getLocalBounds();
+  text.setOrigin(textRect.left + textRect.width/2.0f,
+                 textRect.top  + textRect.height/2.0f);
+  text.setPosition(sf::Vector2f(1200/2.0f,50));
+}

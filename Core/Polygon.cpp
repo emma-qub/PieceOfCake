@@ -71,6 +71,12 @@ void Polygon::translate(const Vector2d& direction) {
   }
 }
 
+void Polygon::homothetie(const Point2d& origin, float scale) {
+  for (Point2d& vertex: _vertices) {
+    vertex.homothetie(origin, scale);
+  }
+}
+
 bool Polygon::newPointIsGood(const Point2d& vertex) const {
   Segment fstSegment(vertex, _vertices.at(0));
   Segment sndSegment(vertex, _vertices.at(_vertices.size()-1));

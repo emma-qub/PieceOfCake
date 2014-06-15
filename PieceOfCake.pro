@@ -36,7 +36,9 @@ HEADERS += \
   QSFMLCanvas.h \
   tests.h \
     HomeMenu.h \
-    RoundedRectangleShape.h
+    RoundedRectangleShape.h \
+    LevelSelector.h \
+    LevelsImageGenerator.h
 
 SOURCES += \
   # Controller
@@ -76,7 +78,9 @@ SOURCES += \
   QSFMLCanvas.cpp \
   main.cpp \
     HomeMenu.cpp \
-    RoundedRectangleShape.cpp
+    RoundedRectangleShape.cpp \
+    LevelSelector.cpp \
+    LevelsImageGenerator.cpp
 
 INCLUDEPATH += \
   Controller \

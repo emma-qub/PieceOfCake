@@ -30,10 +30,9 @@ void Point2d::symetry(void) {
   _coords[0] = tmp;
 }
 
-Point2d& Point2d::homothetie(const Point2d& origin, const float& scale) {
+void Point2d::homothetie(const Point2d& origin, float scale) {
   _coords[0] = scale*(_coords[0] - origin._coords[0]) + origin._coords[0];
   _coords[1] = scale*(_coords[1] - origin._coords[1]) + origin._coords[1];
-  return *this;
 }
 
 Point2d Point2d::applyVector(const Vector2d& vector) const {

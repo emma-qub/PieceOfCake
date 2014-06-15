@@ -11,8 +11,8 @@ public:
   virtual ~HomeMenu(void);
 
 protected:
-  virtual void OnInit();
-  virtual void OnUpdate();
+  virtual void OnInit(void);
+  virtual void OnUpdate(void);
 
 signals:
   void menuIndexSelected(int);
@@ -32,7 +32,5 @@ private:
   sf::Font _font;
   int _index;
 };
-
-void centerText(sf::Text& text);
 
 #endif // HOMEMENU_H

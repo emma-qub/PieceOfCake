@@ -14,6 +14,7 @@
 #include "GameView.h"
 #include "GameModel.h"
 #include "HomeMenu.h"
+#include "LevelSelector.h"
 
 class MainWindow: public QMainWindow {
   Q_OBJECT
@@ -35,6 +36,8 @@ public slots:
   //void alignToGrid(void);
   //void updateMenuActions(int);
   //void updateCurrentController(int currentIndex);
+  void switchView(int);
+  void switchLevel(int);
 
 private:
   AbstractController* _currentController;
@@ -53,6 +56,7 @@ private:
   GameModel* _gameModel;
 
   HomeMenu* _homeMenu;
+  LevelSelector* _levelSelector;
 
   QTabWidget* _tabWidget;
   //QStackedWidget* _stackWidget;

@@ -12,14 +12,14 @@ LevelDesignerTreeView::LevelDesignerTreeView(LevelDesignerController* controller
   _delegate = new LevelDesignerTreeItemDelegate;
   setItemDelegate(_delegate);
 
-  setStyleSheet("QTreeView:branch { border-image: url(none.png); }");
+  //setStyleSheet("QTreeView:branch { border-image: url(none.png); }");
   setItemsExpandable(false);
 
   connect(_delegate, SIGNAL(moveVertex(QModelIndex,int,bool)), this, SLOT(movingVertex(QModelIndex,int,bool)));
   connect(_controller, SIGNAL(update(void)), this, SLOT(expandAll(void)));
   connect(_controller, SIGNAL(selection(void)), this, SLOT(selection(void)));
 
-  setFixedWidth(400);
+  setFixedWidth(350);
 }
 
 void LevelDesignerTreeView::setModel(LevelDesignerModel* model) {
@@ -28,7 +28,7 @@ void LevelDesignerTreeView::setModel(LevelDesignerModel* model) {
 
   setColumnWidth(0, 120);
   for (int k = 1; k < 4; k++)
-    setColumnWidth(k, 80);
+    setColumnWidth(k, 70);
 
   expandAll();
 

@@ -20,6 +20,10 @@ protected:
 
   QTimer _timer;
   bool _initialized;
+  sf::Text _title;
+  sf::Font _font;
 };
+
+void centerText(sf::Text& text);
 
 #endif // QSFMLCANVAS_H

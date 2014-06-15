@@ -26,6 +26,7 @@ public:
   void replaceVertex(int position, const Point2d& newVertex);
 
   void translate(const Vector2d& direction);
+  void homothetie(const Point2d& origin, float scale);
 
   bool newPointIsGood(const Point2d& vertex) const;
 

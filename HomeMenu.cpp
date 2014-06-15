@@ -6,6 +6,8 @@
 HomeMenu::HomeMenu(const QPoint& position, const QSize& size, QWidget* parent):
   QSFMLCanvas(position, size, parent),
   _index(0) {
+
+  _font.loadFromFile("../PieceOfCake/fonts/edosz.ttf");
 }
 
 HomeMenu::~HomeMenu(void) {
@@ -27,8 +29,6 @@ void HomeMenu::OnInit(void) {
   mySprite.setColor(sf::Color(255, 255, 255, 16));
 
   mySprite.scale(1.7, 1.5);
-
-  _font.loadFromFile("../PieceOfCake/fonts/edosz.ttf");
 
   _title.setFont(_font);
   _title.setCharacterSize(100);
@@ -80,16 +80,14 @@ void HomeMenu::OnUpdate(void) {
   draw(mySprite);
 
   sf::Event event;
-  while (pollEvent(event))
-  {
-    if (event.type == sf::Event::KeyPressed) {
-      if (event.key.code == sf::Keyboard::Up) {
-        _index = (_index == 0) ? (_index + 4) : (_index - 1);
-      } else if (event.key.code == sf::Keyboard::Down) {
-        _index = (_index+1)%5;
-      } else if (event.key.code == sf::Keyboard::Return) {
-        emit menuIndexSelected(_index);
-      }
+  pollEvent(event);
+  if (event.type == sf::Event::KeyPressed) {
+    if (event.key.code == sf::Keyboard::Up) {
+      _index = (_index == 0) ? (_index + 4) : (_index - 1);
+    } else if (event.key.code == sf::Keyboard::Down) {
+      _index = (_index+1)%5;
+    } else if (event.key.code == sf::Keyboard::Return) {
+      emit menuIndexSelected(_index);
     }
   }
 
@@ -117,13 +115,4 @@ void HomeMenu::drawMenuItem(sf::Text& text, bool isHightlighted) {
     text.setColor(sf::Color(0, 0, 0));
     draw(text);
   }
-}
-
-
-
-void centerText(sf::Text& text) {
-  sf::FloatRect textRect = text.getLocalBounds();
-  text.setOrigin(textRect.left + textRect.width/2.0f,
-                 textRect.top  + textRect.height/2.0f);
-  text.setPosition(sf::Vector2f(1200/2.0f,50));
 }

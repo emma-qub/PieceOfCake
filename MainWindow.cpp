@@ -4,7 +4,6 @@
 #include "Point2d.h"
 #include "Vector2d.h"
 #include "ParserXML.h"
-#include "HomeMenu.h"
 
 #include <iostream>
 #include <fstream>
@@ -15,57 +14,52 @@ MainWindow::MainWindow(QWidget* parent):
 
   // Create undo stack to manage undo/redo actions
   _undoStack = new QUndoStack;
+
   // Init level designer widgets
   _levelDesignerWidget = new QSplitter;
+  QSplitter* levelDesignerSpliter = new QSplitter(Qt::Vertical, _levelDesignerWidget);
+  // Level designer model
   _levelDesignerModel = new LevelDesignerModel;
+  // Level designer controller
   _levelDesignerController = new LevelDesignerController(_levelDesignerModel, _levelDesignerWidget, _undoStack, this);
-  _levelDesignerTreeView = new LevelDesignerTreeView(_levelDesignerController, _levelDesignerWidget);
+  // Level designer game stat view
+  _levelDesignerGameStatView = new LevelDesignerGameStatView(_levelDesignerController, levelDesignerSpliter);
+  _levelDesignerGameStatView->setModel(_levelDesignerModel);
+  // Level designer tree view
+  _levelDesignerTreeView = new LevelDesignerTreeView(_levelDesignerController, levelDesignerSpliter);
   _levelDesignerTreeView->setModel(_levelDesignerModel);
+  // Level designer scrible view
   _levelDesignerScribbleView = new LevelDesignerScribbleView(_levelDesignerController, _levelDesignerWidget);
   _levelDesignerScribbleView->setModel(_levelDesignerModel);
   _levelDesignerScribbleView->setSelectionModel(_levelDesignerTreeView->selectionModel());
-  _levelDesignerGameStatView = new LevelDesignerGameStatView(_levelDesignerController, _levelDesignerWidget);
-  _levelDesignerGameStatView->setModel(_levelDesignerModel);
-
-  // Init current controller
-  _currentController = _levelDesignerController;
-
-
-
-  // Splitter game
-  QSplitter* gameSplitter = new QSplitter;
-
-
-
 
   // Init game widgets
+  QSplitter* gameSplitter = new QSplitter;
+  // Game model
   _gameModel = new GameModel;
+  // Game controller
   _gameController = new GameController(_gameModel, gameSplitter, _undoStack, this);
+  // Game view
   _gameView = new GameView(_gameController, gameSplitter);
   _gameView->setModel(_gameModel);
-
-
-
-
+  // Game tree view
   QTreeView* gameView = new QTreeView(gameSplitter);
   gameView->setModel(_gameModel);
   _gameView->setSelectionModel(gameView->selectionModel());
 
-
-
+  // Init home menu
   _homeMenu = new HomeMenu(QPoint(0, 0), QSize(1200, 756));
+  connect(_homeMenu, SIGNAL(menuIndexSelected(int)), this, SLOT(switchView(int)));
 
+  // Init level selector
+  _levelSelector = new LevelSelector("levelsPack1", QPoint(0, 0), QSize(1200, 756));
+  connect(_levelSelector, SIGNAL(levelIndexSelected(int)), this, SLOT(switchLevel(int)));
 
-
-
-  // Init tab widget
-  _tabWidget = new QTabWidget;
-  _tabWidget->addTab(_levelDesignerWidget, "Level Designer");
-  _tabWidget->addTab(gameSplitter, "Game");
+  // Init current controller
+  _currentController = _levelDesignerController;
 
   // Set central widget
   setCentralWidget(_homeMenu);
-//  setCentralWidget(_levelDesignerWidget);
 
   // File menu
   QMenu* fileMenu = menuBar()->addMenu("&File");
@@ -114,6 +108,14 @@ MainWindow::MainWindow(QWidget* parent):
 
   // Resize
   setFixedSize(1200, 756);
+
+  setStyleSheet(" \
+  QSplitter::handle:vertical { \
+      width: 1px; \
+      color: black; \
+  }"
+                );
+
 }
 
 void MainWindow::openFile(void) {
@@ -126,4 +128,17 @@ void MainWindow::openFile(void) {
 void MainWindow::addPolygon(void) {
   if (_currentController == _levelDesignerController)
     _levelDesignerController->addPolygon(_levelDesignerModel->rowCount(), Polygon());
+}
+
+void MainWindow::switchView(int index) {
+  if (index == 0) {
+    setCentralWidget(_levelSelector);
+  } else if (index == 1) {
+    setCentralWidget(_levelDesignerWidget);
+  }
+}
+
+void MainWindow::switchLevel(int index) {
+  _levelSelector->setStopPress(false);
+  QMessageBox::information(this, "Level", "You selected level "+QString::number(index));
 }

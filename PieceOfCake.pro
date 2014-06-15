@@ -37,8 +37,7 @@ HEADERS += \
   tests.h \
     HomeMenu.h \
     RoundedRectangleShape.h \
-    LevelSelector.h \
-    LevelsImageGenerator.h
+    LevelSelector.h
 
 SOURCES += \
   # Controller
@@ -79,8 +78,7 @@ SOURCES += \
   main.cpp \
     HomeMenu.cpp \
     RoundedRectangleShape.cpp \
-    LevelSelector.cpp \
-    LevelsImageGenerator.cpp
+    LevelSelector.cpp
 
 INCLUDEPATH += \
   Controller \

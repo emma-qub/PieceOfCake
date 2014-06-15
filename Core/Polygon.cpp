@@ -218,14 +218,28 @@ Point2d Polygon::barycenter(void) const {
     return Point2d();
   }
 
-
   Point2d bary;
+  float baryX = 0.f;
+  float baryY = 0.f;
 
-  for (const Point2d& currPoint: _vertices) {
-    bary += currPoint;
+  int vertexCount = _vertices.size();
+  for (int k = 0; k < vertexCount; ++k) {
+    const Point2d& v0 = _vertices.at(k);
+    const Point2d& v1 = _vertices.at((k+1)%vertexCount);
+
+    float xi0 = v0.getX();
+    float xi1 = v1.getX();
+    float yi0 = v0.getY();
+    float yi1 = v1.getY();
+
+    baryX += (xi0+xi1)*(xi0*yi1 - xi1*yi0);
+    baryY += (yi0+yi1)*(xi0*yi1 - xi1*yi0);
   }
 
-  bary /= _vertices.size();
+  bary.setX(baryX);
+  bary.setY(baryY);
+
+  bary /= (6*orientedArea());
 
   return bary;
 }

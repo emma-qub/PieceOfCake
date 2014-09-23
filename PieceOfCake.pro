@@ -87,7 +87,11 @@ INCLUDEPATH += \
   Item \
   LineModifier \
   Model \
-  View
+  View \
+  C:/SFML-2.1/include
+
+DEPENDPATH += \
+  C:/SFML-2.1/include
 
 CONFIG += \
   c++11

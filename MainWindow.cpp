@@ -119,9 +119,9 @@ MainWindow::MainWindow(QWidget* parent):
 }
 
 void MainWindow::openFile(void) {
-  if (_tabWidget->currentIndex() == 0)
-    _levelDesignerController->openFile();
-  else
+//  if (_tabWidget->currentIndex() == 0)
+//    _levelDesignerController->openFile();
+//  else
     _gameController->openFile();
 }
 

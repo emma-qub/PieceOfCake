@@ -17,6 +17,10 @@ Segment::Segment(const Segment& segment) {
   _boundaries[1] = segment._boundaries[1];
 }
 
+Point2d Segment::getCenter() {
+  return Point2d((getA().getX() + getB().getX())/2.0, (getA().getY() + getB().getY())/2.0);
+}
+
 Point2d Segment::getOtherBoundary(const Point2d& boundary) {
   if (boundary == _boundaries[0])
     return _boundaries[1];

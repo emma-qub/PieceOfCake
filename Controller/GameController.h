@@ -32,14 +32,13 @@ public:
   inline int getLinesDrawn(void) const { return _linesDrawn; }
   inline int getPolygonsCount(void) const { return _polygonsCount; }
 
-  void newComputeIntersections(
-    const Polygon& polygon, const Segment& line, QVector<QPair<Point2d, Segment::Intersection>>& intersections,
-    QMap<Segment, Point2d>& mapSegmentIntersection, QVector<Point2d>& rightVertices, QVector<Point2d>& leftVertices) const;
-  QVector<Segment> computeNewEdges(const QVector<QPair<Point2d, Segment::Intersection>>& intersections) const;
-  Point2d findOtherBound(const Point2d& fstBound, const QVector<Segment>& newEdges) const;
-  void createPolygons(QVector<Point2d>& oldPolygonVertices, std::vector<Point2d>& newPolygonVertices, const Polygon& oldPolygon, const QMap<Segment, Point2d>& mapSegmentIntersection, const QVector<Segment>& newEdges) const;
-  void shiftLineIfEdgeCut(const Polygon& polygon, Segment& line) const;
-  void sliceIt(Segment& line);
+  Point2d* getOtherBound(const Point2d* intersection, const std::vector<std::pair<Point2d*, Point2d*>>& cuttingSegments) const;
+  std::vector<std::pair<Point2d*, Point2d*>> getCuttingSegments(const Polygon& polygon, const std::vector<Point2d*>& intersections) const;
+  bool stillHasBaseVertices(const std::vector<Point2d*>& verticesGlobal, const std::vector<Point2d*>& intersections) const;
+  void  getVerticesAndIntersections(const Segment& line, const std::vector<Point2d>& baseVertices,
+    std::vector<Point2d*>& globalVertices, std::vector<Point2d*>& intersections) const;
+  void sliceIt(const Segment& line);
+
   LineType computeLineType(const Segment& line) const;
   void checkWinning(void);
   void replay(void);
@@ -65,6 +64,6 @@ private:
   QString _fileName;
 };
 
-bool pairCompare(const QPair<Point2d, Segment::Intersection>& fstElem, const QPair<Point2d, Segment::Intersection>& sndElem);
+bool pointCompare(const Point2d* A, const Point2d* B);
 
 #endif // GAMECONTROLLER_HXX

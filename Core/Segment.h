@@ -32,6 +32,8 @@ public:
   inline void setA(const Point2d& a) { _boundaries[0] = a; }
   inline void setB(const Point2d& b) { _boundaries[1] = b; }
 
+  Point2d getCenter();
+
   Point2d getOtherBoundary(const Point2d& boundary);
 
   Side location(const Point2d& P) const;

@@ -5,6 +5,9 @@
 #include <QDoubleValidator>
 #include <QMap>
 
+#include <algorithm>
+#include <cassert>
+
 GameController::GameController(GameModel* model, QWidget* tabWidget, QUndoStack* undoStack, QObject* parent):
   AbstractController(model, tabWidget, undoStack, parent),
   _model(model),
@@ -17,43 +20,62 @@ GameController::GameController(GameModel* model, QWidget* tabWidget, QUndoStack*
   _fileName("") {
 }
 
-void GameController::newComputeIntersections(
-  const Polygon& polygon, const Segment& line, QVector<QPair<Point2d, Segment::Intersection>>& intersections,
-  QMap<Segment, Point2d>& mapSegmentIntersection, QVector<Point2d>& rightVertices, QVector<Point2d>& leftVertices) const {
-
-  std::vector<Point2d> vertices = polygon.getVertices();
-  unsigned int verticesCount = vertices.size();
-  bool isRightVertex = true;
-
-  for (unsigned int k = 0; k < verticesCount; ++k) {
-    Point2d v0 = vertices.at(k);
-    Point2d v1 = vertices.at((k+1)%verticesCount);
-    Segment currEdge(v0, v1);
-
-    Segment::Intersection intersectionType = currEdge.computeIntersection(line);
-    if (intersectionType == Segment::Regular || intersectionType == Segment::None) {
-      if (isRightVertex)
-        rightVertices << v0;
-      else
-        leftVertices << v0;
+Point2d* GameController::getOtherBound(const Point2d* intersection, const std::vector<std::pair<Point2d*, Point2d*>>& cuttingSegments) const {
+  for (const std::pair<Point2d*, Point2d*>& cuttingSegment: cuttingSegments) {
+    if (cuttingSegment.first == intersection) {
+      return cuttingSegment.second;
+    } else if (cuttingSegment.second == intersection) {
+      return cuttingSegment.first;
     }
+  }
 
+  return nullptr;
+}
+
+std::vector<std::pair<Point2d*, Point2d*>> GameController::getCuttingSegments(const Polygon& polygon, const std::vector<Point2d*>& intersections) const {
+  std::vector<std::pair<Point2d*, Point2d*>> cuttingSegments;
+  for (unsigned int k = 0; k < intersections.size(); ++k) {
+    Segment AB(*intersections.at(k), *intersections.at((k+1)%intersections.size()));
+    if (polygon.isPointInside2(AB.getCenter())) {
+      cuttingSegments.push_back(std::pair<Point2d*, Point2d*>(intersections.at(k), intersections.at((k+1)%intersections.size())));
+    }
+  }
+  return cuttingSegments;
+}
+
+bool GameController::stillHasBaseVertices(const std::vector<Point2d*>& globalVertices, const std::vector<Point2d*>& intersections) const {
+  for (Point2d* p: globalVertices) {
+    if (std::find(intersections.begin(), intersections.end(), p) == intersections.end())
+      return true;
+  }
+
+  return false;
+}
+
+void GameController::getVerticesAndIntersections(const Segment& line, const std::vector<Point2d>& baseVertices,
+  std::vector<Point2d*>& globalVertices, std::vector<Point2d*>& intersections) const {
+
+  for (unsigned int k = 0; k < baseVertices.size(); ++k) {
+    Point2d* A = new Point2d(baseVertices.at(k));
+    Point2d* B = new Point2d(baseVertices.at((k+1)%baseVertices.size()));
+    Segment AB(*A, *B);
+
+    globalVertices.push_back(A);
+
+    Segment::Intersection intersectionType = AB.computeIntersection(line);
     switch (intersectionType) {
     case Segment::Regular:
     {
-      Point2d currIntersection = Segment::intersectionPoint(currEdge, line);
-      intersections << QPair<Point2d, Segment::Intersection>(currIntersection, intersectionType);
-      mapSegmentIntersection.insert(currEdge, currIntersection);
-      isRightVertex = !isRightVertex;
+      Point2d* intersection = new Point2d(Segment::intersectionPoint(AB, line));
+      globalVertices.push_back(intersection);
+      intersections.push_back(intersection);
       break;
     }
     case Segment::FirstVertexRegular:
     {
-      Point2d v_1 = vertices.at((k-1)%verticesCount);
-      if (!line.sameSide(v_1, v1)) {
-        intersections << QPair<Point2d, Segment::Intersection>(v0, intersectionType);
-        mapSegmentIntersection.insert(Segment(v0, v1), v0);
-      }
+      Point2d* intersection = new Point2d(baseVertices.at(k));
+      globalVertices.push_back(intersection);
+      intersections.push_back(intersection);
       break;
     }
     default:
@@ -61,155 +83,61 @@ void GameController::newComputeIntersections(
     }
   }
 
-  qSort(intersections.begin(), intersections.end(), pairCompare);
+  std::sort(intersections.begin(), intersections.end(), pointCompare);
 }
 
-QVector<Segment> GameController::computeNewEdges(const QVector<QPair<Point2d, Segment::Intersection>>& intersections) const {
-  QVector<Segment> newEdges;
-
-  Point2d fstPoint(-1, -1);
-  bool isInside = false;
-
-  for (const QPair<Point2d, Segment::Intersection>& intersection: intersections) {
-    Point2d currPoint = intersection.first;
-    Segment::Intersection currIntersectionType = intersection.second;
-    if (!isInside && currIntersectionType == Segment::Regular) {
-      fstPoint = currPoint;
-      isInside = true;
-    } else if (isInside && currIntersectionType == Segment::Regular) {
-      newEdges << Segment(fstPoint, currPoint);
-      isInside = false;
-    } else if (!isInside && currIntersectionType == Segment::FirstVertexRegular) {
-      if (currIntersectionType == Segment::FirstVertexRegular) {
-        fstPoint = currPoint;
-        isInside = true;
-      }
-    } else if (isInside && currIntersectionType == Segment::FirstVertexRegular) {
-      if (currIntersectionType == Segment::FirstVertexRegular) {
-        newEdges << Segment(fstPoint, currPoint);
-        isInside = false;
-      }
-    }
-  }
-
-  return newEdges;
-}
-
-void GameController::shiftLineIfEdgeCut(const Polygon& polygon, Segment& line) const {
-  std::vector<Point2d> vertices = polygon.getVertices();
-  unsigned int verticesCount = vertices.size();
-
-  for (unsigned int k = 0; k < verticesCount; ++k) {
-    Point2d v0 = vertices.at(k);
-    Point2d v1 = vertices.at((k+1)%verticesCount);
-    Segment currEdge(v0, v1);
-
-    if (currEdge.computeIntersection(line) == Segment::Edge) {
-      line.setA(line.getA()+Point2d(1.0, 1.0));
-      return;
-    }
-
-    if (currEdge.computeIntersection(line) == Segment::FirstVertexRegular) {
-      line.setA(line.getA()+Point2d(1.0, 1.0));
-      line.setB(line.getB()+Point2d(1.0, 1.0));
-      return;
-    }
-  }
-}
-
-Point2d GameController::findOtherBound(const Point2d& fstBound, const QVector<Segment>& newEdges) const {
-  for (const Segment& currSegment: newEdges) {
-    if (currSegment.getA() == fstBound) {
-      return currSegment.getB();
-    } else if (currSegment.getB() == fstBound) {
-      return currSegment.getA();
-    }
-  }
-
-  return Point2d();
-}
-
-void GameController::createPolygons(QVector<Point2d>& oldPolygonVertices, std::vector<Point2d>& newPolygonVertices, const Polygon& oldPolygon, const QMap<Segment, Point2d>& mapSegmentIntersection, const QVector<Segment>& newEdges) const {
-  std::vector<Point2d> polygonVertices = oldPolygon.getVertices();
-  int verticesCount = polygonVertices.size();
-  bool seekNewVertex = false;
-  Point2d otherBound;
-  Segment otherSegment;
-
-  for (int k = 0; k < verticesCount; ++k) {
-    Point2d v0 = polygonVertices.at(k);
-    Point2d v1 = polygonVertices.at((k+1)%verticesCount);
-    Segment currSegment(v0, v1);
-
-    bool v0IsToBeAdded = oldPolygonVertices.contains(v0);
-    bool v1IsToBeAdded = oldPolygonVertices.contains(v1);
-
-    if (!seekNewVertex) {
-      if (v0IsToBeAdded && v1IsToBeAdded) {
-        newPolygonVertices.push_back(v0);
-      } else if (v0IsToBeAdded && !v1IsToBeAdded) {
-        newPolygonVertices.push_back(v0);
-        Point2d currIntersection = mapSegmentIntersection.value(currSegment);
-        if (currIntersection != Point2d()) {
-          newPolygonVertices.push_back(currIntersection);
-          seekNewVertex = true;
-          otherBound = findOtherBound(currIntersection, newEdges);
-          if (otherBound != Point2d())
-            otherSegment = mapSegmentIntersection.key(otherBound);
-        }
-      } else if (!v0IsToBeAdded && v1IsToBeAdded) {
-        Point2d currIntersection = mapSegmentIntersection.value(currSegment);
-        if (currIntersection != Point2d()) {
-          newPolygonVertices.push_back(currIntersection);
-          seekNewVertex = false;
-        }
-      }
-    } else {
-      if (currSegment == otherSegment) {
-        newPolygonVertices.push_back(mapSegmentIntersection.value(currSegment));
-        seekNewVertex = false;
-      }
-    }
-  }
-
-  for (const Point2d& vertex: newPolygonVertices) {
-    int vertexIndex = oldPolygonVertices.indexOf(vertex);
-    if (vertexIndex != -1)
-      oldPolygonVertices.remove(vertexIndex);
-  }
-}
-
-void GameController::sliceIt(Segment& line) {
+void GameController::sliceIt(const Segment& line) {
   PolygonList newPolygonList;
+
   for (const Polygon& polygon: _model->getPolygonList()) {
-    shiftLineIfEdgeCut(polygon, line);
+    std::vector<Point2d*> globalVertices;
+    std::vector<Point2d*> intersections;
+    getVerticesAndIntersections(line, polygon.getVertices(), globalVertices, intersections);
 
-    QVector<QPair<Point2d, Segment::Intersection>> intersections;
-    QMap<Segment, Point2d> mapSegmentIntersection;
-    QVector<Point2d> rightVertices;
-    QVector<Point2d> leftVertices;
-    newComputeIntersections(polygon, line, intersections, mapSegmentIntersection, rightVertices, leftVertices);
-    if (intersections.size() == 0) {
-      newPolygonList << polygon;
-      continue;
-    }
+    std::vector<Point2d> newVertices;
 
-    QVector<Segment> newEdges = computeNewEdges(intersections);
+    std::vector<std::pair<Point2d*, Point2d*>> cuttingSegments = getCuttingSegments(polygon, intersections);
 
-    std::vector<Point2d> newPolygonVertices;
-    int k = 0;
-    while (leftVertices.size() > 0) {
-      createPolygons(leftVertices, newPolygonVertices, polygon, mapSegmentIntersection, newEdges);
-      newPolygonList << Polygon(newPolygonVertices);
-      newPolygonVertices.clear();
-      if (++k > 2) break;
-    }
-    k = 0;
-    while (rightVertices.size() > 0) {
-      createPolygons(rightVertices, newPolygonVertices, polygon, mapSegmentIntersection, newEdges);
-      newPolygonList << Polygon(newPolygonVertices);
-      newPolygonVertices.clear();
-      if (++k > 2) break;
+    while (stillHasBaseVertices(globalVertices, intersections)) {
+
+      // We really don't want the first point to be an intersection. Trust me.
+      Point2d* p = globalVertices.at(0);
+      while (std::find(intersections.begin(), intersections.end(), p) != intersections.end()) {
+        globalVertices.erase(globalVertices.begin());
+        globalVertices.push_back(p);
+        p = globalVertices.at(0);
+      }
+      std::vector<Point2d*> globalVerticesCopy(globalVertices);
+
+      bool lookingForOtherBound = false;
+      Point2d* otherBound = nullptr;
+      for (Point2d* currVerrtex: globalVerticesCopy) {
+        if (lookingForOtherBound) {
+          if (otherBound == currVerrtex) {
+            newVertices.push_back(*currVerrtex);
+            lookingForOtherBound = false;
+          }
+        } else {
+          if (std::find(intersections.begin(), intersections.end(), currVerrtex) != intersections.end()) {
+            // If the intersection is not equal to the last point, we add it
+            if (newVertices.size() > 0 && (std::find(newVertices.begin(), newVertices.end(), *currVerrtex) == newVertices.end())) {
+              newVertices.push_back(*currVerrtex);
+            }
+            otherBound = getOtherBound(currVerrtex, cuttingSegments);
+            lookingForOtherBound = true;
+          } else {
+            newVertices.push_back(*currVerrtex);
+            auto it = std::find(globalVertices.begin(), globalVertices.end(), currVerrtex);
+            assert(it != globalVertices.end());
+            globalVertices.erase(it);
+          }
+        }
+      }
+      globalVerticesCopy.clear();
+      globalVerticesCopy = globalVertices;
+
+      newPolygonList << Polygon(newVertices);
+      newVertices.clear();
     }
   }
   _model->setPolygonList(newPolygonList);
@@ -313,6 +241,6 @@ void GameController::openLevel(const QString& fileName) {
 
 
 
-bool pairCompare(const QPair<Point2d, Segment::Intersection>& fstElem, const QPair<Point2d, Segment::Intersection>& sndElem) {
-  return fstElem.first < sndElem.first;
+bool pointCompare(const Point2d* A, const Point2d* B) {
+  return *A < *B;
 }

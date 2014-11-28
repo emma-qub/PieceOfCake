@@ -1,0 +1,35 @@
+<!DOCTYPE PieceOfCakeML>
+<level>
+    <polygons>
+        <polygon id="0">
+            <vertex y="555" x="55"/>
+            <vertex y="55" x="55"/>
+            <vertex y="55" x="605"/>
+            <vertex y="555" x="605"/>
+            <vertex y="555" x="155"/>
+            <vertex y="155" x="155"/>
+            <vertex y="155" x="505"/>
+            <vertex y="455" x="505"/>
+            <vertex y="455" x="255"/>
+            <vertex y="255" x="255"/>
+            <vertex y="255" x="405"/>
+            <vertex y="355" x="405"/>
+            <vertex y="355" x="355"/>
+            <vertex y="305" x="355"/>
+            <vertex y="305" x="305"/>
+            <vertex y="405" x="305"/>
+            <vertex y="405" x="455"/>
+            <vertex y="205" x="455"/>
+            <vertex y="205" x="205"/>
+            <vertex y="505" x="205"/>
+            <vertex y="505" x="555"/>
+            <vertex y="105" x="555"/>
+            <vertex y="105" x="105"/>
+            <vertex y="555" x="105"/>
+        </polygon>
+    </polygons>
+    <linescount value="4"/>
+    <partscount value="13"/>
+    <maxgaptowin value="10"/>
+    <hints/>
+</level>

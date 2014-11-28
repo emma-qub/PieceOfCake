@@ -34,6 +34,6 @@
     </polygons>
     <linescount value="3"/>
     <partscount value="10"/>
-    <maxgaptowin value="-1"/>
+    <maxgaptowin value="10"/>
     <hints/>
 </level>

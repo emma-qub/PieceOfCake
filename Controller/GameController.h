@@ -33,9 +33,10 @@ public:
   inline int getPolygonsCount(void) const { return _polygonsCount; }
 
   Point2d* getOtherBound(const Point2d* intersection, const std::vector<std::pair<Point2d*, Point2d*>>& cuttingSegments) const;
-  std::vector<std::pair<Point2d*, Point2d*>> getCuttingSegments(const Polygon& polygon, const std::vector<Point2d*>& intersections) const;
+  std::vector<std::pair<Point2d*, Point2d*>> getCuttingSegments(const std::vector<Point2d*>& intersections) const;
   bool stillHasBaseVertices(const std::vector<Point2d*>& verticesGlobal, const std::vector<Point2d*>& intersections) const;
-  void  getVerticesAndIntersections(const Segment& line, const std::vector<Point2d>& baseVertices,
+  void cleanIntersections(const Polygon& polygon, std::vector<Point2d*>& intersections) const;
+  void getVerticesAndIntersections(const Segment& line, const Polygon& polygon,
     std::vector<Point2d*>& globalVertices, std::vector<Point2d*>& intersections) const;
   void sliceIt(const Segment& line);
 

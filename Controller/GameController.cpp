@@ -32,13 +32,16 @@ Point2d* GameController::getOtherBound(const Point2d* intersection, const std::v
   return nullptr;
 }
 
-std::vector<std::pair<Point2d*, Point2d*>> GameController::getCuttingSegments(const Polygon& polygon, const std::vector<Point2d*>& intersections) const {
+std::vector<std::pair<Point2d*, Point2d*>> GameController::getCuttingSegments(const std::vector<Point2d*>& intersections) const {
+  assert(intersections.size()%2 == 0);
+
   std::vector<std::pair<Point2d*, Point2d*>> cuttingSegments;
-  for (unsigned int k = 0; k < intersections.size(); ++k) {
-    Segment AB(*intersections.at(k), *intersections.at((k+1)%intersections.size()));
-    if (polygon.isPointInside2(AB.getCenter())) {
-      cuttingSegments.push_back(std::pair<Point2d*, Point2d*>(intersections.at(k), intersections.at((k+1)%intersections.size())));
-    }
+  if (intersections.size() == 0)
+    return cuttingSegments;
+
+  for (unsigned int k = 0; k < intersections.size()-1; k += 2) {
+    Segment AB(*intersections.at(k), *intersections.at(k+1));
+    cuttingSegments.push_back(std::pair<Point2d*, Point2d*>(intersections.at(k), intersections.at((k+1)%intersections.size())));
   }
   return cuttingSegments;
 }
@@ -52,8 +55,46 @@ bool GameController::stillHasBaseVertices(const std::vector<Point2d*>& globalVer
   return false;
 }
 
-void GameController::getVerticesAndIntersections(const Segment& line, const std::vector<Point2d>& baseVertices,
+void GameController::cleanIntersections(const Polygon& polygon, std::vector<Point2d*>& intersections) const {
+  if (intersections.size() < 2) {
+    intersections.clear();
+    return;
+  }
+
+  std::vector<Point2d*> realIntersection;
+  bool inside = false;
+
+  for (unsigned int k = 0; k < intersections.size()-1; ++k) {
+    Segment AB(*intersections.at(k), *intersections.at(k+1));
+    if (polygon.isPointInside2(AB.getCenter())) {
+      if (!inside) {
+        realIntersection.push_back(intersections.at(k));
+        inside = true;
+      }
+    } else if (!polygon.isPointInside2(AB.getCenter())) {
+      if (inside) {
+        realIntersection.push_back(intersections.at(k));
+        inside = false;
+      }
+    }
+  }
+
+  // Handle last vertex
+  if (inside)
+    realIntersection.push_back(intersections.at(intersections.size()-1));
+
+  for (Point2d* p: realIntersection)
+    std::cerr << *p << " ";
+  std::cerr << std::endl;
+
+  intersections.clear();
+  intersections = realIntersection;
+}
+
+void GameController::getVerticesAndIntersections(const Segment& line, const Polygon& polygon,
   std::vector<Point2d*>& globalVertices, std::vector<Point2d*>& intersections) const {
+
+  std::vector<Point2d> baseVertices = polygon.getVertices();
 
   for (unsigned int k = 0; k < baseVertices.size(); ++k) {
     Point2d* A = new Point2d(baseVertices.at(k));
@@ -84,6 +125,8 @@ void GameController::getVerticesAndIntersections(const Segment& line, const std:
   }
 
   std::sort(intersections.begin(), intersections.end(), pointCompare);
+
+  cleanIntersections(polygon, intersections);
 }
 
 void GameController::sliceIt(const Segment& line) {
@@ -92,11 +135,11 @@ void GameController::sliceIt(const Segment& line) {
   for (const Polygon& polygon: _model->getPolygonList()) {
     std::vector<Point2d*> globalVertices;
     std::vector<Point2d*> intersections;
-    getVerticesAndIntersections(line, polygon.getVertices(), globalVertices, intersections);
+    getVerticesAndIntersections(line, polygon, globalVertices, intersections);
 
     std::vector<Point2d> newVertices;
 
-    std::vector<std::pair<Point2d*, Point2d*>> cuttingSegments = getCuttingSegments(polygon, intersections);
+    std::vector<std::pair<Point2d*, Point2d*>> cuttingSegments = getCuttingSegments(intersections);
 
     while (stillHasBaseVertices(globalVertices, intersections)) {
 
@@ -151,30 +194,30 @@ void GameController::sliceIt(const Segment& line) {
 }
 
 GameController::LineType GameController::computeLineType(const Segment& line) const {
-    PolygonList polygonList = _model->getPolygonList();
+  PolygonList polygonList = _model->getPolygonList();
 
-    bool noCrossing = false;
-    bool goodCrossing = false;
-    bool badCrossing = false;
+  bool noCrossing = false;
+  bool goodCrossing = false;
+  bool badCrossing = false;
 
-    foreach (const Polygon& polygon, polygonList) {
-        if (!polygon.isCrossing(line) && !polygon.isPointInside2(line.getA())) {
-            noCrossing = true;
-        } else if (polygon.isGoodSegment(line)) {
-            goodCrossing = true;
-        } else {
-            badCrossing = true;
-        }
+  foreach (const Polygon& polygon, polygonList) {
+    if (!polygon.isCrossing(line) && !polygon.isPointInside2(line.getA())) {
+      noCrossing = true;
+    } else if (polygon.isGoodSegment(line)) {
+      goodCrossing = true;
+    } else {
+      badCrossing = true;
     }
+  }
 
-    if (badCrossing)
-        return GameController::badCrossing;
-    else if (goodCrossing)
-        return GameController::goodCrossing;
-    else if (noCrossing)
-        return GameController::noCrossing;
-    else
-        return GameController::unknownCrossing;
+  if (badCrossing)
+    return GameController::badCrossing;
+  else if (goodCrossing)
+    return GameController::goodCrossing;
+  else if (noCrossing)
+    return GameController::noCrossing;
+  else
+    return GameController::unknownCrossing;
 }
 
 void GameController::checkWinning(void) {
@@ -217,26 +260,26 @@ void GameController::clearGame(void) {
 }
 
 void GameController::openLevel(const QString& fileName) {
-    clear();
-    clearGame();
+  clear();
+  clearGame();
 
-    ParserXML parser(fileName);
+  ParserXML parser(fileName);
 
-    _fileName = QString(fileName);
+  _fileName = QString(fileName);
 
-    PolygonList polygonList(parser.createPolygonList());
-    _model->setPolygonList(polygonList);
+  PolygonList polygonList(parser.createPolygonList());
+  _model->setPolygonList(polygonList);
 
-    _linesCount = parser.getLinesCount();
-    _partsCount = parser.getPartsCount();
-    _polygonsCount = _model->getPolygonsCount();
-    _maxGapToWin = parser.getMaxGapToWin();
+  _linesCount = parser.getLinesCount();
+  _partsCount = parser.getPartsCount();
+  _polygonsCount = _model->getPolygonsCount();
+  _maxGapToWin = parser.getMaxGapToWin();
 
-    for (const Polygon& polygon: _model->getPolygonList()) {
-      _orientedAreaTotal += polygon.orientedArea();
-    }
+  for (const Polygon& polygon: _model->getPolygonList()) {
+    _orientedAreaTotal += polygon.orientedArea();
+  }
 
-    emit update();
+  emit update();
 }
 
 

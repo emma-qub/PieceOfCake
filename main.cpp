@@ -1,8 +1,6 @@
 #include <cstdlib>
 #include <time.h>   // init rand
 
-#include <QApplication>
-
 #include "tests.h"
 #include "MainWindow.h"
 #include "LevelDesignerModel.h"
@@ -13,8 +11,18 @@
 #define TESTPOLYGON 0
 #define TESTMODELVIEW 0
 #define XML 0
-#define GUI 1
+#define GUI 0
 #define GNUPLOT 0
+#define QML 1
+
+#if QML
+#include <QGuiApplication>
+#include <QQmlApplicationEngine>
+#endif
+
+#if GUI
+#include <QApplication>
+#endif
 
 int main(int argc, char** argv) {
   srand(time(NULL));  // init rand;
@@ -39,6 +47,15 @@ int main(int argc, char** argv) {
 
   MainWindow window;
   window.show();
+
+  return app.exec();
+#endif
+
+#if QML
+  QGuiApplication app(argc, argv);
+
+  QQmlApplicationEngine engine;
+  engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
   return app.exec();
 #endif

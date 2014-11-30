@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>resources/fonts/Pacifico.ttf</file>
+        <file>resources/images/createLevelsIn.png</file>
+        <file>resources/images/createLevelsOut.png</file>
+        <file>resources/images/creditIn.png</file>
+        <file>resources/images/followUsIn.png</file>
+        <file>resources/images/followUsOut.png</file>
+        <file>resources/images/homeBackground.png</file>
+        <file>resources/images/homeBackgroundFollowUs.png</file>
+        <file>resources/images/homeBackgroundNaked.png</file>
+        <file>resources/images/optionsIn.png</file>
+        <file>resources/images/optionsOut.png</file>
+        <file>resources/images/playIn.png</file>
+    </qresource>
+</RCC>

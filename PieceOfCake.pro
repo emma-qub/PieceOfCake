@@ -1,3 +1,10 @@
+TEMPLATE = app
+
+QT += qml quick
+
+RESOURCES += qml.qrc
+
+
 HEADERS += \
   # Controller
   Controller/AbstractController.h \
@@ -35,10 +42,10 @@ HEADERS += \
   ParserXML.h \
   QSFMLCanvas.h \
   tests.h \
-    HomeMenu.h \
-    RoundedRectangleShape.h \
-    LevelSelector.h \
-    View/LevelDesignerWidget.h
+  HomeMenu.h \
+  RoundedRectangleShape.h \
+  LevelSelector.h \
+  View/LevelDesignerWidget.h
 
 SOURCES += \
   # Controller
@@ -77,10 +84,10 @@ SOURCES += \
   ParserXML.cpp \
   QSFMLCanvas.cpp \
   main.cpp \
-    HomeMenu.cpp \
-    RoundedRectangleShape.cpp \
-    LevelSelector.cpp \
-    View/LevelDesignerWidget.cpp
+  HomeMenu.cpp \
+  RoundedRectangleShape.cpp \
+  LevelSelector.cpp \
+  View/LevelDesignerWidget.cpp
 
 INCLUDEPATH += \
   Controller \
@@ -108,3 +115,9 @@ LIBS += \
   -lsfml-system \
   -lsfml-window \
   -lsfml-graphics
+
+# Additional import path used to resolve QML modules in Qt Creator's code model
+QML_IMPORT_PATH =
+
+# Default rules for deployment.
+include(deployment.pri)

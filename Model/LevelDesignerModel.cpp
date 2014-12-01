@@ -7,9 +7,9 @@ LevelDesignerModel::LevelDesignerModel(const QStringList& headers, const QString
   TreeModel(headers, data, parent),
   _polygonList(),
   _selections(),
-  _partsCount(-1),
-  _linesCount(-1),
-  _maxGapToWin(-1) {
+  _partsCount(2),
+  _linesCount(1),
+  _maxGapToWin(10) {
 
   _selections << QPair<int, int>(-1, -1);
 

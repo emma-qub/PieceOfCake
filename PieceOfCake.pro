@@ -1,7 +1,5 @@
 TEMPLATE = app
 
-QT += qml quick
-
 RESOURCES += qml.qrc
 
 
@@ -108,6 +106,9 @@ CONFIG += \
 QT += \
   core \
   gui \
+  qml \
+  quick \
+  quickwidgets \
   widgets \
   xml
 

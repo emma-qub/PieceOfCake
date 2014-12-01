@@ -38,6 +38,7 @@ public slots:
   //void updateCurrentController(int currentIndex);
   void switchView(int);
   void switchLevel(QString);
+  void getQMLSignal(QString mess);
 
 private:
   AbstractController* _currentController;

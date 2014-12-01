@@ -9,6 +9,11 @@
 #include <fstream>
 #include <iomanip>
 
+#include <QQuickItem>
+#include <QQuickView>
+#include <QQuickWidget>
+
+
 MainWindow::MainWindow(QWidget* parent):
   QMainWindow(parent) {
 
@@ -59,7 +64,11 @@ MainWindow::MainWindow(QWidget* parent):
   _currentController = _levelDesignerController;
 
   // Set central widget
-  setCentralWidget(_homeMenu);
+  QQuickWidget* qmlView = new QQuickWidget(QUrl::fromLocalFile("../PieceOfCake/main.qml"));
+  setCentralWidget(qmlView);
+  QQuickItem* item = qmlView->rootObject();
+  connect(item, SIGNAL(qmlSignal(QString)), this, SLOT(getQMLSignal(QString)));
+  //setCentralWidget(_homeMenu);
 
   // File menu
   QMenu* fileMenu = menuBar()->addMenu("&File");
@@ -116,6 +125,10 @@ MainWindow::MainWindow(QWidget* parent):
   }"
                 );
 
+}
+
+void MainWindow::getQMLSignal(QString mess) {
+  QMessageBox::information(this, "QML IS TALKING TO YOU", mess);
 }
 
 void MainWindow::openFile(void) {

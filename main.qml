@@ -1,13 +1,14 @@
 import QtQuick 2.3
-import QtQuick.Window 2.2
-import QtQuick.Controls 1.2
+import QtQuick.Window 2.1
+import QtQuick.Controls 1.1
 
-Window {
+Rectangle {
     id: homePage
     visible: true
     width: 1200
     height: 756
     color: "#FFFFFF"
+    signal qmlSignal(string msg)
 
     Item {
         id: home
@@ -58,7 +59,8 @@ Window {
                 width: 205
                 height: 220
                 hoverEnabled: true
-                onClicked: stackView.replace(followUs)
+                //onClicked: stackView.replace(followUs)
+                onClicked: homePage.qmlSignal("FOLLOW US!")
 
                 Image {
                     id: followUsIn

@@ -52,14 +52,6 @@ MainWindow::MainWindow(QWidget* parent):
   gameView->setModel(_gameModel);
   _gameView->setSelectionModel(gameView->selectionModel());
 
-  // Init home menu
-  _homeMenu = new HomeMenu(QPoint(0, 0), QSize(1200, 756));
-  connect(_homeMenu, SIGNAL(menuIndexSelected(int)), this, SLOT(switchView(int)));
-
-  // Init level selector
-  _levelSelector = new LevelSelector("levelsPack1", QPoint(0, 0), QSize(1200, 756));
-  connect(_levelSelector, SIGNAL(levelIndexSelected(QString)), this, SLOT(switchLevel(QString)));
-
   // Init current controller
   _currentController = _levelDesignerController;
 
@@ -128,7 +120,17 @@ MainWindow::MainWindow(QWidget* parent):
 }
 
 void MainWindow::getQMLSignal(QString mess) {
-  QMessageBox::information(this, "QML IS TALKING TO YOU", mess);
+  if (mess == "play") {
+//    setCentralWidget();
+  } else if (mess == "createLevels") {
+    setCentralWidget(_levelDesignerScribbleView);
+  } else if (mess == "options") {
+//    setCentralWidget();
+  } else if (mess == "credit") {
+//    setCentralWidget();
+  } else if (mess == "followUs") {
+//    setCentralWidget();
+  }
 }
 
 void MainWindow::openFile(void) {
@@ -141,20 +143,4 @@ void MainWindow::openFile(void) {
 void MainWindow::addPolygon(void) {
   if (_currentController == _levelDesignerController)
     _levelDesignerController->addPolygon(_levelDesignerModel->rowCount(), Polygon());
-}
-
-void MainWindow::switchView(int index) {
-  if (index == 0) {
-    setCentralWidget(_levelSelector);
-  } else if (index == 1) {
-    setCentralWidget(_levelDesignerWidget);
-  }
-}
-
-void MainWindow::switchLevel(QString levelName) {
-  _levelSelector->setStopPress(false);
-  setCentralWidget(_gameView);
-  // Wait for process, and then open level. Otherwise the widget is blank.
-  qApp->processEvents();
-  _gameController->openLevel("../PieceOfCake/levels/levelsPack1/"+levelName);
 }

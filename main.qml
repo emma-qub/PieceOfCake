@@ -98,7 +98,7 @@ Rectangle {
                 width: 150
                 height: 240
                 hoverEnabled: true
-                onClicked: stackView.replace(createLevels)
+                onClicked: homePage.qmlSignal("createLevels")
 
                 Image {
                     id: createLevelsIn

@@ -13,8 +13,6 @@
 #include "GameController.h"
 #include "GameView.h"
 #include "GameModel.h"
-#include "HomeMenu.h"
-#include "LevelSelector.h"
 
 class MainWindow: public QMainWindow {
   Q_OBJECT
@@ -36,8 +34,6 @@ public slots:
   //void alignToGrid(void);
   //void updateMenuActions(int);
   //void updateCurrentController(int currentIndex);
-  void switchView(int);
-  void switchLevel(QString);
   void getQMLSignal(QString mess);
 
 private:
@@ -56,11 +52,7 @@ private:
   GameView* _gameView;
   GameModel* _gameModel;
 
-  HomeMenu* _homeMenu;
-  LevelSelector* _levelSelector;
-
   QTabWidget* _tabWidget;
-  //QStackedWidget* _stackWidget;
   QWidget* _levelDesignerWidget;
 
   QAction* _newAction;

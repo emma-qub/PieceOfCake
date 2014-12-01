@@ -33,17 +33,13 @@ HEADERS += \
   View/LevelDesignerGameStatView.h \
   View/LevelDesignerScribbleView.h \
   View/LevelDesignerTreeView.h \
+  View/LevelDesignerWidget.h \
   # Root
   Commands.h \
   Hint.h \
   MainWindow.h \
   ParserXML.h \
-  QSFMLCanvas.h \
-  tests.h \
-  HomeMenu.h \
-  RoundedRectangleShape.h \
-  LevelSelector.h \
-  View/LevelDesignerWidget.h
+  tests.h
 
 SOURCES += \
   # Controller
@@ -75,17 +71,13 @@ SOURCES += \
   View/LevelDesignerGameStatView.cpp \
   View/LevelDesignerScribbleView.cpp \
   View/LevelDesignerTreeView.cpp \
+  View/LevelDesignerWidget.cpp \
   # Root
   Commands.cpp \
   Hint.cpp \
   MainWindow.cpp \
   ParserXML.cpp \
-  QSFMLCanvas.cpp \
-  main.cpp \
-  HomeMenu.cpp \
-  RoundedRectangleShape.cpp \
-  LevelSelector.cpp \
-  View/LevelDesignerWidget.cpp
+  main.cpp
 
 INCLUDEPATH += \
   Controller \
@@ -94,11 +86,7 @@ INCLUDEPATH += \
   Item \
   LineModifier \
   Model \
-  View \
-  C:/SFML-2.1/include
-
-DEPENDPATH += \
-  C:/SFML-2.1/include
+  View
 
 CONFIG += \
   c++11
@@ -111,11 +99,6 @@ QT += \
   quickwidgets \
   widgets \
   xml
-
-LIBS += \
-  -lsfml-system \
-  -lsfml-window \
-  -lsfml-graphics
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =

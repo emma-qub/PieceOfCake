@@ -22,8 +22,6 @@
 
 #if GUI
 #include <QApplication>
-#include "LevelsModel.h"
-#include <QtQml>
 #endif
 
 int main(int argc, char** argv) {

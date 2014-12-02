@@ -1,6 +1,9 @@
 import QtQuick 2.3
 import QtQuick.Window 2.1
 import QtQuick.Controls 1.1
+import Qt.labs.folderlistmodel 1.0
+
+
 
 Rectangle {
     id: homePage
@@ -201,11 +204,22 @@ Rectangle {
                 width: 1200
                 height: 756
 
-                model: LevelsModel {}
+                model: FolderListModel {
+                    id: dataModel
+                    showDirs: false
+                    nameFilters: [
+                        "*.png"
+                    ]
+                    folder: "../PieceOfCake/resources/levels/"
+                }
+
                 delegate: Column {
-                    Image { source: image; anchors.horizontalCenter: parent.horizontalCenter }
+                    Image { source: "resources/levels/"+fileName; anchors.horizontalCenter: parent.horizontalCenter }
                     Text { text: stars; anchors.horizontalCenter: parent.horizontalCenter }
                 }
+
+
+
             }
         }
     }

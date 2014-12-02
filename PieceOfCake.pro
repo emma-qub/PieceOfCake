@@ -2,7 +2,6 @@ TEMPLATE = app
 
 RESOURCES += qml.qrc
 
-
 HEADERS += \
   # Controller
   Controller/AbstractController.h \
@@ -39,7 +38,8 @@ HEADERS += \
   Hint.h \
   MainWindow.h \
   ParserXML.h \
-  tests.h
+  tests.h \
+    LevelsModel.h
 
 SOURCES += \
   # Controller
@@ -77,7 +77,8 @@ SOURCES += \
   Hint.cpp \
   MainWindow.cpp \
   ParserXML.cpp \
-  main.cpp
+  main.cpp \
+    LevelsModel.cpp
 
 INCLUDEPATH += \
   Controller \
@@ -86,7 +87,8 @@ INCLUDEPATH += \
   Item \
   LineModifier \
   Model \
-  View
+  View \
+  QML-Utils
 
 CONFIG += \
   c++11
@@ -105,3 +107,6 @@ QML_IMPORT_PATH =
 
 # Default rules for deployment.
 include(deployment.pri)
+
+OTHER_FILES += \
+    LevelsModel.qml

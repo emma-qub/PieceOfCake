@@ -197,36 +197,15 @@ Rectangle {
             width: 1200
             height: 756
 
-            MouseArea {
-                id: playArea
-                x: 230
-                y: 275
-                width: 231
-                height: 114
-                anchors.fill: parent
-                onClicked: stackView.replace(home)
+            GridView {
+                width: 1200
+                height: 756
 
-                Text {
-                    id: playBackText
-                    x: 381
-                    y: 289
-                    width: 160
-                    height: 47
-                    text: qsTr("Go back to menu")
-                    font.family: "Pacifico"
-                    font.pixelSize: 22
+                model: LevelsModel {}
+                delegate: Column {
+                    Image { source: image; anchors.horizontalCenter: parent.horizontalCenter }
+                    Text { text: stars; anchors.horizontalCenter: parent.horizontalCenter }
                 }
-            }
-
-            Text {
-                id: playtitleText
-                x: 225
-                y: 148
-                width: 197
-                height: 84
-                text: qsTr("Play")
-                font.family: "Pacifico"
-                font.pixelSize: 22
             }
         }
     }
@@ -430,14 +409,14 @@ Rectangle {
     }
 }
 
-//    StateGroup {
-//        id: stateGroup
-//        states: [
-//            State {
-//                name: "PlayHovered"
-//                PropertyChanges {
-//                    target: playText
-//                }
-//            }
-//        ]
-//    }
+////    StateGroup {
+////        id: stateGroup
+////        states: [
+////            State {
+////                name: "PlayHovered"
+////                PropertyChanges {
+////                    target: playText
+////                }
+////            }
+////        ]
+////    }

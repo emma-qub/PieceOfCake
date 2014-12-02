@@ -12,7 +12,7 @@
 #include <QQuickItem>
 #include <QQuickView>
 #include <QQuickWidget>
-
+#include <QQmlContext>
 
 MainWindow::MainWindow(QWidget* parent):
   QMainWindow(parent) {
@@ -55,12 +55,17 @@ MainWindow::MainWindow(QWidget* parent):
   // Init current controller
   _currentController = _levelDesignerController;
 
-  // Set central widget
+
+  _levelsModel = new LevelsModel;
   QQuickWidget* qmlView = new QQuickWidget(QUrl::fromLocalFile("../PieceOfCake/main.qml"));
-  setCentralWidget(qmlView);
+  QQmlContext* ctxt = qmlView->rootContext();
+  ctxt->setContextProperty("levelsModel", _levelsModel);
   QQuickItem* item = qmlView->rootObject();
   connect(item, SIGNAL(qmlSignal(QString)), this, SLOT(getQMLSignal(QString)));
+
+  // Set central widget
   //setCentralWidget(_homeMenu);
+  setCentralWidget(qmlView);
 
   // File menu
   QMenu* fileMenu = menuBar()->addMenu("&File");

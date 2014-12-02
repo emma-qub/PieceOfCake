@@ -9,6 +9,7 @@
 #include "LevelDesignerTreeView.h"
 #include "LevelDesignerScribbleView.h"
 #include "LevelDesignerGameStatView.h"
+#include "LevelsModel.h"
 #include "Commands.h"
 #include "GameController.h"
 #include "GameView.h"
@@ -47,6 +48,7 @@ private:
   LevelDesignerScribbleView* _levelDesignerScribbleView;
   LevelDesignerGameStatView* _levelDesignerGameStatView;
   LevelDesignerModel* _levelDesignerModel;
+  LevelsModel* _levelsModel;
 
   GameController* _gameController;
   GameView* _gameView;

@@ -13,6 +13,6 @@
         <file>resources/images/optionsIn.png</file>
         <file>resources/images/optionsOut.png</file>
         <file>resources/images/playIn.png</file>
-        <file>LevelsModel.qml</file>
+        <file>resources/images/selectLevels.png</file>
     </qresource>
 </RCC>

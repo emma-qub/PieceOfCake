@@ -56,12 +56,10 @@ MainWindow::MainWindow(QWidget* parent):
   _currentController = _levelDesignerController;
 
 
-  _levelsModel = new LevelsModel;
   QQuickWidget* qmlView = new QQuickWidget(QUrl::fromLocalFile("../PieceOfCake/main.qml"));
-  QQmlContext* ctxt = qmlView->rootContext();
-  ctxt->setContextProperty("levelsModel", _levelsModel);
   QQuickItem* item = qmlView->rootObject();
   connect(item, SIGNAL(qmlSignal(QString)), this, SLOT(getQMLSignal(QString)));
+  connect(item, SIGNAL(onOpenLevel(QString)), this, SLOT(openLevel(QString)));
 
   // Set central widget
   //setCentralWidget(_homeMenu);
@@ -125,6 +123,8 @@ MainWindow::MainWindow(QWidget* parent):
 }
 
 void MainWindow::getQMLSignal(QString mess) {
+  QMessageBox::information(this, "Message from Select Level", mess);
+
   if (mess == "play") {
 //    setCentralWidget();
   } else if (mess == "createLevels") {
@@ -136,6 +136,13 @@ void MainWindow::getQMLSignal(QString mess) {
   } else if (mess == "followUs") {
 //    setCentralWidget();
   }
+}
+
+void MainWindow::openLevel(QString levelName) {
+  setCentralWidget(_gameView);
+  // Force the widget to draw
+  QApplication::processEvents();
+  _gameController->openLevel("../PieceOfCake/"+levelName);
 }
 
 void MainWindow::openFile(void) {

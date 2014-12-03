@@ -9,7 +9,6 @@
 #include "LevelDesignerTreeView.h"
 #include "LevelDesignerScribbleView.h"
 #include "LevelDesignerGameStatView.h"
-#include "LevelsModel.h"
 #include "Commands.h"
 #include "GameController.h"
 #include "GameView.h"
@@ -36,6 +35,7 @@ public slots:
   //void updateMenuActions(int);
   //void updateCurrentController(int currentIndex);
   void getQMLSignal(QString mess);
+  void openLevel(QString levelName);
 
 private:
   AbstractController* _currentController;
@@ -48,7 +48,6 @@ private:
   LevelDesignerScribbleView* _levelDesignerScribbleView;
   LevelDesignerGameStatView* _levelDesignerGameStatView;
   LevelDesignerModel* _levelDesignerModel;
-  LevelsModel* _levelsModel;
 
   GameController* _gameController;
   GameView* _gameView;

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<levels version="2.0">
+  <level id="0">
+    <stars>0</stars>
+    <image>resources/levels/square.png</image>
+    <name>resources/levels/square.xml</name>
+  </level>
+  <level id="1">
+    <stars>2</stars>
+    <image>resources/levels/square2.png</image>
+    <name>resources/levels/square2.xml</name>
+  </level>
+  <level id="2">
+    <stars>3</stars>
+    <image>resources/levels/podium.png</image>
+    <name>resources/levels/podium.xml</name>
+  </level>
+  <level id="3">
+    <stars>0</stars>
+    <image>resources/levels/fourSquares.png</image>
+    <name>resources/levels/fourSquares.xml</name>
+  </level>
+  <level id="4">
+    <stars>1</stars>
+    <image>resources/levels/fiveSquares.png</image>
+    <name>resources/levels/fiveSquares.xml</name>
+  </level>
+</levels>

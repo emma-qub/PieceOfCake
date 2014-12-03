@@ -1,8 +1,7 @@
 import QtQuick 2.3
 import QtQuick.Window 2.1
 import QtQuick.Controls 1.1
-import Qt.labs.folderlistmodel 1.0
-
+import QtQuick.XmlListModel 2.0
 
 
 Rectangle {
@@ -12,6 +11,7 @@ Rectangle {
     height: 756
     color: "#FFFFFF"
     signal qmlSignal(string msg)
+    signal onOpenLevel(string msg)
 
     Item {
         id: home
@@ -200,26 +200,86 @@ Rectangle {
             width: 1200
             height: 756
 
-            GridView {
-                width: 1200
-                height: 756
+            XmlListModel {
+                id: levelsModel
+                source: "../PieceOfCake/resources/levels/levels.xml"
+                query: "/levels/level"
 
-                model: FolderListModel {
-                    id: dataModel
-                    showDirs: false
-                    nameFilters: [
-                        "*.png"
-                    ]
-                    folder: "../PieceOfCake/resources/levels/"
+                XmlRole { name: "stars"; query: "stars/string()" }
+                XmlRole { name: "image"; query: "image/string()" }
+                XmlRole { name: "name"; query: "name/string()" }
+            }
+
+            Image {
+                id: selectLevels
+                x: 0
+                y: 0
+                sourceSize.height: 756
+                sourceSize.width: 1200
+                source: "resources/images/selectLevels.png"
+            }
+
+            GridView {
+                header: Text {
+                    width: parent.width
+                    height: 100
+                    font.family: homeFont.name
+                    font.bold: true
+                    text: qsTr("Select your level")
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    font.pixelSize: 22
+                    color:"#333333"
                 }
+
+                id: levelsView
+                width: 375
+                height: 600
+
+                x: 200
+                y: 100
+
+                cellHeight: 90
+                cellWidth: 90
+
+                model: levelsModel
 
                 delegate: Column {
-                    Image { source: "resources/levels/"+fileName; anchors.horizontalCenter: parent.horizontalCenter }
-                    Text { text: stars; anchors.horizontalCenter: parent.horizontalCenter }
+                    MouseArea {
+                        width: 60
+                        height: 60
+                        hoverEnabled: true
+                        onClicked: onOpenLevel(name)
+
+                        Rectangle {
+                            x: 5
+                            y: 5
+                            width: 60
+                            height: 60
+                            color: "#639c45"
+                            radius: 5
+
+                            Image {
+                                x: 5
+                                y: 5
+                                height: 50
+                                width: 50
+                                source: image;
+                                anchors.horizontalCenter: parent.horizontalCenter
+                            }
+                            Text {
+                                text: (function (stars) {
+                                    var k;
+                                    var starsStr = "";
+                                    for (k = 0; k < parseInt(stars); k += 1)
+                                        starsStr += "*";
+                                    return starsStr;
+                                })
+                                anchors.horizontalCenter: parent.horizontalCenter
+                            }
+                        }
+                    }
                 }
-
-
-
             }
         }
     }
@@ -400,26 +460,26 @@ Rectangle {
         initialItem: home
 
         delegate: StackViewDelegate {
-                function transitionFinished(properties)
-                {
-                    properties.exitItem.opacity = 1
-                }
+            function transitionFinished(properties)
+            {
+                properties.exitItem.opacity = 1
+            }
 
-                pushTransition: StackViewTransition {
-                    PropertyAnimation {
-                        target: enterItem
-                        property: "opacity"
-                        from: 0
-                        to: 1
-                    }
-                    PropertyAnimation {
-                        target: exitItem
-                        property: "opacity"
-                        from: 1
-                        to: 0
-                    }
+            pushTransition: StackViewTransition {
+                PropertyAnimation {
+                    target: enterItem
+                    property: "opacity"
+                    from: 0
+                    to: 1
+                }
+                PropertyAnimation {
+                    target: exitItem
+                    property: "opacity"
+                    from: 1
+                    to: 0
                 }
             }
+        }
     }
 }
 

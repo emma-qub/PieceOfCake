@@ -38,8 +38,7 @@ HEADERS += \
   Hint.h \
   MainWindow.h \
   ParserXML.h \
-  tests.h \
-    LevelsModel.h
+  tests.h
 
 SOURCES += \
   # Controller
@@ -77,8 +76,7 @@ SOURCES += \
   Hint.cpp \
   MainWindow.cpp \
   ParserXML.cpp \
-  main.cpp \
-    LevelsModel.cpp
+  main.cpp
 
 INCLUDEPATH += \
   Controller \

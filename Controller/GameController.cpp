@@ -238,6 +238,7 @@ void GameController::checkWinning(void) {
       emit levelEnd(orientedAreas, fail);
     else {
       int rank = qCeil(gap / _maxGapToWin * 5);
+      //updateLevelStats(rank);
       emit levelEnd(orientedAreas, Ranking(6-rank));
     }
   }

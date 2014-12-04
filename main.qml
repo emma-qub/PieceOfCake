@@ -225,9 +225,9 @@ Rectangle {
                     height: 100
                     font.family: homeFont.name
                     font.bold: true
-                    text: qsTr("Select your level")
+                    text: qsTr("Pack 1: Cut polygons")
                     horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
+                    verticalAlignment: Text.AlignTop
                     font.pixelSize: 22
                     color:"#333333"
                 }
@@ -245,19 +245,20 @@ Rectangle {
                 model: levelsModel
 
                 delegate: Column {
+                    height: 80
                     MouseArea {
+                        id: level
                         width: 60
                         height: 60
                         hoverEnabled: true
                         onClicked: onOpenLevel(name)
 
                         Rectangle {
-                            x: 5
-                            y: 5
                             width: 60
                             height: 60
                             color: "#639c45"
                             radius: 5
+                            border.width: level.containsMouse ? 2 : 0
 
                             Image {
                                 x: 5
@@ -267,17 +268,28 @@ Rectangle {
                                 source: image;
                                 anchors.horizontalCenter: parent.horizontalCenter
                             }
-                            Text {
-                                text: (function (stars) {
-                                    var k;
-                                    var starsStr = "";
-                                    for (k = 0; k < parseInt(stars); k += 1)
-                                        starsStr += "*";
-                                    return starsStr;
-                                })
-                                anchors.horizontalCenter: parent.horizontalCenter
-                            }
                         }
+                    }
+
+                    Text {
+                        y: 10
+                        function starsToString(stars) {
+                            var k;
+                            var starsStr = "";
+                            if (parseInt(stars) > 0)
+                                starsStr += "<b><font color='#F70'>"
+                            else
+                                starsStr += "<font color='#AAA'>"
+                            for (k = 0; k < 5; k += 1) {
+                                starsStr += "*";
+                                if (k === parseInt(stars) && k > 0)
+                                   starsStr += "</font></b><font color='#AAA'>";
+                            }
+                            starsStr += "</font>";
+                            return starsStr;
+                        }
+                        text: starsToString(stars)
+                        anchors.horizontalCenter: parent.horizontalCenter
                     }
                 }
             }

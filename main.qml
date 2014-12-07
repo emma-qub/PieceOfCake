@@ -11,6 +11,7 @@ Rectangle {
   width: 1200
   height: 756
   color: "#FFFFFF"
+  signal levelOpenRequested(string fileName)
 
   Item {
     id: home
@@ -214,165 +215,165 @@ Rectangle {
       sourceSize.width: 1200
       source: "resources/images/selectLevels.png"
 
-      MouseArea {
-        id: pack1Area
-        x: SelectJS.computeXTab(0)
-        y: 120
-        width: 60+SelectJS.computeShiftTab(0)
-        height: 40
-        hoverEnabled: true
-        onClicked: SelectJS.setSelectedPack(0)
+//      MouseArea {
+//        id: pack1Area
+//        x: SelectJS.computeXTab(0)
+//        y: 120
+//        width: 60+SelectJS.computeShiftTab(0)
+//        height: 40
+//        hoverEnabled: true
+//        onClicked: SelectJS.setSelectedPack(0)
 
-        Rectangle {
-          id: pack1Rectangle
-          x: 0
-          y: 0
-          width: 60+SelectJS.computeShiftTab(0)
-          height: 40
-          color: "#639c45"
-          border.width: 2
-          border.color: "#333"
+//        Rectangle {
+//          id: pack1Rectangle
+//          x: 0
+//          y: 0
+//          width: 60+SelectJS.computeShiftTab(0)
+//          height: 40
+//          color: "#639c45"
+//          border.width: 2
+//          border.color: "#333"
 
-          Text {
-            id: pack1Text
-            x: 6+SelectJS.computeShiftTab(0)
-            y: 5
-            width: 49
-            font.family: homeFont.name
-            text: qsTr("Pack 1")
-            font.bold: true
-            font.pixelSize: 18
-          }
-        }
-      }
+//          Text {
+//            id: pack1Text
+//            x: 6+SelectJS.computeShiftTab(0)
+//            y: 5
+//            width: 49
+//            font.family: homeFont.name
+//            text: qsTr("Pack 1")
+//            font.bold: true
+//            font.pixelSize: 18
+//          }
+//        }
+//      }
 
-      MouseArea {
-        id: pack2Area
-        x: SelectJS.computeXTab(1)
-        y: 200
-        width: 60+SelectJS.computeShiftTab(1)
-        height: 40
-        hoverEnabled: true
-        acceptedButtons: Qt.LeftButton
-        onClicked: SelectJS.setSelectedPack(1)
+//      MouseArea {
+//        id: pack2Area
+//        x: SelectJS.computeXTab(1)
+//        y: 200
+//        width: 60+SelectJS.computeShiftTab(1)
+//        height: 40
+//        hoverEnabled: true
+//        acceptedButtons: Qt.LeftButton
+//        onClicked: SelectJS.setSelectedPack(1)
 
-        Rectangle {
-          id: pack2Rectangle
-          x: 0
-          y: 0
-          width: 60+SelectJS.computeShiftTab(1)
-          height: 40
-          color: "#f03535"
-          border.width: 2
-          border.color: "#333"
+//        Rectangle {
+//          id: pack2Rectangle
+//          x: 0
+//          y: 0
+//          width: 60+SelectJS.computeShiftTab(1)
+//          height: 40
+//          color: "#fff080"
+//          border.width: 2
+//          border.color: "#333"
 
-          Text {
-            id: pack2Text
-            x: 6+SelectJS.computeShiftTab(1)
-            y: 5
-            font.family: homeFont.name
-            text: qsTr("Pack 2")
-            font.bold: true
-            font.pixelSize: 18
-          }
-        }
-      }
+//          Text {
+//            id: pack2Text
+//            x: 6+SelectJS.computeShiftTab(1)
+//            y: 5
+//            font.family: homeFont.name
+//            text: qsTr("Pack 2")
+//            font.bold: true
+//            font.pixelSize: 18
+//          }
+//        }
+//      }
 
-      MouseArea {
-        id: pack3Area
-        x: SelectJS.computeXTab(2)
-        y: 280
-        width: 60+SelectJS.computeShiftTab(2)
-        height: 40
-        hoverEnabled: true
-        acceptedButtons: Qt.LeftButton
-        onClicked: SelectJS.setSelectedPack(2)
+//      MouseArea {
+//        id: pack3Area
+//        x: SelectJS.computeXTab(2)
+//        y: 280
+//        width: 60+SelectJS.computeShiftTab(2)
+//        height: 40
+//        hoverEnabled: true
+//        acceptedButtons: Qt.LeftButton
+//        onClicked: SelectJS.setSelectedPack(2)
 
-        Rectangle {
-          id: pack3Rectangle
-          x: 0
-          y: 0
-          width: 60+SelectJS.computeShiftTab(2)
-          height: 40
-          color: "#f07835"
-          border.width: 2
-          border.color: "#333"
+//        Rectangle {
+//          id: pack3Rectangle
+//          x: 0
+//          y: 0
+//          width: 60+SelectJS.computeShiftTab(2)
+//          height: 40
+//          color: "steelblue"
+//          border.width: 2
+//          border.color: "#333"
 
-          Text {
-            id: pack3Text
-            x: 6+SelectJS.computeShiftTab(2)
-            y: 5
-            font.family: homeFont.name
-            text: qsTr("Pack 3")
-            font.bold: true
-            font.pixelSize: 18
-          }
-        }
-      }
+//          Text {
+//            id: pack3Text
+//            x: 6+SelectJS.computeShiftTab(2)
+//            y: 5
+//            font.family: homeFont.name
+//            text: qsTr("Pack 3")
+//            font.bold: true
+//            font.pixelSize: 18
+//          }
+//        }
+//      }
 
-      MouseArea {
-        id: pack4Area
-        x: SelectJS.computeXTab(3)
-        y: 360
-        width: 60+SelectJS.computeShiftTab(3)
-        height: 40
-        hoverEnabled: true
-        acceptedButtons: Qt.LeftButton
-        onClicked: SelectJS.setSelectedPack(3)
+//      MouseArea {
+//        id: pack4Area
+//        x: SelectJS.computeXTab(3)
+//        y: 360
+//        width: 60+SelectJS.computeShiftTab(3)
+//        height: 40
+//        hoverEnabled: true
+//        acceptedButtons: Qt.LeftButton
+//        onClicked: SelectJS.setSelectedPack(3)
 
-        Rectangle {
-          id: pack4Rectangle
-          x: 0
-          y: 0
-          width: 60+SelectJS.computeShiftTab(3)
-          height: 40
-          color: "#ff00ff"
-          border.width: 2
-          border.color: "#333"
+//        Rectangle {
+//          id: pack4Rectangle
+//          x: 0
+//          y: 0
+//          width: 60+SelectJS.computeShiftTab(3)
+//          height: 40
+//          color: "#f07835"
+//          border.width: 2
+//          border.color: "#333"
 
-          Text {
-            id: pack4Text
-            x: 6+SelectJS.computeShiftTab(3)
-            y: 5
-            font.family: homeFont.name
-            text: qsTr("Pack 4")
-            font.bold: true
-            font.pixelSize: 18
-          }
-        }
-      }
+//          Text {
+//            id: pack4Text
+//            x: 6+SelectJS.computeShiftTab(3)
+//            y: 5
+//            font.family: homeFont.name
+//            text: qsTr("Pack 4")
+//            font.bold: true
+//            font.pixelSize: 18
+//          }
+//        }
+//      }
 
-      MouseArea {
-        id: pack5Area
-        x: SelectJS.computeXTab(4)
-        y: 440
-        width: 60+SelectJS.computeShiftTab(4)
-        height: 40
-        hoverEnabled: true
-        acceptedButtons: Qt.LeftButton
-        onClicked: SelectJS.setSelectedPack(4)
+//      MouseArea {
+//        id: pack5Area
+//        x: SelectJS.computeXTab(4)
+//        y: 440
+//        width: 60+SelectJS.computeShiftTab(4)
+//        height: 40
+//        hoverEnabled: true
+//        acceptedButtons: Qt.LeftButton
+//        onClicked: SelectJS.setSelectedPack(4)
 
-        Rectangle {
-          id: pack5Rectangle
-          x: 0
-          y: 0
-          width: 60+SelectJS.computeShiftTab(4)
-          height: 40
-          color: "#60a0ff"
-          border.width: 2
-          border.color: "#333"
+//        Rectangle {
+//          id: pack5Rectangle
+//          x: 0
+//          y: 0
+//          width: 60+SelectJS.computeShiftTab(4)
+//          height: 40
+//          color: "#60a0ff"
+//          border.width: 2
+//          border.color: "#333"
 
-          Text {
-            id: pack5Text
-            x: 6+SelectJS.computeShiftTab(4)
-            y: 5
-            font.family: homeFont.name
-            text: qsTr("Pack 5")
-            font.bold: true
-            font.pixelSize: 18
-          }
-        }
-      }
+//          Text {
+//            id: pack5Text
+//            x: 6+SelectJS.computeShiftTab(4)
+//            y: 5
+//            font.family: homeFont.name
+//            text: qsTr("Pack 5")
+//            font.bold: true
+//            font.pixelSize: 18
+//          }
+//        }
+//      }
     }
 
     Rectangle {
@@ -387,7 +388,7 @@ Rectangle {
         font.family: homeFont.name
         font.bold: true
         text: "Pack 1: Cut Polygons"
-        font.pixelSize: 22
+        font.pixelSize: 24
         color:"#333333"
         anchors.horizontalCenter: titleRectangle.horizontalCenter
       }
@@ -414,7 +415,7 @@ Rectangle {
           width: 60
           height: 60
           hoverEnabled: true
-          onClicked: onOpenLevel(name)
+          onClicked: levelOpenRequested(name)
 
           Rectangle {
             width: 60
@@ -473,6 +474,129 @@ Rectangle {
           height: 40
           width: 40
           source: "resources/images/home.png";
+        }
+      }
+    }
+
+    Rectangle {
+      id: goalRectangle
+      x: 650
+      y: 150
+      width: 375
+      height: 150
+//      color: "steelblue"
+
+      Text {
+        id: goalTitleText
+        text: qsTr("Objective of the game")
+        font.family: homeFont.name
+        font.bold: true
+        font.pixelSize: 24
+        color:"#333333"
+      }
+
+      Text {
+        id: goalText
+        x: 10
+        y: 40
+        width: 300
+        text: qsTr("  Cut polygons and try to get pieces of equal area.")
+        wrapMode: Text.Wrap
+        font.family: homeFont.name
+        font.pixelSize: 20
+        color:"#333333"
+      }
+    }
+    Rectangle {
+      id: rules1Rectangle
+      x: 650
+      y: 300
+      width: 375
+      height: 250
+      visible: SelectJS.getSelectedPack() === 0
+
+      Text {
+        id: rulesTitle
+        text: qsTr("Rules")
+        font.family: homeFont.name
+        font.bold: true
+        font.pixelSize: 24
+        color:"#333333"
+      }
+
+      Text {
+        id: rule1Text
+        y: 40
+        text: qsTr("  - Cut through the whole polygon")
+        font.family: homeFont.name
+        font.pixelSize: 20
+        color:"#333333"
+      }
+
+      Image {
+        height: 100
+        width: 100
+        x: 0
+        y: 80
+        source: "resources/images/rule1Pack1.png";
+      }
+      Image {
+        height: 100
+        width: 100
+        x: 125
+        y: 80
+        source: "resources/images/rule2Pack1.png";
+      }
+      Image {
+        height: 100
+        width: 100
+        x: 250
+        y: 80
+        source: "resources/images/rule3Pack1.png";
+      }
+
+      Text {
+        id: rule2Text
+        y: 200
+        text: qsTr("  - Respect number of lines and pieces")
+        font.family: homeFont.name
+        font.pixelSize: 20
+        color:"#333333"
+      }
+    }
+
+    Rectangle {
+      id: navigationRectangle
+      x: 650
+      y: 600
+      width: 375
+      height: 40
+//      color: "lightblue"
+
+      Row {
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+        Repeater {
+          id: pageRepeater
+          model: 5
+          MouseArea {
+            width: 40
+            height: 40
+            onClicked: SelectJS.setSelectedPack(index)
+            Rectangle {
+              width: 40
+              height: 40
+              Rectangle {
+                width: SelectJS.getSelectedPack() === index ? 14 : 10
+                height: SelectJS.getSelectedPack() === index ? 14 : 10
+                radius: SelectJS.getSelectedPack() === index ? 7 : 5
+                color: SelectJS.getSelectedPack() === index ? "white" : "black"
+                border.width: SelectJS.getSelectedPack() === index ? 3 : 0
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+              }
+            }
+          }
         }
       }
     }

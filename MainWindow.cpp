@@ -12,6 +12,9 @@
 MainWindow::MainWindow(QWidget* parent):
   QMainWindow(parent) {
 
+  // Create undo stack to manage undo/redo actions
+  _undoStack = new QUndoStack;
+
   initHome();
   initGame();
   initLevelDesigner();
@@ -19,9 +22,6 @@ MainWindow::MainWindow(QWidget* parent):
 
   // Set central widget
   setCentralWidget(_homeWidget);
-
-//  // Create undo stack to manage undo/redo actions
-//  _undoStack = new QUndoStack;
 
 //  // Init level designer widgets
 //  _levelDesignerWidget = new QSplitter;
@@ -156,7 +156,19 @@ void MainWindow::addPolygon(void) {
 }
 
 void MainWindow::initGame(void) {
-
+  // Init game widgets
+  QSplitter* gameSplitter = new QSplitter;
+  // Game model
+  _gameModel = new GameModel;
+  // Game controller
+  _gameController = new GameController(_gameModel, gameSplitter, _undoStack, this);
+  // Game view
+  _gameView = new GameView(_gameController, gameSplitter);
+  _gameView->setModel(_gameModel);
+  // Game tree view
+  QTreeView* gameView = new QTreeView(gameSplitter);
+  gameView->setModel(_gameModel);
+  _gameView->setSelectionModel(gameView->selectionModel());
 }
 
 void MainWindow::initLevelDesigner(void) {
@@ -165,9 +177,8 @@ void MainWindow::initLevelDesigner(void) {
 
 void MainWindow::initHome(void) {
   _homeWidget = new QQuickWidget(QUrl::fromLocalFile("../PieceOfCake/main.qml"));
-//  _centralWidget->addWidget(_homeWidget);
-//  QQuickItem* item = _homeWidget->rootObject();
-//  connect(item, SIGNAL(clickOn(QString)), this, SLOT(onClick(QString)));
+  QQuickItem* item = _homeWidget->rootObject();
+  connect(item, SIGNAL(levelOpenRequested(QString)), this, SLOT(openLevel(QString)));
 }
 
 void MainWindow::initSelectLevel(void) {

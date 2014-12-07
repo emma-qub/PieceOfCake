@@ -2,14 +2,22 @@
 #define MAINWINDOW_H
 
 #include <QtWidgets>
+#include <QQuickItem>
+#include <QQuickView>
+#include <QQuickWidget>
+#include <QQmlContext>
 
+// Core
 #include "Segment.h"
+
+// Levels Designer
 #include "LevelDesignerController.h"
 #include "LevelDesignerModel.h"
 #include "LevelDesignerTreeView.h"
 #include "LevelDesignerScribbleView.h"
-#include "LevelDesignerGameStatView.h"
 #include "Commands.h"
+
+// Game
 #include "GameController.h"
 #include "GameView.h"
 #include "GameModel.h"
@@ -34,8 +42,14 @@ public slots:
   //void alignToGrid(void);
   //void updateMenuActions(int);
   //void updateCurrentController(int currentIndex);
-  void getQMLSignal(QString mess);
+  void onClick(QString selected);
   void openLevel(QString levelName);
+
+private:
+  void initGame(void);
+  void initLevelDesigner(void);
+  void initSelectLevel(void);
+  void initHome(void);
 
 private:
   AbstractController* _currentController;
@@ -46,25 +60,31 @@ private:
   LevelDesignerController* _levelDesignerController;
   LevelDesignerTreeView* _levelDesignerTreeView;
   LevelDesignerScribbleView* _levelDesignerScribbleView;
-  LevelDesignerGameStatView* _levelDesignerGameStatView;
   LevelDesignerModel* _levelDesignerModel;
 
   GameController* _gameController;
   GameView* _gameView;
   GameModel* _gameModel;
 
-  QTabWidget* _tabWidget;
+  QWidget* _gameWidget;
   QWidget* _levelDesignerWidget;
+  QQuickWidget* _selectLevelWidget;
+  QQuickWidget* _homeWidget;
 
-  QAction* _newAction;
-  QAction* _openAction;
-  QAction* _saveAction;
-  QAction* _saveAsAction;
-  QAction* _undoAction;
-  QAction* _redoAction;
-  QAction* _addPolygonAction;
-  QAction* _magnetismAction;
-  QAction* _alignToGridAction;
+  QStackedWidget* _centralWidget;
+
+//  QTabWidget* _tabWidget;
+//  QWidget* _levelDesignerWidget;
+
+//  QAction* _newAction;
+//  QAction* _openAction;
+//  QAction* _saveAction;
+//  QAction* _saveAsAction;
+//  QAction* _undoAction;
+//  QAction* _redoAction;
+//  QAction* _addPolygonAction;
+//  QAction* _magnetismAction;
+//  QAction* _alignToGridAction;
 };
 
 #endif // MAINWINDOW_H

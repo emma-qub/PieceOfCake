@@ -29,10 +29,10 @@ HEADERS += \
   Model/TreeModel.h \
   # View
   View/GameView.h \
-  View/LevelDesignerGameStatView.h \
+  ## REMOVE View/LevelDesignerGameStatView.h \
   View/LevelDesignerScribbleView.h \
   View/LevelDesignerTreeView.h \
-  View/LevelDesignerWidget.h \
+  ## REMOVE View/LevelDesignerWidget.h \
   # Root
   Commands.h \
   Hint.h \
@@ -67,10 +67,10 @@ SOURCES += \
   Model/TreeModel.cpp \
   # View
   View/GameView.cpp \
-  View/LevelDesignerGameStatView.cpp \
+  ## REMOVE View/LevelDesignerGameStatView.cpp \
   View/LevelDesignerScribbleView.cpp \
   View/LevelDesignerTreeView.cpp \
-  View/LevelDesignerWidget.cpp \
+  ## REMOVE View/LevelDesignerWidget.cpp \
   # Root
   Commands.cpp \
   Hint.cpp \

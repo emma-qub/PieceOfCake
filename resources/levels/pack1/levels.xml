@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<levels version="2.0">
+  <title>Cut Polygons</title>
+  <level id="0">
+    <stars>1</stars>
+    <image>resources/levels/pack1/square.png</image>
+    <name>resources/levels/pack1/square.xml</name>
+  </level>
+  <level id="1">
+    <stars>2</stars>
+    <image>resources/levels/pack1/square2.png</image>
+    <name>resources/levels/pack1/square2.xml</name>
+  </level>
+  <level id="2">
+    <stars>5</stars>
+    <image>resources/levels/pack1/podium.png</image>
+    <name>resources/levels/pack1/podium.xml</name>
+  </level>
+  <level id="3">
+    <stars>3</stars>
+    <image>resources/levels/pack1/fourSquares.png</image>
+    <name>resources/levels/pack1/fourSquares.xml</name>
+  </level>
+  <level id="4">
+    <stars>0</stars>
+    <image>resources/levels/pack1/fiveSquares.png</image>
+    <name>resources/levels/pack1/fiveSquares.xml</name>
+  </level>
+</levels>

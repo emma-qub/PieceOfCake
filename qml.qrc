@@ -14,5 +14,8 @@
         <file>resources/images/optionsOut.png</file>
         <file>resources/images/playIn.png</file>
         <file>resources/images/selectLevels.png</file>
+        <file>createLevels.qml</file>
+        <file>selectLevel.js</file>
+        <file>resources/images/home.png</file>
     </qresource>
 </RCC>

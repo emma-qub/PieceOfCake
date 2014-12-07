@@ -7,6 +7,8 @@ LevelDesignerController::LevelDesignerController(LevelDesignerModel *model, QWid
   AbstractController(model, tabWidget, undoStack, parent),
   _model(model) {
 
+  addPolygon(0, Polygon());
+
   connect(_undoStack, SIGNAL(indexChanged(int)), this, SLOT(emitUpdate(int)));
 }
 

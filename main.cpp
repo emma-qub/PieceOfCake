@@ -11,10 +11,10 @@
 #define TESTPOLYGON 0
 #define TESTMODELVIEW 0
 #define XML 0
-#define GUI 0
+#define GUI 1
 #define GNUPLOT 0
 #define QML 0
-#define Thumbnail 1
+#define Thumbnail 0
 
 #if Thumbnail
 # include "ThumbnailCreator.h"

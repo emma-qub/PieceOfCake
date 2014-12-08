@@ -11,24 +11,60 @@
 #define TESTPOLYGON 0
 #define TESTMODELVIEW 0
 #define XML 0
-#define GUI 1
+#define GUI 0
 #define GNUPLOT 0
 #define QML 0
+#define Thumbnail 1
+
+#if Thumbnail
+# include "ThumbnailCreator.h"
+# include <QLabel>
+#endif
 
 #if QML
-#include <QGuiApplication>
-#include <QQmlApplicationEngine>
+# include <QGuiApplication>
+# include <QQmlApplicationEngine>
 #endif
 
 #if GUI
-#include <QApplication>
+# include <QApplication>
 #endif
 
 int main(int argc, char** argv) {
   srand(time(NULL));  // init rand;
 
+#if Thumbnail
+
+
+  QApplication app(argc, argv);
+
+  PolygonList polygonList;
+  //polygonList << Polygon(30, 250, 21, 260, 5);
+  Polygon polygon;
+  polygon << Point2d(55, 55)
+  << Point2d(455, 55)
+  << Point2d(455, 455)
+  << Point2d(155, 455)
+  << Point2d(155, 255)
+  << Point2d(255, 255)
+  << Point2d(255, 355)
+  << Point2d(355, 355)
+  << Point2d(355, 155)
+  << Point2d(55, 155);
+  polygonList << polygon;
+  qDebug() << polygonList;
+  ThumbnailCreator thumbnailCreator(polygonList);
+  QImage thumbnail = thumbnailCreator.makeThumbnail();
+
+  QLabel* label = new QLabel;
+  label->setPixmap(QPixmap::fromImage(thumbnail));
+  label->show();
+
+  return app.exec();
+#endif
+
 #if TESTPOINT
-  Test::testPoint2d();
+  Test::test<< Point2d();
 #endif
 
 #if TESTVECTOR
@@ -62,7 +98,7 @@ int main(int argc, char** argv) {
 
 #if GNUPLOT
   // Polygon polygon;
-  // polygon << Point2d() << Point2d(0, 1) << Point2d(1, 1) << Point2d(1);
+  // polygon << << Point2d() << << Point2d(0, 1) << << Point2d(1, 1) << << Point2d(1);
 
   Polygon polygon(0, 100, 0, 100, 7);
   //    std::vector<Point2d> vertices = polygon.getVertices();

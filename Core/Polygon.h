@@ -26,6 +26,7 @@ public:
   void replaceVertex(int position, const Point2d& newVertex);
 
   void translate(const Vector2d& direction);
+  void translate(float x, float y);
   void homothetie(const Point2d& origin, float scale);
 
   bool newPointIsGood(const Point2d& vertex) const;
@@ -49,6 +50,7 @@ public:
   std::istream& operator<<(std::istream &is);
   friend std::istream& operator>>(std::istream &is, Polygon& polygon);
   friend std::ostream& operator<<(std::ostream& os, const Polygon& polygon);
+  friend QDebug operator<<(QDebug dbg, const Polygon &model);
 
   float computeAngleFromPoint(float x, float y);
   float** surface(float size, float delta);

@@ -71,6 +71,10 @@ void Polygon::translate(const Vector2d& direction) {
   }
 }
 
+void Polygon::translate(float x, float y) {
+  translate(Vector2d(x, y));
+}
+
 void Polygon::homothetie(const Point2d& origin, float scale) {
   for (Point2d& vertex: _vertices) {
     vertex.homothetie(origin, scale);
@@ -347,4 +351,15 @@ std::ostream& operator<<(std::ostream& os, const Polygon& polygon) {
     os << vertices.at(k) << ";";
   }
   return os;
+}
+
+QDebug operator<<(QDebug dbg, const Polygon &polygon) {
+  std::vector<Point2d> vertices = polygon._vertices;
+
+  dbg.nospace() << vertices.size() << ";";
+  for (unsigned k = 0; k < vertices.size(); k++) {
+    dbg.nospace() << vertices.at(k) << ";";
+  }
+
+  return dbg.maybeSpace();
 }

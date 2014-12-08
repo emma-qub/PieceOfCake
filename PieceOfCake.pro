@@ -38,7 +38,8 @@ HEADERS += \
   Hint.h \
   MainWindow.h \
   ParserXML.h \
-  tests.h
+  tests.h \
+    ThumbnailCreator.h
 
 SOURCES += \
   # Controller
@@ -76,7 +77,8 @@ SOURCES += \
   Hint.cpp \
   MainWindow.cpp \
   ParserXML.cpp \
-  main.cpp
+  main.cpp \
+    ThumbnailCreator.cpp
 
 INCLUDEPATH += \
   Controller \

@@ -25,7 +25,7 @@ public:
     perfect = 6
   };
 
-  GameController(GameModel* model, QWidget* tabWidget, QUndoStack* undoStack, QObject* parent = 0);
+  GameController(GameModel* model, QUndoStack* undoStack, QObject* parent = 0);
 
   inline int getLinesCount(void) const { return _linesCount; }
   inline int getPartsCount(void) const { return _partsCount; }

@@ -19,7 +19,7 @@ LevelDesignerTreeView::LevelDesignerTreeView(LevelDesignerController* controller
   connect(_controller, SIGNAL(update(void)), this, SLOT(expandAll(void)));
   connect(_controller, SIGNAL(selection(void)), this, SLOT(selection(void)));
 
-  setFixedWidth(350);
+  resize(375, 500);
 }
 
 void LevelDesignerTreeView::setModel(LevelDesignerModel* model) {

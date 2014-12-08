@@ -26,7 +26,7 @@ LevelDesignerScribbleView::LevelDesignerScribbleView(LevelDesignerController* co
   _currOldX(-1),
   _currOldY(-1) {
 
-  resize(381, 441);
+  resize(375, 500);
 
   setMouseTracking(true);
 
@@ -284,8 +284,8 @@ void LevelDesignerScribbleView::drawText(const QString& text, const QPoint& posi
 void LevelDesignerScribbleView::drawGrid(void) {
   QPainter painter(&_image);
 
-  int xMin = 5, xMax = 805;
-  int yMin = 5, yMax = 705;
+  int xMin = 0, xMax = 375;
+  int yMin = 0, yMax = 500;
   int subSubCaseSize = 10;
   painter.setPen(QPen(Qt::lightGray, 1, Qt::DashLine));
   for (int i = xMin; i <= xMax; i += subSubCaseSize) {

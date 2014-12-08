@@ -3,8 +3,8 @@
 
 #include <QDebug>
 
-LevelDesignerController::LevelDesignerController(LevelDesignerModel *model, QWidget* tabWidget, QUndoStack* undoStack, QObject* parent):
-  AbstractController(model, tabWidget, undoStack, parent),
+LevelDesignerController::LevelDesignerController(LevelDesignerModel *model, QUndoStack* undoStack, QObject* parent):
+  AbstractController(model, undoStack, parent),
   _model(model) {
 
   addPolygon(0, Polygon());

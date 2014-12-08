@@ -12,6 +12,8 @@ Rectangle {
   height: 756
   color: "#FFFFFF"
   signal levelOpenRequested(string fileName)
+  signal createLevelRequested()
+  signal homePageRequested()
 
   Item {
     id: home
@@ -99,6 +101,10 @@ Rectangle {
         width: 150
         height: 240
         hoverEnabled: true
+        onClicked: {
+          stackView.replace(createLevelItem)
+          createLevelRequested()
+        }
 
         Image {
           id: createLevelsIn
@@ -214,166 +220,6 @@ Rectangle {
       sourceSize.height: 756
       sourceSize.width: 1200
       source: "resources/images/selectLevels.png"
-
-//      MouseArea {
-//        id: pack1Area
-//        x: SelectJS.computeXTab(0)
-//        y: 120
-//        width: 60+SelectJS.computeShiftTab(0)
-//        height: 40
-//        hoverEnabled: true
-//        onClicked: SelectJS.setSelectedPack(0)
-
-//        Rectangle {
-//          id: pack1Rectangle
-//          x: 0
-//          y: 0
-//          width: 60+SelectJS.computeShiftTab(0)
-//          height: 40
-//          color: "#639c45"
-//          border.width: 2
-//          border.color: "#333"
-
-//          Text {
-//            id: pack1Text
-//            x: 6+SelectJS.computeShiftTab(0)
-//            y: 5
-//            width: 49
-//            font.family: homeFont.name
-//            text: qsTr("Pack 1")
-//            font.bold: true
-//            font.pixelSize: 18
-//          }
-//        }
-//      }
-
-//      MouseArea {
-//        id: pack2Area
-//        x: SelectJS.computeXTab(1)
-//        y: 200
-//        width: 60+SelectJS.computeShiftTab(1)
-//        height: 40
-//        hoverEnabled: true
-//        acceptedButtons: Qt.LeftButton
-//        onClicked: SelectJS.setSelectedPack(1)
-
-//        Rectangle {
-//          id: pack2Rectangle
-//          x: 0
-//          y: 0
-//          width: 60+SelectJS.computeShiftTab(1)
-//          height: 40
-//          color: "#fff080"
-//          border.width: 2
-//          border.color: "#333"
-
-//          Text {
-//            id: pack2Text
-//            x: 6+SelectJS.computeShiftTab(1)
-//            y: 5
-//            font.family: homeFont.name
-//            text: qsTr("Pack 2")
-//            font.bold: true
-//            font.pixelSize: 18
-//          }
-//        }
-//      }
-
-//      MouseArea {
-//        id: pack3Area
-//        x: SelectJS.computeXTab(2)
-//        y: 280
-//        width: 60+SelectJS.computeShiftTab(2)
-//        height: 40
-//        hoverEnabled: true
-//        acceptedButtons: Qt.LeftButton
-//        onClicked: SelectJS.setSelectedPack(2)
-
-//        Rectangle {
-//          id: pack3Rectangle
-//          x: 0
-//          y: 0
-//          width: 60+SelectJS.computeShiftTab(2)
-//          height: 40
-//          color: "steelblue"
-//          border.width: 2
-//          border.color: "#333"
-
-//          Text {
-//            id: pack3Text
-//            x: 6+SelectJS.computeShiftTab(2)
-//            y: 5
-//            font.family: homeFont.name
-//            text: qsTr("Pack 3")
-//            font.bold: true
-//            font.pixelSize: 18
-//          }
-//        }
-//      }
-
-//      MouseArea {
-//        id: pack4Area
-//        x: SelectJS.computeXTab(3)
-//        y: 360
-//        width: 60+SelectJS.computeShiftTab(3)
-//        height: 40
-//        hoverEnabled: true
-//        acceptedButtons: Qt.LeftButton
-//        onClicked: SelectJS.setSelectedPack(3)
-
-//        Rectangle {
-//          id: pack4Rectangle
-//          x: 0
-//          y: 0
-//          width: 60+SelectJS.computeShiftTab(3)
-//          height: 40
-//          color: "#f07835"
-//          border.width: 2
-//          border.color: "#333"
-
-//          Text {
-//            id: pack4Text
-//            x: 6+SelectJS.computeShiftTab(3)
-//            y: 5
-//            font.family: homeFont.name
-//            text: qsTr("Pack 4")
-//            font.bold: true
-//            font.pixelSize: 18
-//          }
-//        }
-//      }
-
-//      MouseArea {
-//        id: pack5Area
-//        x: SelectJS.computeXTab(4)
-//        y: 440
-//        width: 60+SelectJS.computeShiftTab(4)
-//        height: 40
-//        hoverEnabled: true
-//        acceptedButtons: Qt.LeftButton
-//        onClicked: SelectJS.setSelectedPack(4)
-
-//        Rectangle {
-//          id: pack5Rectangle
-//          x: 0
-//          y: 0
-//          width: 60+SelectJS.computeShiftTab(4)
-//          height: 40
-//          color: "#60a0ff"
-//          border.width: 2
-//          border.color: "#333"
-
-//          Text {
-//            id: pack5Text
-//            x: 6+SelectJS.computeShiftTab(4)
-//            y: 5
-//            font.family: homeFont.name
-//            text: qsTr("Pack 5")
-//            font.bold: true
-//            font.pixelSize: 18
-//          }
-//        }
-//      }
     }
 
     Rectangle {
@@ -459,7 +305,10 @@ Rectangle {
         acceptedButtons: Qt.LeftButton
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
-        onClicked: stackView.replace(home)
+        onClicked: {
+          stackView.replace(home)
+          homePageRequested()
+        }
 
         Rectangle {
           height: 50
@@ -600,6 +449,60 @@ Rectangle {
         }
       }
     }
+  }
+
+  Item {
+    id: createLevelItem
+    width: 1200
+    height: 756
+
+    Rectangle {
+      id: createLevelRectangle
+      width: 1200
+      height: 756
+
+      Image {
+          source: "../PieceOfCake/resources/images/selectLevels.png"
+      }
+    }
+
+    Rectangle {
+      id: homeCreateLevelRectangle
+      width: 375
+      height: 50
+      x: 200
+      y: 600
+
+      MouseArea {
+        id: homeCreateLevelArea
+        width: 40
+        height: 40
+        hoverEnabled: true
+        acceptedButtons: Qt.LeftButton
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+        onClicked: {
+          stackView.replace(home)
+          homePageRequested()
+        }
+
+        Rectangle {
+          height: 50
+          width: 50
+          x: -5
+          y: -5
+          radius: 5
+          color: homeCreateLevelArea.containsMouse ? "#CCCCCC" : "#FFFFFF"
+        }
+
+        Image {
+          height: 40
+          width: 40
+          source: "resources/images/home.png";
+        }
+      }
+    }
+
   }
 
   StackView {

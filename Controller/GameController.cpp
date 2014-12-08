@@ -8,8 +8,8 @@
 #include <algorithm>
 #include <cassert>
 
-GameController::GameController(GameModel* model, QWidget* tabWidget, QUndoStack* undoStack, QObject* parent):
-  AbstractController(model, tabWidget, undoStack, parent),
+GameController::GameController(GameModel* model, QUndoStack* undoStack, QObject* parent):
+  AbstractController(model, undoStack, parent),
   _model(model),
   _linesCount(-1),
   _partsCount(-1),

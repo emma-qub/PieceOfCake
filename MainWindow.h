@@ -44,6 +44,8 @@ public slots:
   //void updateCurrentController(int currentIndex);
   void onClick(QString selected);
   void openLevel(QString levelName);
+  void hideWidgets(void);
+  void showCreateLevel(void);
 
 private:
   void initGame(void);

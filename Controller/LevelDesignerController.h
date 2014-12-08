@@ -11,7 +11,7 @@ class LevelDesignerController: public AbstractController {
   Q_OBJECT
 
 public:
-  LevelDesignerController(LevelDesignerModel* model, QWidget* tabWidget, QUndoStack* undoStack, QObject* parent = 0);
+  LevelDesignerController(LevelDesignerModel* model, QUndoStack* undoStack, QObject* parent = 0);
 
   void initPolygon(void);
 

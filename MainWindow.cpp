@@ -16,12 +16,18 @@ MainWindow::MainWindow(QWidget* parent):
   _undoStack = new QUndoStack;
 
   initHome();
+
+  // Set central widget
+  setCentralWidget(_homeWidget);
+
   initGame();
   initLevelDesigner();
   initSelectLevel();
 
-  // Set central widget
-  setCentralWidget(_homeWidget);
+  QQuickItem* item = _homeWidget->rootObject();
+  connect(item, SIGNAL(levelOpenRequested(QString)), this, SLOT(openLevel(QString)));
+  connect(item, SIGNAL(homePageRequested(void)), this, SLOT(hideWidgets(void)));
+  connect(item, SIGNAL(createLevelRequested(void)), this, SLOT(showCreateLevel(void)));
 
 //  // Init level designer widgets
 //  _levelDesignerWidget = new QSplitter;
@@ -143,6 +149,16 @@ void MainWindow::openLevel(QString levelName) {
   _gameController->openLevel("../PieceOfCake/"+levelName);
 }
 
+void MainWindow::hideWidgets(void) {
+  _levelDesignerTreeView->hide();
+  _levelDesignerScribbleView->hide();
+}
+
+void MainWindow::showCreateLevel(void) {
+  _levelDesignerTreeView->show();
+  _levelDesignerScribbleView->show();
+}
+
 void MainWindow::openFile(void) {
 //  if (_tabWidget->currentIndex() == 0)
 //    _levelDesignerController->openFile();
@@ -156,29 +172,38 @@ void MainWindow::addPolygon(void) {
 }
 
 void MainWindow::initGame(void) {
-  // Init game widgets
-  QSplitter* gameSplitter = new QSplitter;
   // Game model
   _gameModel = new GameModel;
   // Game controller
-  _gameController = new GameController(_gameModel, gameSplitter, _undoStack, this);
+  _gameController = new GameController(_gameModel, _undoStack, this);
   // Game view
-  _gameView = new GameView(_gameController, gameSplitter);
+  _gameView = new GameView(_gameController);
   _gameView->setModel(_gameModel);
   // Game tree view
-  QTreeView* gameView = new QTreeView(gameSplitter);
+  QTreeView* gameView = new QTreeView;
   gameView->setModel(_gameModel);
   _gameView->setSelectionModel(gameView->selectionModel());
 }
 
 void MainWindow::initLevelDesigner(void) {
+  _levelDesignerModel = new LevelDesignerModel;
 
+  _levelDesignerController = new LevelDesignerController(_levelDesignerModel, _undoStack);
+
+  _levelDesignerTreeView = new LevelDesignerTreeView(_levelDesignerController, this);
+  _levelDesignerTreeView->setModel(_levelDesignerModel);
+  _levelDesignerTreeView->move(650, 100);
+  _levelDesignerTreeView->hide();
+
+  _levelDesignerScribbleView = new LevelDesignerScribbleView(_levelDesignerController, centralWidget());
+  _levelDesignerScribbleView->setModel(_levelDesignerModel);
+  _levelDesignerScribbleView->setSelectionModel(_levelDesignerTreeView->selectionModel());
+  _levelDesignerScribbleView->move(200, 100);
+  _levelDesignerScribbleView->hide();
 }
 
 void MainWindow::initHome(void) {
   _homeWidget = new QQuickWidget(QUrl::fromLocalFile("../PieceOfCake/main.qml"));
-  QQuickItem* item = _homeWidget->rootObject();
-  connect(item, SIGNAL(levelOpenRequested(QString)), this, SLOT(openLevel(QString)));
 }
 
 void MainWindow::initSelectLevel(void) {

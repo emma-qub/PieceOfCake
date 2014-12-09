@@ -11,6 +11,8 @@ class AbstractController: public QObject {
 public:
   AbstractController(QAbstractItemModel* model, QUndoStack* undoStack, QObject* parent = NULL);
 
+  inline QUndoStack* getUndoStack(void) const { return _undoStack; }
+
 public slots:
   virtual bool confirmErase(QWidget* parent);
   virtual void initNewDocument(bool neverSavedBefore, const QString& fileName = "");

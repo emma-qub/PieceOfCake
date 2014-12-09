@@ -15,7 +15,6 @@ public:
 
   void initPolygon(void);
 
-  void appendPolygon(void);
   void addPolygon(int polygonRow, const Polygon& polygon);
   void removePolygon(int polygonRow, const Polygon& polygon);
   void movePolygon(int polygonRow, int oldX, int oldY, int newX, int newY, bool pushToStack = true);
@@ -31,6 +30,7 @@ public:
   void clear(void);
 
 public slots:
+  void appendPolygon(void);
   void saveLevel(const QString& fileName);
   void openLevel(const QString& fileName);
   void alignToGrid(void);

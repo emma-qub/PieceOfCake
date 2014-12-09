@@ -13,6 +13,9 @@ LevelDesignerController::LevelDesignerController(LevelDesignerModel *model, QUnd
 }
 
 void LevelDesignerController::addPolygon(int polygonRow, const Polygon& polygon) {
+  if (polygonRow == -1)
+    polygonRow = _model->rowCount();
+
   QUndoCommand* addPolygonCommand = new AddPolygonCommand(_model, polygonRow, polygon, polygonRow, -1);
   _undoStack->push(addPolygonCommand);
 
@@ -104,6 +107,10 @@ void LevelDesignerController::clear(void) {
   emitUpdate(0);
 }
 
+void LevelDesignerController::appendPolygon(void) {
+  addPolygon(_model->rowCount(), Polygon());
+}
+
 void LevelDesignerController::saveLevel(const QString& fileName) {
   ParserXML parser;
   parser.initFileName(fileName);
@@ -155,14 +162,14 @@ void LevelDesignerController::alignToGrid(void) {
       int newY = oldY;
 
       if (extraY < 50/3)
-        newY = oldY - extraY + 5;
+        newY = oldY - extraY;// + 5;
       else if (extraY > 50 - 50/3)
-        newY = oldY + (50 - extraY) + 5;
+        newY = oldY + (50 - extraY);// + 5;
 
       if (extraX < 50/3)
-        newX = oldX - extraX + 5;
+        newX = oldX - extraX;// + 5;
       else if (extraX > 50 - 50/3)
-        newX = oldX + (50 - extraX) + 5;
+        newX = oldX + (50 - extraX);// + 5;
 
       if (oldX != newX || oldY != newY)
         moveVertex(k, i, oldX, oldY, newX, newY);

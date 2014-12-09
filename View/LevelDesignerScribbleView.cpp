@@ -11,6 +11,7 @@ LevelDesignerScribbleView::LevelDesignerScribbleView(LevelDesignerController* co
   _image(),
   _hasToDraw(true),
   _controller(controller),
+  _undoStack(controller->getUndoStack()),
   _isMagnetic(false),
   _isStuck(false),
   _nearToVertex(false),
@@ -26,12 +27,48 @@ LevelDesignerScribbleView::LevelDesignerScribbleView(LevelDesignerController* co
   _currOldX(-1),
   _currOldY(-1) {
 
-  resize(375, 500);
+  resize(401, 401);
 
   setMouseTracking(true);
 
   connect(_controller, SIGNAL(update()), this, SLOT(drawFromModel()));
   connect(_controller, SIGNAL(updateReset()), this, SLOT(resetValues()));
+
+  _newAction = new QAction("&New...", this);
+  _newAction->setShortcut(QKeySequence::New);
+  addAction(_newAction);
+  connect(_newAction, SIGNAL(triggered()), this, SLOT(newFile(void)));
+
+  _openAction = new QAction("&Open...", this);
+  _openAction->setShortcut(QKeySequence::Open);
+  addAction(_openAction);
+  connect(_openAction, SIGNAL(triggered(void)), this, SLOT(openFile(void)));
+
+  _saveAction = new QAction("&Save", this);
+  _saveAction->setShortcut(QKeySequence::Save);
+  addAction(_saveAction);
+  connect(_saveAction, SIGNAL(triggered()), this, SLOT(saveFile(void)));
+
+  _saveAsAction = new QAction("Save &as...", this);
+  _saveAsAction->setShortcut(QKeySequence::SaveAs);
+  addAction(_saveAsAction);
+  connect(_saveAsAction, SIGNAL(triggered(void)), this, SLOT(saveAsFile(void)));
+
+  _undoAction = _undoStack->createUndoAction(this, "&Undo");
+  _undoAction->setShortcut(QKeySequence::Undo);
+
+  _redoAction = _undoStack->createRedoAction(this, "&Redo");
+  _redoAction->setShortcut(QKeySequence::Redo);
+
+  _addPolygonAction = new QAction("&New Polygon", this);
+  _addPolygonAction->setShortcut(QKeySequence("CTRL+SHIFT+N"));
+  addAction(_addPolygonAction);
+  connect(_addPolygonAction, SIGNAL(triggered()), _controller, SLOT(appendPolygon()));
+
+  _alignToGridAction = new QAction("&Align to grid", this);
+  _alignToGridAction->setShortcut(QKeySequence("CTRL+I"));
+  addAction(_alignToGridAction);
+  connect(_alignToGridAction, SIGNAL(triggered()), _controller, SLOT(alignToGrid()));
 }
 
 void LevelDesignerScribbleView::setModel(LevelDesignerModel* model) {
@@ -284,8 +321,8 @@ void LevelDesignerScribbleView::drawText(const QString& text, const QPoint& posi
 void LevelDesignerScribbleView::drawGrid(void) {
   QPainter painter(&_image);
 
-  int xMin = 0, xMax = 375;
-  int yMin = 0, yMax = 500;
+  int xMin = 0, xMax = 401;
+  int yMin = 0, yMax = 401;
   int subSubCaseSize = 10;
   painter.setPen(QPen(Qt::lightGray, 1, Qt::DashLine));
   for (int i = xMin; i <= xMax; i += subSubCaseSize) {
@@ -431,4 +468,24 @@ void LevelDesignerScribbleView::resetValues(void) {
   _beforeMovingPolygonY = -1;
   _currOldX = -1;
   _currOldY = -1;
+}
+
+void LevelDesignerScribbleView::newFile(void) {
+  if (isVisible())
+    _controller->newFile(this);
+}
+
+void LevelDesignerScribbleView::openFile(void) {
+  if (isVisible())
+    _controller->openFile(this);
+}
+
+void LevelDesignerScribbleView::saveFile(void) {
+  if (isVisible())
+    _controller->saveFile(this);
+}
+
+void LevelDesignerScribbleView::saveAsFile(void) {
+  if (isVisible())
+    _controller->saveAsFile(this);
 }

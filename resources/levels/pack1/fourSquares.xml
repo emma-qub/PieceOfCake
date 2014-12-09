@@ -2,28 +2,28 @@
 <level>
     <polygons>
         <polygon id="0">
-            <vertex x="105" y="105"/>
-            <vertex x="305" y="105"/>
-            <vertex x="305" y="305"/>
-            <vertex x="105" y="305"/>
+            <vertex x="50" y="50"/>
+            <vertex x="150" y="50"/>
+            <vertex x="150" y="150"/>
+            <vertex x="50" y="150"/>
         </polygon>
         <polygon id="1">
-            <vertex x="405" y="105"/>
-            <vertex x="605" y="105"/>
-            <vertex x="605" y="305"/>
-            <vertex x="405" y="305"/>
+            <vertex x="250" y="50"/>
+            <vertex x="350" y="50"/>
+            <vertex x="350" y="150"/>
+            <vertex x="250" y="150"/>
         </polygon>
         <polygon id="2">
-            <vertex x="105" y="405"/>
-            <vertex x="305" y="405"/>
-            <vertex x="305" y="605"/>
-            <vertex x="105" y="605"/>
+            <vertex x="50" y="250"/>
+            <vertex x="150" y="250"/>
+            <vertex x="150" y="350"/>
+            <vertex x="50" y="350"/>
         </polygon>
         <polygon id="3">
-            <vertex x="405" y="405"/>
-            <vertex x="605" y="405"/>
-            <vertex x="605" y="605"/>
-            <vertex x="405" y="605"/>
+            <vertex x="250" y="250"/>
+            <vertex x="350" y="250"/>
+            <vertex x="350" y="350"/>
+            <vertex x="250" y="350"/>
         </polygon>
     </polygons>
     <linescount value="3"/>

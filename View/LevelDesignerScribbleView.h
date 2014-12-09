@@ -78,14 +78,27 @@ public slots:
   void currentChanged(QModelIndex, QModelIndex previousIndex);
   void setMagnetism(bool b) { _isMagnetic = b; }
   void resetValues(void);
+  void newFile(void);
+  void openFile(void);
+  void saveFile(void);
+  void saveAsFile(void);
 
 protected:
   LevelDesignerModel* _model;
   QImage _image;
   bool _hasToDraw;
   QItemSelectionModel* _selectionModel;
-  QUndoStack* _undoStack;
   LevelDesignerController* _controller;
+  QUndoStack* _undoStack;
+
+  QAction* _newAction;
+  QAction* _openAction;
+  QAction* _saveAction;
+  QAction* _saveAsAction;
+  QAction* _undoAction;
+  QAction* _redoAction;
+  QAction* _addPolygonAction;
+  QAction* _alignToGridAction;
 
   bool _isMagnetic;
   bool _isStuck;

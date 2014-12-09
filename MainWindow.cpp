@@ -29,6 +29,7 @@ MainWindow::MainWindow(QWidget* parent):
   connect(item, SIGNAL(homePageRequested(void)), this, SLOT(hideWidgets(void)));
   connect(item, SIGNAL(createLevelRequested(void)), this, SLOT(showCreateLevel(void)));
   connect(_levelDesignerTreeView, SIGNAL(updateViewNotModel(QModelIndex,int)), _levelDesignerScribbleView, SLOT(drawFromModel(QModelIndex,int)));
+  connect(_undoStack, SIGNAL(indexChanged(int)), _levelDesignerController, SLOT(updateSavingState(int)));
 
 //  // Init level designer widgets
 //  _levelDesignerWidget = new QSplitter;
@@ -199,7 +200,7 @@ void MainWindow::initLevelDesigner(void) {
   _levelDesignerScribbleView = new LevelDesignerScribbleView(_levelDesignerController, centralWidget());
   _levelDesignerScribbleView->setModel(_levelDesignerModel);
   _levelDesignerScribbleView->setSelectionModel(_levelDesignerTreeView->selectionModel());
-  _levelDesignerScribbleView->move(200, 100);
+  _levelDesignerScribbleView->move(175, 150);
   _levelDesignerScribbleView->hide();
 }
 

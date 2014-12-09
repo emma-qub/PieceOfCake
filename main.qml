@@ -11,10 +11,11 @@ Rectangle {
   width: 1200
   height: 756
   color: "#FFFFFF"
-  signal levelOpenRequested(string fileName)
+  signal openLevelRequested(string fileName)
   signal createLevelRequested()
   signal homePageRequested()
 
+  // Home Page
   Item {
     id: home
 
@@ -194,22 +195,7 @@ Rectangle {
     }
   }
 
-  FontLoader {
-    id: homeFont
-    name: "Pacifico"
-    source: "resources/fonts/Pacifico.ttf"
-  }
-
-  XmlListModel {
-    id: levelsModel
-    source: "../PieceOfCake/resources/levels/pack1/levels.xml"
-    query: "/levels/level"
-
-    XmlRole { name: "stars"; query: "stars/string()" }
-    XmlRole { name: "image"; query: "image/string()" }
-    XmlRole { name: "name"; query: "name/string()" }
-  }
-
+  // Select Level
   Item {
     id: selectLevelItem
 
@@ -261,7 +247,10 @@ Rectangle {
           width: 60
           height: 60
           hoverEnabled: true
-          onClicked: levelOpenRequested(name)
+          onClicked: {
+            stackView.replace(gameItem)
+            openLevelRequested(name)
+          }
 
           Rectangle {
             width: 60
@@ -451,6 +440,7 @@ Rectangle {
     }
   }
 
+  // Create Level
   Item {
     id: createLevelItem
     width: 1200
@@ -505,6 +495,80 @@ Rectangle {
 
   }
 
+  // Game
+  Item {
+    id: gameItem
+    width: 1200
+    height: 756
+
+    Rectangle {
+      id: gameRectangle
+      width: 1200
+      height: 756
+
+      Image {
+          source: "../PieceOfCake/resources/images/selectLevels.png"
+      }
+    }
+
+    Rectangle {
+      id: homeGameRectangle
+      width: 375
+      height: 50
+      x: 200
+      y: 600
+
+      MouseArea {
+        id: homeGameArea
+        width: 40
+        height: 40
+        hoverEnabled: true
+        acceptedButtons: Qt.LeftButton
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+        onClicked: {
+          stackView.replace(home)
+          homePageRequested()
+        }
+
+        Rectangle {
+          height: 50
+          width: 50
+          x: -5
+          y: -5
+          radius: 5
+          color: homeGameArea.containsMouse ? "#CCCCCC" : "#FFFFFF"
+        }
+
+        Image {
+          height: 40
+          width: 40
+          source: "resources/images/home.png";
+        }
+      }
+    }
+
+  }
+
+  // Font Loader
+  FontLoader {
+    id: homeFont
+    name: "Pacifico"
+    source: "resources/fonts/Pacifico.ttf"
+  }
+
+  // XML List Model
+  XmlListModel {
+    id: levelsModel
+    source: "../PieceOfCake/resources/levels/pack1/levels.xml"
+    query: "/levels/level"
+
+    XmlRole { name: "stars"; query: "stars/string()" }
+    XmlRole { name: "image"; query: "image/string()" }
+    XmlRole { name: "name"; query: "name/string()" }
+  }
+
+  // Stack View
   StackView {
     id: stackView
     anchors.fill: parent

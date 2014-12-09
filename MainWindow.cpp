@@ -25,7 +25,7 @@ MainWindow::MainWindow(QWidget* parent):
   initSelectLevel();
 
   QQuickItem* item = _homeWidget->rootObject();
-  connect(item, SIGNAL(levelOpenRequested(QString)), this, SLOT(openLevel(QString)));
+  connect(item, SIGNAL(openLevelRequested(QString)), this, SLOT(openLevel(QString)));
   connect(item, SIGNAL(homePageRequested(void)), this, SLOT(hideWidgets(void)));
   connect(item, SIGNAL(createLevelRequested(void)), this, SLOT(showCreateLevel(void)));
   connect(_levelDesignerTreeView, SIGNAL(updateViewNotModel(QModelIndex,int)), _levelDesignerScribbleView, SLOT(drawFromModel(QModelIndex,int)));
@@ -145,7 +145,8 @@ void MainWindow::onClick(QString selected) {
 }
 
 void MainWindow::openLevel(QString levelName) {
-  setCentralWidget(_gameView);
+  _gameView->show();
+  _levelDesignerScribbleView->hide();
   // Force the widget to draw
   QApplication::processEvents();
   _gameController->openLevel("../PieceOfCake/"+levelName);
@@ -154,6 +155,7 @@ void MainWindow::openLevel(QString levelName) {
 void MainWindow::hideWidgets(void) {
   _levelDesignerTreeView->hide();
   _levelDesignerScribbleView->hide();
+  _gameView->hide();
 }
 
 void MainWindow::showCreateLevel(void) {
@@ -179,12 +181,14 @@ void MainWindow::initGame(void) {
   // Game controller
   _gameController = new GameController(_gameModel, _undoStack, this);
   // Game view
-  _gameView = new GameView(_gameController);
+  _gameView = new GameView(_gameController, this);
   _gameView->setModel(_gameModel);
-  // Game tree view
-  QTreeView* gameView = new QTreeView;
-  gameView->setModel(_gameModel);
-  _gameView->setSelectionModel(gameView->selectionModel());
+  _gameView->move(175, 150);
+  _gameView->hide();
+//  // Game tree view
+//  QTreeView* gameView = new QTreeView;
+//  gameView->setModel(_gameModel);
+//  _gameView->setSelectionModel(gameView->selectionModel());
 }
 
 void MainWindow::initLevelDesigner(void) {

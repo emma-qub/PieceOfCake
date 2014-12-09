@@ -22,8 +22,7 @@ GameView::GameView(GameController* controller, QWidget* parent):
   _partsCountLabel->setFixedSize(300, 50);
   _partsCountLabel->move(200, 0);
 
-
-  setMinimumWidth(600);
+  resize(401, 401);
 
   setMouseTracking(true);
 

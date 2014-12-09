@@ -1,5 +1,6 @@
 #include "LevelDesignerController.h"
 #include "ParserXML.h"
+#include "ThumbnailCreator.h"
 
 #include <QDebug>
 
@@ -112,6 +113,7 @@ void LevelDesignerController::appendPolygon(void) {
 }
 
 void LevelDesignerController::saveLevel(const QString& fileName) {
+  // Write xml file
   ParserXML parser;
   parser.initFileName(fileName);
 
@@ -127,6 +129,73 @@ void LevelDesignerController::saveLevel(const QString& fileName) {
   parser.setTolerances(0);
 
   parser.writeXML();
+
+  // Create thumbbnail
+  ThumbnailCreator thumbnailCreator(_model->getPolygonList());
+  QString thumbnailName = fileName;
+  thumbnailName.replace(QRegExp(".xml"), ".png");
+  thumbnailCreator.makeThumbnail(thumbnailName);
+
+  // Update levels file
+  QStringList levelPackPath = fileName.split("/");
+  levelPackPath.removeLast();
+  QString xmlFileName = levelPackPath.join("/")+"/levels.xml";
+
+  QFile XMLDoc(xmlFileName);
+  if (!XMLDoc.exists()) {
+    qDebug() << "Error:" << xmlFileName << "file not found";
+    return;
+  }
+
+  if(!XMLDoc.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    qDebug() << "Cannot open XML file in LevelDesignerController::saveLevel(const QString& fileName)";
+    return;
+  }
+
+  QDomDocument doc("PieceOfCakeLevelsML");
+  if(!doc.setContent(&XMLDoc)) {
+    XMLDoc.close();
+    qDebug() << "Cannot set content of dom in LevelDesignerController::saveLevel(const QString& fileName)";
+    return;
+  }
+
+  XMLDoc.close();
+
+  QDomElement root = doc.createElement("levels");
+
+  QDomNodeList imageList = root.elementsByTagName("image");
+  for (int k = 0; k < imageList.size(); ++k) {
+    QDomNode element = imageList.at(k);
+    // No need to register several times the same level,
+    // especially if this method is called to update thumbnail and level.xml file
+    if (element.nodeValue() == thumbnailName) {
+      qDebug() << "No need to update levels.xml";
+      return;
+    }
+  }
+
+  QDomElement level = doc.createElement("level");
+  level.setAttribute("id", root.elementsByTagName("level").size());
+  QDomElement stars = doc.createElement("stars");
+  stars.setNodeValue("0");
+  QDomElement image = doc.createElement("image");
+  image.setNodeValue(thumbnailName);
+  QDomElement name = doc.createElement("name");
+  name.setNodeValue(fileName);
+  level.appendChild(stars);
+  level.appendChild(image);
+  level.appendChild(name);
+  root.appendChild(level);
+
+  if(!XMLDoc.open(QIODevice::WriteOnly | QIODevice::Text)) {
+    qDebug() << "Cannot open XML file in LevelDesignerController::saveLevel(const QString& fileName)";
+    return;
+  }
+
+  QTextStream inFile(&XMLDoc);
+  inFile << doc.toString(2);
+
+  XMLDoc.close();
 }
 
 void LevelDesignerController::openLevel(const QString& fileName) {

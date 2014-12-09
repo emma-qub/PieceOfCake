@@ -10,7 +10,7 @@ typedef QList<Polygon> PolygonList;
 class ThumbnailCreator {
 public:
   ThumbnailCreator(const PolygonList& polygonList);
-  QImage makeThumbnail(void);
+  void makeThumbnail(const QString& fileName);
 
 private:
   PolygonList _polygonList;

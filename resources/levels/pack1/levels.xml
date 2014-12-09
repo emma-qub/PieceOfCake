@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE PieceOfCakeLevelsML>
 <levels version="2.0">
   <title>Cut Polygons</title>
   <level id="0">
@@ -25,5 +25,15 @@
     <stars>0</stars>
     <image>resources/levels/pack1/fiveSquares.png</image>
     <name>resources/levels/pack1/fiveSquares.xml</name>
+  </level>
+  <level id="5">
+    <stars>0</stars>
+    <image>resources/levels/pack1/triangle.png</image>
+    <name>resources/levels/pack1/triangle.xml</name>
+  </level>
+  <level id="6">
+    <stars>0</stars>
+    <image>resources/levels/pack1/triangle2.png</image>
+    <name>resources/levels/pack1/triangle2.xml</name>
   </level>
 </levels>

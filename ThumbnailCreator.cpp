@@ -8,9 +8,9 @@ ThumbnailCreator::ThumbnailCreator(const PolygonList& polygonList):
   _polygonList(polygonList) {
 }
 
-QImage ThumbnailCreator::makeThumbnail(void) {
+void ThumbnailCreator::makeThumbnail(const QString& fileName) {
   if (_polygonList.size() < 1)
-    return QImage();
+    return;
 
   int xmin = _polygonList.at(0).getVertices().at(0).getX();
   int ymin = _polygonList.at(0).getVertices().at(0).getY();
@@ -76,6 +76,5 @@ QImage ThumbnailCreator::makeThumbnail(void) {
   }
 
   QImage thumbnail = image.scaled(50, 50);
-  thumbnail.save("/home/valentin/Documents/test.png", "PNG", 100);
-  return thumbnail;
+  thumbnail.save(fileName, "PNG", 100);
 }

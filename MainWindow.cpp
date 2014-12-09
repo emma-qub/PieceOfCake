@@ -28,6 +28,7 @@ MainWindow::MainWindow(QWidget* parent):
   connect(item, SIGNAL(levelOpenRequested(QString)), this, SLOT(openLevel(QString)));
   connect(item, SIGNAL(homePageRequested(void)), this, SLOT(hideWidgets(void)));
   connect(item, SIGNAL(createLevelRequested(void)), this, SLOT(showCreateLevel(void)));
+  connect(_levelDesignerTreeView, SIGNAL(updateViewNotModel(QModelIndex,int)), _levelDesignerScribbleView, SLOT(drawFromModel(QModelIndex,int)));
 
 //  // Init level designer widgets
 //  _levelDesignerWidget = new QSplitter;

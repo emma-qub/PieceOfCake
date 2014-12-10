@@ -14,6 +14,7 @@ Rectangle {
   signal openLevelRequested(string fileName)
   signal createLevelRequested()
   signal homePageRequested()
+  signal backToLevelsRequested()
 
   // Home Page
   Item {
@@ -299,19 +300,10 @@ Rectangle {
           homePageRequested()
         }
 
-        Rectangle {
-          height: 50
-          width: 50
-          x: -5
-          y: -5
-          radius: 5
-          color: homeArea.containsMouse ? "#CCCCCC" : "#FFFFFF"
-        }
-
         Image {
           height: 40
           width: 40
-          source: "resources/images/home.png";
+          source: homeArea.containsMouse ? "resources/images/homeIn.png" : "resources/images/homeOut.png"
         }
       }
     }
@@ -345,6 +337,7 @@ Rectangle {
         color:"#333333"
       }
     }
+
     Rectangle {
       id: rules1Rectangle
       x: 650
@@ -417,13 +410,18 @@ Rectangle {
         Repeater {
           id: pageRepeater
           model: 5
+
           MouseArea {
+            id: pageArea
             width: 40
             height: 40
+            hoverEnabled: true
             onClicked: SelectJS.setSelectedPack(index)
+
             Rectangle {
               width: 40
               height: 40
+
               Rectangle {
                 width: SelectJS.getSelectedPack() === index ? 14 : 10
                 height: SelectJS.getSelectedPack() === index ? 14 : 10
@@ -476,19 +474,10 @@ Rectangle {
           homePageRequested()
         }
 
-        Rectangle {
-          height: 50
-          width: 50
-          x: -5
-          y: -5
-          radius: 5
-          color: homeCreateLevelArea.containsMouse ? "#CCCCCC" : "#FFFFFF"
-        }
-
         Image {
           height: 40
           width: 40
-          source: "resources/images/home.png";
+          source: homeCreateLevelArea.containsMouse ? "resources/images/homeIn.png" : "resources/images/homeOut.png"
         }
       }
     }
@@ -519,6 +508,26 @@ Rectangle {
       y: 600
 
       MouseArea {
+        id: backToLevelsArea
+        width: 40
+        height: 40
+        hoverEnabled: true
+        acceptedButtons: Qt.LeftButton
+        anchors.horizontalCenter: parent.left
+        anchors.verticalCenter: parent.verticalCenter
+        onClicked: {
+          stackView.replace(selectLevelItem)
+          backToLevelsRequested()
+        }
+
+        Image {
+          height: 40
+          width: 40
+          source: backToLevelsArea.containsMouse ? "resources/images/backToLevelsIn.png" : "resources/images/backToLevelsOut.png"
+        }
+      }
+
+      MouseArea {
         id: homeGameArea
         width: 40
         height: 40
@@ -531,19 +540,10 @@ Rectangle {
           homePageRequested()
         }
 
-        Rectangle {
-          height: 50
-          width: 50
-          x: -5
-          y: -5
-          radius: 5
-          color: homeGameArea.containsMouse ? "#CCCCCC" : "#FFFFFF"
-        }
-
         Image {
           height: 40
           width: 40
-          source: "resources/images/home.png";
+          source: homeGameArea.containsMouse ? "resources/images/homeIn.png" : "resources/images/homeOut.png"
         }
       }
     }
@@ -563,9 +563,9 @@ Rectangle {
     source: "../PieceOfCake/resources/levels/pack1/levels.xml"
     query: "/levels/level"
 
-    XmlRole { name: "stars"; query: "stars/string()" }
-    XmlRole { name: "image"; query: "image/string()" }
-    XmlRole { name: "name"; query: "name/string()" }
+    XmlRole { name: "stars"; query: "@stars/string()" }
+    XmlRole { name: "image"; query: "@image/string()" }
+    XmlRole { name: "name"; query: "@name/string()" }
   }
 
   // Stack View

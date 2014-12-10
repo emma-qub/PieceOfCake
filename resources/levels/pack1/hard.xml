@@ -1,0 +1,23 @@
+<!DOCTYPE PieceOfCakeML>
+<level>
+    <polygons>
+        <polygon id="0">
+            <vertex y="100" x="100"/>
+            <vertex y="100" x="300"/>
+            <vertex y="150" x="350"/>
+            <vertex y="150" x="150"/>
+            <vertex y="350" x="150"/>
+            <vertex y="300" x="100"/>
+        </polygon>
+        <polygon id="1">
+            <vertex y="200" x="200"/>
+            <vertex y="200" x="300"/>
+            <vertex y="300" x="300"/>
+            <vertex y="300" x="200"/>
+        </polygon>
+    </polygons>
+    <linescount value="2"/>
+    <partscount value="6"/>
+    <maxgaptowin value="10"/>
+    <hints/>
+</level>

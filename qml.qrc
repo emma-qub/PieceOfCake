@@ -16,9 +16,10 @@
         <file>resources/images/selectLevels.png</file>
         <file>createLevels.qml</file>
         <file>selectLevel.js</file>
-        <file>resources/images/home.png</file>
+        <file>resources/images/homeOut.png</file>
         <file>resources/images/rule1Pack1.png</file>
         <file>resources/images/rule2Pack1.png</file>
         <file>resources/images/rule3Pack1.png</file>
+        <file>resources/images/homeIn.png</file>
     </qresource>
 </RCC>

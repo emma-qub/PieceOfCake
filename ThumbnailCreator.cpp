@@ -44,19 +44,19 @@ void ThumbnailCreator::makeThumbnail(const QString& fileName) {
     offsetmax = (size - txmax) / 2;
   }
 
-  qDebug() << isXLarger << " " << txmax << " " << tymax << " " << offsetmin << " " << offsetmax <<  " " << size;
+//  qDebug() << isXLarger << " " << txmax << " " << tymax << " " << offsetmin << " " << offsetmax <<  " " << size;
 
   auto it = _polygonList.begin();
   for (; it != _polygonList.end(); ++it) {
-    qDebug() << "BEFORE";
-    qDebug() << *it;
+//    qDebug() << "BEFORE";
+//    qDebug() << *it;
     if (isXLarger)
       it->translate(offsetmin - xmin, offsetmax - ymin);
     else
       it->translate(offsetmax - xmin, offsetmin - ymin);
-    qDebug() << "AFTER";
-    qDebug() << *it;
-    qDebug() << "";
+//    qDebug() << "AFTER";
+//    qDebug() << *it;
+//    qDebug() << "";
   }
 
   QImage image(QSize(size, size), QImage::Format_ARGB32);

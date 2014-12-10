@@ -28,6 +28,7 @@ MainWindow::MainWindow(QWidget* parent):
   connect(item, SIGNAL(openLevelRequested(QString)), this, SLOT(openLevel(QString)));
   connect(item, SIGNAL(homePageRequested(void)), this, SLOT(hideWidgets(void)));
   connect(item, SIGNAL(createLevelRequested(void)), this, SLOT(showCreateLevel(void)));
+  connect(item, SIGNAL(backToLevelsRequested(void)), this, SLOT(hideWidgets(void)));
   connect(_levelDesignerTreeView, SIGNAL(updateViewNotModel(QModelIndex,int)), _levelDesignerScribbleView, SLOT(drawFromModel(QModelIndex,int)));
   connect(_undoStack, SIGNAL(indexChanged(int)), _levelDesignerController, SLOT(updateSavingState(int)));
 

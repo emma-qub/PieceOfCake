@@ -130,16 +130,19 @@ void LevelDesignerController::saveLevel(const QString& fileName) {
 
   parser.writeXML();
 
+  // Rename fileName
+  QString newFileName = "resources/levels/"+fileName.split("resources/levels/").last();
+
   // Create thumbbnail
   ThumbnailCreator thumbnailCreator(_model->getPolygonList());
-  QString thumbnailName = fileName;
+  QString thumbnailName = newFileName;
   thumbnailName.replace(QRegExp(".xml"), ".png");
-  thumbnailCreator.makeThumbnail(thumbnailName);
+  thumbnailCreator.makeThumbnail("../PieceOfCake/"+thumbnailName);
 
   // Update levels file
-  QStringList levelPackPath = fileName.split("/");
+  QStringList levelPackPath = newFileName.split("/");
   levelPackPath.removeLast();
-  QString xmlFileName = levelPackPath.join("/")+"/levels.xml";
+  QString xmlFileName = "../PieceOfCake/"+levelPackPath.join("/")+"/levels.xml";
 
   QFile XMLDoc(xmlFileName);
   if (!XMLDoc.exists()) {
@@ -161,14 +164,14 @@ void LevelDesignerController::saveLevel(const QString& fileName) {
 
   XMLDoc.close();
 
-  QDomElement root = doc.createElement("levels");
+  QDomElement root = doc.firstChildElement("levels");
 
-  QDomNodeList imageList = root.elementsByTagName("image");
-  for (int k = 0; k < imageList.size(); ++k) {
-    QDomNode element = imageList.at(k);
+  QDomNodeList levelList = root.elementsByTagName("level");
+  for (int k = 0; k < levelList.size(); ++k) {
+    QDomElement level = levelList.at(k).toElement();
     // No need to register several times the same level,
     // especially if this method is called to update thumbnail and level.xml file
-    if (element.nodeValue() == thumbnailName) {
+    if (level.attribute("image").split("/").last() == thumbnailName.split("/").last()) {
       qDebug() << "No need to update levels.xml";
       return;
     }
@@ -176,15 +179,10 @@ void LevelDesignerController::saveLevel(const QString& fileName) {
 
   QDomElement level = doc.createElement("level");
   level.setAttribute("id", root.elementsByTagName("level").size());
-  QDomElement stars = doc.createElement("stars");
-  stars.setNodeValue("0");
-  QDomElement image = doc.createElement("image");
-  image.setNodeValue(thumbnailName);
-  QDomElement name = doc.createElement("name");
-  name.setNodeValue(fileName);
-  level.appendChild(stars);
-  level.appendChild(image);
-  level.appendChild(name);
+  level.setAttribute("stars", "0");
+  level.setAttribute("image", thumbnailName);
+  level.setAttribute("name", newFileName);
+
   root.appendChild(level);
 
   if(!XMLDoc.open(QIODevice::WriteOnly | QIODevice::Text)) {

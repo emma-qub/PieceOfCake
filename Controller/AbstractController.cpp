@@ -74,7 +74,7 @@ void AbstractController::openFile(QWidget* parent) {
   }
 
   if (canOpen) {
-    QString fileName = QFileDialog::getOpenFileName(parent, "Open file", "../PieceOfCake/levels/", "XML Files (*.xml)");
+    QString fileName = QFileDialog::getOpenFileName(parent, "Open file", "../PieceOfCake/resources/levels/", "XML Files (*.xml)");
     if (!checkFileExists(fileName)) {
       qDebug() << "Error:" << fileName << "file not found in AbstractController::openFile";
       return;
@@ -107,7 +107,7 @@ void AbstractController::saveFile(QWidget* parent) {
 }
 
 void AbstractController::saveAsFile(QWidget* parent) {
-  QString fileName = QFileDialog::getSaveFileName(parent, "Save file as", "../PieceOfCake/levels/", "XML files (*.xml)");
+  QString fileName = QFileDialog::getSaveFileName(parent, "Save file as", "../PieceOfCake/resources/levels/", "XML files (*.xml)");
   if (!fileName.isEmpty()) {
     if (!fileName.endsWith(".xml", Qt::CaseInsensitive))
       fileName += ".xml";

@@ -31,6 +31,7 @@ public:
   inline int getPartsCount(void) const { return _partsCount; }
   inline int getLinesDrawn(void) const { return _linesDrawn; }
   inline int getPolygonsCount(void) const { return _polygonsCount; }
+  inline bool isLevelRunning() const { return _levelRunning; }
 
   Point2d* getOtherBound(const Point2d* intersection, const std::vector<std::pair<Point2d*, Point2d*>>& cuttingSegments) const;
   std::vector<std::pair<Point2d*, Point2d*>> getCuttingSegments(const std::vector<Point2d*>& intersections) const;
@@ -63,6 +64,7 @@ private:
   float _orientedAreaTotal;
   int _maxGapToWin;
   QString _fileName;
+  bool _levelRunning;
 };
 
 bool pointCompare(const Point2d* A, const Point2d* B);

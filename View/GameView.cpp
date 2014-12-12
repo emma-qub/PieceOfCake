@@ -9,8 +9,7 @@ GameView::GameView(GameController* controller, QWidget* parent):
   _firstPoint(),
   _canErase(false),
   _goodSegment(false),
-  _controller(controller),
-  _levelIsOver(false) {
+  _controller(controller) {
 
   _mousePositionLabel = new QLabel(this);
   _mousePositionLabel->setFixedSize(300, 50);
@@ -42,7 +41,7 @@ void GameView::setModel(GameModel* model) {
 
 
 void GameView::mousePressEvent(QMouseEvent* event) {
-  if (!_levelIsOver && event->buttons() == Qt::LeftButton && !_scribbling) {
+  if (_controller->isLevelRunning() && event->buttons() == Qt::LeftButton && !_scribbling) {
     _scribbling = true;
     _firstPoint = event->pos();
   }
@@ -51,7 +50,7 @@ void GameView::mousePressEvent(QMouseEvent* event) {
 void GameView::mouseMoveEvent(QMouseEvent* event) {
   _mousePositionLabel->setText(QString::number(event->pos().x())+QString("   ")+QString::number(event->pos().y()));
 
-  if (!_levelIsOver && _scribbling) {
+  if (_controller->isLevelRunning() && _scribbling) {
     QPoint currPoint(event->pos());
 
     Point2d firstPoint(_firstPoint.x(), _firstPoint.y());
@@ -83,7 +82,7 @@ void GameView::mouseMoveEvent(QMouseEvent* event) {
 }
 
 void GameView::mouseReleaseEvent(QMouseEvent* event) {
-  if (!_levelIsOver && _scribbling) {
+  if (_controller->isLevelRunning() && _scribbling) {
     clearImage();
     drawFromModel();
     if (_goodSegment) {
@@ -204,7 +203,6 @@ void GameView::levelEnd(QList<float> orientedAreas, GameController::Ranking /*ra
 //  QString starsMessage;
 
   drawAreaValues(orientedAreas);
-  _levelIsOver = true;
 
 //  switch (ranking) {
 //  case GameController::fail:

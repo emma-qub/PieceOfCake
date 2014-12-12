@@ -17,7 +17,8 @@ GameController::GameController(GameModel* model, QUndoStack* undoStack, QObject*
   _polygonsCount(-1),
   _orientedAreaTotal(0.0),
   _maxGapToWin(0),
-  _fileName("") {
+  _fileName(""),
+  _levelRunning(false) {
 }
 
 Point2d* GameController::getOtherBound(const Point2d* intersection, const std::vector<std::pair<Point2d*, Point2d*>>& cuttingSegments) const {
@@ -241,6 +242,8 @@ void GameController::checkWinning(void) {
       //updateLevelStats(rank);
       emit levelEnd(orientedAreas, Ranking(6-rank));
     }
+
+    _levelRunning = false;
   }
 }
 
@@ -256,6 +259,7 @@ void GameController::clearGame(void) {
   _polygonsCount = 0;
   _orientedAreaTotal = 0.0;
   _maxGapToWin = 0.0;
+  _levelRunning = false;
 
   emit update();
 }
@@ -279,6 +283,8 @@ void GameController::openLevel(const QString& fileName) {
   for (const Polygon& polygon: _model->getPolygonList()) {
     _orientedAreaTotal += polygon.orientedArea();
   }
+
+  _levelRunning = true;
 
   emit update();
 }

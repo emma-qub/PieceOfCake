@@ -9,7 +9,8 @@ GameView::GameView(GameController* controller, QWidget* parent):
   _firstPoint(),
   _canErase(false),
   _goodSegment(false),
-  _controller(controller) {
+  _controller(controller),
+  _levelIsOver(false) {
 
   _mousePositionLabel = new QLabel(this);
   _mousePositionLabel->setFixedSize(300, 50);
@@ -41,18 +42,16 @@ void GameView::setModel(GameModel* model) {
 
 
 void GameView::mousePressEvent(QMouseEvent* event) {
-  if (event->buttons() == Qt::LeftButton && !_scribbling) {
+  if (!_levelIsOver && event->buttons() == Qt::LeftButton && !_scribbling) {
     _scribbling = true;
     _firstPoint = event->pos();
   }
 }
 
 void GameView::mouseMoveEvent(QMouseEvent* event) {
-  emit position(event->pos().x(), event->pos().y());
-
   _mousePositionLabel->setText(QString::number(event->pos().x())+QString("   ")+QString::number(event->pos().y()));
 
-  if (_scribbling) {
+  if (!_levelIsOver && _scribbling) {
     QPoint currPoint(event->pos());
 
     Point2d firstPoint(_firstPoint.x(), _firstPoint.y());
@@ -84,7 +83,7 @@ void GameView::mouseMoveEvent(QMouseEvent* event) {
 }
 
 void GameView::mouseReleaseEvent(QMouseEvent* event) {
-  if (_scribbling) {
+  if (!_levelIsOver && _scribbling) {
     clearImage();
     drawFromModel();
     if (_goodSegment) {
@@ -200,50 +199,51 @@ void GameView::drawAreaValues(QList<float> orientedAreas) {
   }
 }
 
-void GameView::levelEnd(QList<float> orientedAreas, GameController::Ranking ranking) {
-  QString rankingMessage;
-  QString starsMessage;
+void GameView::levelEnd(QList<float> orientedAreas, GameController::Ranking /*ranking*/) {
+//  QString rankingMessage;
+//  QString starsMessage;
 
   drawAreaValues(orientedAreas);
+  _levelIsOver = true;
 
-  switch (ranking) {
-  case GameController::fail:
-    rankingMessage = "Fail";
-    starsMessage = "";
-    break;
-  case GameController::poor:
-    rankingMessage = "Poor";
-    starsMessage = "*";
-    break;
-  case GameController::average:
-    rankingMessage = "Average";
-    starsMessage = "**";
-    break;
-  case GameController::nice:
-    rankingMessage = "Nice";
-    starsMessage = "***";
-    break;
-  case GameController::good:
-    rankingMessage = "Good";
-    starsMessage = "****";
-    break;
-  case GameController::great:
-    rankingMessage = "Great";
-    starsMessage = "*****";
-    break;
-  case GameController::perfect:
-    rankingMessage = "Perfect";
-    starsMessage = "***** P";
-    break;
-  default:
-    rankingMessage = "Fail";
-    break;
-  }
+//  switch (ranking) {
+//  case GameController::fail:
+//    rankingMessage = "Fail";
+//    starsMessage = "";
+//    break;
+//  case GameController::poor:
+//    rankingMessage = "Poor";
+//    starsMessage = "*";
+//    break;
+//  case GameController::average:
+//    rankingMessage = "Average";
+//    starsMessage = "**";
+//    break;
+//  case GameController::nice:
+//    rankingMessage = "Nice";
+//    starsMessage = "***";
+//    break;
+//  case GameController::good:
+//    rankingMessage = "Good";
+//    starsMessage = "****";
+//    break;
+//  case GameController::great:
+//    rankingMessage = "Great";
+//    starsMessage = "*****";
+//    break;
+//  case GameController::perfect:
+//    rankingMessage = "Perfect";
+//    starsMessage = "***** P";
+//    break;
+//  default:
+//    rankingMessage = "Fail";
+//    break;
+//  }
 
-  QMessageBox::StandardButton buttonClicked = QMessageBox::information(this, rankingMessage, starsMessage+"\nReplay?", QMessageBox::Yes, QMessageBox::No);
+//  QMessageBox::StandardButton buttonClicked = QMessageBox::information(this, rankingMessage, starsMessage+"\nReplay?", QMessageBox::Yes, QMessageBox::No);
 
-  if (buttonClicked == QMessageBox::Yes)
-    _controller->replay();
-  else
-    _controller->clearGame();
+//  if (buttonClicked == QMessageBox::Yes)
+//    _controller->replay();
+//  else
+//    _controller->clearGame();
 }

@@ -40,7 +40,6 @@ public slots:
 signals:
   void boundaries(QPoint, QPoint);
   void moving(QPoint);
-  void position(int, int);
 
 protected:
   bool _scribbling;
@@ -56,6 +55,7 @@ protected:
   QLabel* _mousePositionLabel;
   QLabel* _linesCountLabel;
   QLabel* _partsCountLabel;
+  bool _levelIsOver;
 };
 
 #endif // GAMEVIEW_H

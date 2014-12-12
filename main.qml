@@ -35,7 +35,10 @@ Rectangle {
         width: 170
         height: 100
         hoverEnabled: true
-        onClicked: stackView.replace(selectLevelItem)
+        onClicked: {
+          levelsModel.reload()
+          stackView.replace(selectLevelItem)
+        }
 
         Image {
           id: playIn

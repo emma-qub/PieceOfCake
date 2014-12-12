@@ -74,9 +74,6 @@ void LevelDesignerTreeView::movingVertex(QModelIndex vertexIndex, int value, boo
   int column = vertexIndex.column();
   TreeItem* currVertex = _model->getItem(vertexIndex);
 
-  //    for (int k = 0; k < 4; k++)
-  //        qDebug() << currVertex->data(k);
-
   int newX = -1;
   int newY = -1;
 

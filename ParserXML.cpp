@@ -252,8 +252,6 @@ Segment ParserXML::createSegment(const QDomElement& element) {
 }
 
 int ParserXML::getIntValue(const QString& tagName, const QString& attributeName) {
-  qDebug() << tagName << " " << attributeName;
-
   QDomNodeList nodeList = _doc.elementsByTagName(tagName);
   if (nodeList.size() != 1)
     return -1;

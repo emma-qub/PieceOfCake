@@ -25,8 +25,6 @@ void ThumbnailCreator::makeThumbnail(const QString& fileName) {
     }
   }
 
-  qDebug() << xmin << " " << ymin << " " << xmax << " " << ymax;
-
   int txmax = xmax - xmin;
   int tymax = ymax - ymin;
   bool isXLarger = txmax > tymax;
@@ -44,19 +42,12 @@ void ThumbnailCreator::makeThumbnail(const QString& fileName) {
     offsetmax = (size - txmax) / 2;
   }
 
-//  qDebug() << isXLarger << " " << txmax << " " << tymax << " " << offsetmin << " " << offsetmax <<  " " << size;
-
   auto it = _polygonList.begin();
   for (; it != _polygonList.end(); ++it) {
-//    qDebug() << "BEFORE";
-//    qDebug() << *it;
     if (isXLarger)
       it->translate(offsetmin - xmin, offsetmax - ymin);
     else
       it->translate(offsetmax - xmin, offsetmin - ymin);
-//    qDebug() << "AFTER";
-//    qDebug() << *it;
-//    qDebug() << "";
   }
 
   QImage image(QSize(size, size), QImage::Format_ARGB32);

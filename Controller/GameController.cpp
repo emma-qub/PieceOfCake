@@ -83,9 +83,9 @@ void GameController::cleanIntersections(const Polygon& polygon, std::vector<Poin
   if (inside)
     realIntersection.push_back(intersections.at(intersections.size()-1));
 
-  for (Point2d* p: realIntersection)
-    std::cerr << *p << " ";
-  std::cerr << std::endl;
+//  for (Point2d* p: realIntersection)
+//    std::cerr << *p << " ";
+//  std::cerr << std::endl;
 
   intersections.clear();
   intersections = realIntersection;

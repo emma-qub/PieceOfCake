@@ -29,34 +29,20 @@ public:
   explicit MainWindow(QWidget* parent = NULL);
 
 public slots:
-  //bool confirmErase(void);
-  //void initNewDocument(bool neverSavedBefore, const QString& fileName = "");
-  //void updateSavingState(int index);
-  //void newFile(void);
-  //void clear(void);
-  void openFile(void);
-  //void saveFile(void);
-  //void saveAsFile(void);
-  //void saveAndUpdate(void);
-  void addPolygon(void);
-  //void alignToGrid(void);
-  //void updateMenuActions(int);
-  //void updateCurrentController(int currentIndex);
-  void onClick(QString selected);
   void openLevel(QString levelName);
   void hideWidgets(void);
   void showCreateLevel(void);
 
 private:
+  void initHome(void);
   void initGame(void);
   void initLevelDesigner(void);
-  void initSelectLevel(void);
-  void initHome(void);
 
 private:
   AbstractController* _currentController;
 
-  QUndoStack* _undoStack;
+  QUndoStack* _levelDesignerUndoStack;
+  QUndoStack* _gameUndoStack;
   QUndoView* _undoView;
 
   LevelDesignerController* _levelDesignerController;
@@ -72,21 +58,6 @@ private:
   QWidget* _levelDesignerWidget;
   QQuickWidget* _selectLevelWidget;
   QQuickWidget* _homeWidget;
-
-  QStackedWidget* _centralWidget;
-
-//  QTabWidget* _tabWidget;
-//  QWidget* _levelDesignerWidget;
-
-//  QAction* _newAction;
-//  QAction* _openAction;
-//  QAction* _saveAction;
-//  QAction* _saveAsAction;
-//  QAction* _undoAction;
-//  QAction* _redoAction;
-//  QAction* _addPolygonAction;
-//  QAction* _magnetismAction;
-//  QAction* _alignToGridAction;
 };
 
 #endif // MAINWINDOW_H

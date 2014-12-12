@@ -1,13 +1,13 @@
 <!DOCTYPE PieceOfCakeLevelsML>
 <levels>
   <title>Cut Polygons</title>
-  <level id="0" image="resources/levels/pack1/square.png" name="resources/levels/pack1/square.xml" stars="1"/>
-  <level id="1" image="resources/levels/pack1/square2.png" name="resources/levels/pack1/square2.xml" stars="2"/>
-  <level id="2" image="resources/levels/pack1/podium.png" name="resources/levels/pack1/podium.xml" stars="5"/>
-  <level id="3" image="resources/levels/pack1/fourSquares.png" name="resources/levels/pack1/fourSquares.xml" stars="3"/>
-  <level id="4" image="resources/levels/pack1/fiveSquares.png" name="resources/levels/pack1/fiveSquares.xml" stars="0"/>
-  <level id="5" image="resources/levels/pack1/triangle.png" name="resources/levels/pack1/triangle.xml" stars="0"/>
-  <level id="6" image="resources/levels/pack1/triangle2.png" name="resources/levels/pack1/triangle2.xml" stars="0"/>
-  <level id="7" image="resources/levels/pack1/hard.png" name="resources/levels/pack1/hard.xml" stars="0"/>
-  <level id="8" image="resources/levels/pack1/rss.png" name="resources/levels/pack1/rss.xml" stars="0"/>
+  <level name="resources/levels/pack1/square.xml" image="resources/levels/pack1/square.png" stars="1" id="0"/>
+  <level name="resources/levels/pack1/square2.xml" image="resources/levels/pack1/square2.png" stars="2" id="1"/>
+  <level name="resources/levels/pack1/podium.xml" image="resources/levels/pack1/podium.png" stars="5" id="2"/>
+  <level name="resources/levels/pack1/fourSquares.xml" image="resources/levels/pack1/fourSquares.png" stars="3" id="3"/>
+  <level name="resources/levels/pack1/fiveSquares.xml" image="resources/levels/pack1/fiveSquares.png" stars="0" id="4"/>
+  <level name="resources/levels/pack1/triangle.xml" image="resources/levels/pack1/triangle.png" stars="0" id="5"/>
+  <level name="resources/levels/pack1/triangle2.xml" image="resources/levels/pack1/triangle2.png" stars="0" id="6"/>
+  <level name="resources/levels/pack1/hard.xml" image="resources/levels/pack1/hard.png" stars="0" id="7"/>
+  <level name="resources/levels/pack1/rss.xml" image="resources/levels/pack1/rss.png" stars="0" id="8"/>
 </levels>

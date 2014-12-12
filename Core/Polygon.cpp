@@ -240,8 +240,9 @@ Point2d Polygon::barycenter(void) const {
     baryY += (yi0+yi1)*(xi0*yi1 - xi1*yi0);
   }
 
-  bary.setX(baryX);
-  bary.setY(baryY);
+  // take abs other wise barycenter depends on vertex browse direction
+  bary.setX(std::abs(baryX));
+  bary.setY(std::abs(baryY));
 
   bary /= (6*orientedArea());
 

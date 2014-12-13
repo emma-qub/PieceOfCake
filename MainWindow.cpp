@@ -9,6 +9,10 @@
 #include <fstream>
 #include <iomanip>
 
+#include <QQmlEngine>
+#include <QQmlProperty>
+#include <QtQml>
+
 MainWindow::MainWindow(QWidget* parent):
   QMainWindow(parent) {
 
@@ -51,6 +55,12 @@ void MainWindow::showCreateLevel(void) {
   _levelDesignerScribbleView->show();
 }
 
+void MainWindow::updateQMLView(void) {
+  QQuickItem* item = _homeWidget->rootObject();
+//  std::cerr << item << std::endl;
+  item->setProperty("state", "green");
+}
+
 void MainWindow::initHome(void) {
   _homeWidget = new QQuickWidget(QUrl::fromLocalFile("../PieceOfCake/main.qml"));
 
@@ -71,6 +81,11 @@ void MainWindow::initGame(void) {
   _gameView->setModel(_gameModel);
   _gameView->move(175, 150);
   _gameView->hide();
+
+  connect(_gameController, SIGNAL(update()), this, SLOT(updateQMLView()));
+
+  _homeWidget->rootContext()->setContextProperty("gameInfo", _gameController->getGameInfo());
+  _homeWidget->engine()->addImportPath("../PieceOfCake");
 }
 
 void MainWindow::initLevelDesigner(void) {

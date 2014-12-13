@@ -5,6 +5,9 @@
 #include "MainWindow.h"
 #include "LevelDesignerModel.h"
 #include "LevelDesignerScribbleView.h"
+#include "GameInfo.h"
+
+#include <QtQml>
 
 #define TESTPOINT 0
 #define TESTVECTOR 0
@@ -78,8 +81,10 @@ int main(int argc, char** argv) {
 #if GUI
   QApplication app(argc, argv);
 
-  QFontDatabase::addApplicationFont("../PieceOfCake/fonts/edosz.ttf");
-  QFontDatabase::addApplicationFont("../PieceOfCake/fonts/watermark.ttf");
+//  QFontDatabase::addApplicationFont("../PieceOfCake/fonts/edosz.ttf");
+//  QFontDatabase::addApplicationFont("../PieceOfCake/fonts/watermark.ttf");
+
+  qmlRegisterType<GameInfo>("gameinfo", 1, 0, "GameInfo");
 
   MainWindow window;
   window.show();

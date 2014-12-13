@@ -11,14 +11,19 @@
 GameController::GameController(GameModel* model, QUndoStack* undoStack, QObject* parent):
   AbstractController(model, undoStack, parent),
   _model(model),
-  _linesCount(-1),
-  _partsCount(-1),
-  _linesDrawn(-1),
-  _polygonsCount(-1),
+  _gameInfo(new GameInfo),
   _orientedAreaTotal(0.0),
   _maxGapToWin(0),
   _fileName(""),
   _levelRunning(false) {
+}
+
+GameController::~GameController(void) {
+  delete _gameInfo;
+}
+
+GameInfo* GameController::getGameInfo(void) const {
+  return _gameInfo;
 }
 
 Point2d* GameController::getOtherBound(const Point2d* intersection, const std::vector<std::pair<Point2d*, Point2d*>>& cuttingSegments) const {
@@ -186,8 +191,8 @@ void GameController::sliceIt(const Segment& line) {
   }
   _model->setPolygonList(newPolygonList);
 
-  _polygonsCount = _model->getPolygonsCount();
-  _linesDrawn++;
+  _gameInfo->setPartsCut(_model->getPolygonsCount());
+  _gameInfo->setLinesDrawn(_gameInfo->linesDrawn()+1);
 
   emit update();
 
@@ -222,7 +227,7 @@ GameController::LineType GameController::computeLineType(const Segment& line) co
 }
 
 void GameController::checkWinning(void) {
-  if (_linesDrawn >= _linesCount) {
+  if (_gameInfo->linesDrawn() >= _gameInfo->linesCount()) {
     QList<float> orientedAreas;
     float minArea = 100.0;
     float maxArea = 0.0;
@@ -235,7 +240,7 @@ void GameController::checkWinning(void) {
 
     float gap = qAbs(maxArea - minArea);
 
-    if (_polygonsCount != _partsCount || gap > _maxGapToWin)
+    if (_gameInfo->partsCut() != _gameInfo->partsCount() || gap > _maxGapToWin)
       emit levelEnd(orientedAreas, fail);
     else {
       int rank = qCeil(gap / _maxGapToWin * 5);
@@ -253,10 +258,10 @@ void GameController::replay(void) {
 
 void GameController::clearGame(void) {
   _model->clearPolygons();
-  _linesCount = 0;
-  _partsCount = 0;
-  _linesDrawn = 0;
-  _polygonsCount = 0;
+  _gameInfo->setLinesCount(0);
+  _gameInfo->setLinesCount(0);
+  _gameInfo->setPartsCut(0);
+  _gameInfo->setPartsCount(0);
   _orientedAreaTotal = 0.0;
   _maxGapToWin = 0.0;
   _levelRunning = false;
@@ -275,9 +280,10 @@ void GameController::openLevel(const QString& fileName) {
   PolygonList polygonList(parser.createPolygonList());
   _model->setPolygonList(polygonList);
 
-  _linesCount = parser.getLinesCount();
-  _partsCount = parser.getPartsCount();
-  _polygonsCount = _model->getPolygonsCount();
+  _gameInfo->setLinesDrawn(0);
+  _gameInfo->setLinesCount(parser.getLinesCount());
+  _gameInfo->setPartsCut(_model->getPolygonsCount());
+  _gameInfo->setPartsCount(parser.getPartsCount());
   _maxGapToWin = parser.getMaxGapToWin();
 
   for (const Polygon& polygon: _model->getPolygonList()) {

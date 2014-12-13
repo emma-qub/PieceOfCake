@@ -4,6 +4,7 @@
 #include "AbstractController.h"
 
 #include "GameModel.h"
+#include "GameInfo.h"
 
 class GameController: public AbstractController {
   Q_OBJECT
@@ -26,12 +27,10 @@ public:
   };
 
   GameController(GameModel* model, QUndoStack* undoStack, QObject* parent = 0);
+  virtual ~GameController(void);
 
-  inline int getLinesCount(void) const { return _linesCount; }
-  inline int getPartsCount(void) const { return _partsCount; }
-  inline int getLinesDrawn(void) const { return _linesDrawn; }
-  inline int getPolygonsCount(void) const { return _polygonsCount; }
   inline bool isLevelRunning() const { return _levelRunning; }
+  GameInfo* getGameInfo(void) const;
 
   Point2d* getOtherBound(const Point2d* intersection, const std::vector<std::pair<Point2d*, Point2d*>>& cuttingSegments) const;
   std::vector<std::pair<Point2d*, Point2d*>> getCuttingSegments(const std::vector<Point2d*>& intersections) const;
@@ -57,10 +56,7 @@ signals:
 
 private:
   GameModel* _model;
-  int _linesCount;
-  int _partsCount;
-  int _linesDrawn;
-  int _polygonsCount;
+  GameInfo* _gameInfo;
   float _orientedAreaTotal;
   int _maxGapToWin;
   QString _fileName;

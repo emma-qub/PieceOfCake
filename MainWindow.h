@@ -32,6 +32,7 @@ public slots:
   void openLevel(QString levelName);
   void hideWidgets(void);
   void showCreateLevel(void);
+  void updateQMLView(void);
 
 private:
   void initHome(void);

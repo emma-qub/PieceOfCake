@@ -39,7 +39,8 @@ HEADERS += \
   MainWindow.h \
   ParserXML.h \
   tests.h \
-    ThumbnailCreator.h
+    ThumbnailCreator.h \
+    GameInfo.h
 
 SOURCES += \
   # Controller
@@ -78,7 +79,8 @@ SOURCES += \
   MainWindow.cpp \
   ParserXML.cpp \
   main.cpp \
-    ThumbnailCreator.cpp
+    ThumbnailCreator.cpp \
+    GameInfo.cpp
 
 INCLUDEPATH += \
   Controller \

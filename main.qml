@@ -4,6 +4,7 @@ import QtQuick.Controls 1.1
 import QtQuick.XmlListModel 2.0
 
 import "selectLevel.js" as SelectJS
+import gameinfo 1.0
 
 Rectangle {
   id: homePage
@@ -321,7 +322,7 @@ Rectangle {
 
       Text {
         id: goalTitleText
-        text: qsTr("Objective of the game")
+        text: qsTr("Objective")
         font.family: homeFont.name
         font.bold: true
         font.pixelSize: 24
@@ -551,6 +552,56 @@ Rectangle {
       }
     }
 
+    Rectangle {
+      id: missionRectangle
+      x: 650
+      y: 150
+      width: 375
+      height: 150
+
+      MouseArea {
+        id: missionMouseArea
+        width: 375
+        height: 150
+      }
+
+      Text {
+        id: missionTitleText
+        text: qsTr("Mission")
+        font.family: homeFont.name
+        font.bold: true
+        font.pixelSize: 24
+        color:"#333333"
+      }
+
+      Text {
+        id: linesText
+        x: 40
+        y: 40
+        width: 300
+        wrapMode: Text.Wrap
+        font.family: homeFont.name
+        font.pixelSize: 20
+        color:"#333333"
+        text: {
+          var lines = gameInfo.linesCount - gameInfo.linesDrawn;
+          return lines.toString();
+        }
+      }
+
+      Text {
+        id: partsText
+        x: 40
+        y: 60
+        width: 300
+        wrapMode: Text.Wrap
+        font.family: homeFont.name
+        font.pixelSize: 20
+        color:"#333333"
+        text: gameInfo.partsCut.toString() + "/" + gameInfo.partsCount.toString()
+      }
+    }
+
   }
 
   // Font Loader
@@ -599,16 +650,38 @@ Rectangle {
       }
     }
   }
-}
 
-////    StateGroup {
-////        id: stateGroup
-////        states: [
-////            State {
-////                name: "PlayHovered"
-////                PropertyChanges {
-////                    target: playText
-////                }
-////            }
-////        ]
-////    }
+  StateGroup {
+    id: stateGroup
+    states: [
+      State {
+        name: "green"
+        when: missionMouseArea.pressed === true
+
+        PropertyChanges {
+          target: partsText
+          color: "#639c45"
+          font.pixelSize: 32
+        }
+      }
+    ]
+    transitions: [
+      Transition {
+        reversible: true
+        from: "*"; to: "green"
+        ParallelAnimation {
+          NumberAnimation {
+            duration: 1000
+            properties: "font.pixelSize"
+            easing.type: Easing.InOutQuad
+          }
+          ColorAnimation {
+            duration: 1000
+            easing.type: Easing.InOutQuad
+          }
+        }
+      }
+    ]
+  }
+
+}

@@ -29,13 +29,13 @@ public:
   void drawLine(const QPoint& begin, const QPoint& end, const QColor &color = Qt::black, Qt::PenStyle penStyle = Qt::SolidLine);
   void circlePoint(const QPoint& point, const QColor& color = Qt::red, Qt::PenStyle penStyle = Qt::SolidLine);
   void drawText(const QPoint& position, const QString& text, const QColor &color = QColor(0x777700));
+  void drawAreaValues(const QList<float>& orientedAreas);
 
 public slots:
   void drawFromModel(void);
   void clearImage(void);
   void currentChanged(QModelIndex currentIndex, QModelIndex previousIndex);
-  void drawAreaValues(QList<float> orientedAreas);
-  void levelEnd(QList<float>, GameController::Ranking);
+  void levelEnd(QList<float>);
 
 signals:
   void boundaries(QPoint, QPoint);

@@ -19,7 +19,7 @@ GameView::GameView(GameController* controller, QWidget* parent):
   setMouseTracking(true);
 
   connect(_controller, SIGNAL(update()), this, SLOT(drawFromModel()));
-  connect(_controller, SIGNAL(levelEnd(QList<float>, GameController::Ranking)), this, SLOT(levelEnd(QList<float>, GameController::Ranking)));
+  connect(_controller, SIGNAL(levelEnd(QList<float>)), this, SLOT(levelEnd(QList<float>)));
 }
 
 void GameView::setSelectionModel(QItemSelectionModel* selectionModel) {
@@ -163,6 +163,16 @@ void GameView::drawText(const QPoint& position, const QString& text, const QColo
   painter.drawText(position+QPoint(leftShift, topShift), text);
 }
 
+void GameView::drawAreaValues(const QList<float>& orientedAreas) {
+  PolygonList polygons = _model->getPolygonList();
+  int k = 0;
+  for (const Polygon& polygon: polygons) {
+    Point2d areaPoint = polygon.barycenter();
+    drawText(QPoint(areaPoint.getX(), areaPoint.getY()), QString::number(orientedAreas.at(k)), Qt::black);
+    ++k;
+  }
+}
+
 void GameView::clearImage(void) {
   _image.fill(Qt::white);
 }
@@ -179,20 +189,13 @@ void GameView::currentChanged(QModelIndex currentIndex, QModelIndex /*previousIn
   }
 }
 
-void GameView::drawAreaValues(QList<float> orientedAreas) {
-  PolygonList polygons = _model->getPolygonList();
-  for (int k = 0; k < polygons.size(); ++k) {
-    Polygon polygon = polygons.at(k);
-    Point2d areaPoint = polygon.barycenter();
-    drawText(QPoint(areaPoint.getX(), areaPoint.getY()), QString::number(orientedAreas.at(k)), Qt::black);
-  }
-}
-
-void GameView::levelEnd(QList<float> orientedAreas, GameController::Ranking /*ranking*/) {
+void GameView::levelEnd(QList<float> orientedAreas) {
 //  QString rankingMessage;
 //  QString starsMessage;
 
+  drawFromModel();
   drawAreaValues(orientedAreas);
+
 
 //  switch (ranking) {
 //  case GameController::fail:

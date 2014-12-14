@@ -4,9 +4,12 @@
 #include <iostream>
 #include <cassert>
 
+class Point2d;
+
 class Vector2d {
 public:
   Vector2d(const float& x = 0.0, const float& y = 0.0);
+  Vector2d(const Point2d& A, const Point2d& B);
   Vector2d(const Vector2d& vector);
   virtual ~Vector2d(void) {}
 

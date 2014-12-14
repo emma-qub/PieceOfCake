@@ -1,4 +1,6 @@
 var selectedPack = 0;
+var selectedLevel = -1;
+
 var titles = [
   "Cut Polygons",
   "Adhesive Tapes",
@@ -6,6 +8,18 @@ var titles = [
   "Portals",
   "Filters"
 ];
+
+function setSelectedLevel(levelNumber)  {
+  selectedLevel = levelNumber;
+}
+
+function isFirstLevel() {
+  return selectedLevel === 0;
+}
+
+function isLastLevel() {
+  return selectedLevel === 19;
+}
 
 function setSelectedPack(packNumber) {
   selectedPack = packNumber;

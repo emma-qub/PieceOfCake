@@ -16,6 +16,7 @@ Rectangle {
   signal createLevelRequested()
   signal homePageRequested()
   signal backToLevelsRequested()
+  signal refreshLevelRequested()
 
   // Home Page
   Item {
@@ -253,6 +254,7 @@ Rectangle {
           height: 60
           hoverEnabled: true
           onClicked: {
+            SelectJS.setSelectedLevel(id)
             stackView.replace(gameItem)
             openLevelRequested(name)
           }
@@ -271,6 +273,21 @@ Rectangle {
               width: 50
               source: image;
               anchors.horizontalCenter: parent.horizontalCenter
+            }
+          }
+
+          Rectangle {
+            width: 20
+            height: 20
+            x: -10
+            y: -10
+            radius: 5
+            border.width: 1
+            border.color: "#cccccc"
+            Text {
+              text: id+1
+              anchors.horizontalCenter: parent.horizontalCenter
+              anchors.verticalCenter: parent.verticalCenter
             }
           }
         }
@@ -460,7 +477,7 @@ Rectangle {
 
     Rectangle {
       id: homeCreateLevelRectangle
-      width: 375
+      width: 350
       height: 50
       x: 200
       y: 600
@@ -505,8 +522,18 @@ Rectangle {
     }
 
     Rectangle {
+      id: drawAreaRectangle
+      x: 174
+      y: 149
+      width: 403
+      height: 403
+      border.width: 1
+      border.color: "#ddddff"
+    }
+
+    Rectangle {
       id: homeGameRectangle
-      width: 375
+      width: 350
       height: 50
       x: 200
       y: 600
@@ -520,6 +547,7 @@ Rectangle {
         anchors.horizontalCenter: parent.left
         anchors.verticalCenter: parent.verticalCenter
         onClicked: {
+          SelectJS.setSelectedLevel(-1)
           stackView.replace(selectLevelItem)
           backToLevelsRequested()
         }
@@ -550,6 +578,26 @@ Rectangle {
           source: homeGameArea.containsMouse ? "resources/images/homeIn.png" : "resources/images/homeOut.png"
         }
       }
+
+      MouseArea {
+        id: eraseArea
+        width: 40
+        height: 40
+        hoverEnabled: true
+        acceptedButtons: Qt.LeftButton
+        anchors.horizontalCenter: parent.right
+        anchors.verticalCenter: parent.verticalCenter
+        onClicked: {
+//          stackView.replace(home)
+//          homePageRequested()
+        }
+
+        Image {
+          height: 40
+          width: 40
+          source: eraseArea.containsMouse ? "resources/images/eraserIn.png" : "resources/images/eraserOut.png"
+        }
+      }
     }
 
     Rectangle {
@@ -574,31 +622,129 @@ Rectangle {
         color:"#333333"
       }
 
+      Image {
+        id: lineImage
+        x: 10
+        y: 40
+        width: 40
+        height: 40
+        source: "resources/images/line.png"
+      }
+
       Text {
         id: linesText
-        x: 40
-        y: 40
+        x: 60
+        y: 50
         width: 300
         wrapMode: Text.Wrap
-        font.family: homeFont.name
-        font.pixelSize: 20
+        font.family: arial
+        font.pixelSize: 24
+        font.bold: true
         color:"#333333"
         text: {
           var lines = gameInfo.linesCount - gameInfo.linesDrawn;
-          return lines.toString();
+          return "x "+lines.toString();
         }
+      }
+
+      Image {
+        id: partsImage
+        x: 10
+        y: 90
+        width: 40
+        height: 40
+        source: "resources/images/parts.png"
       }
 
       Text {
         id: partsText
-        x: 40
-        y: 60
+        x: 60
+        y: 100
         width: 300
         wrapMode: Text.Wrap
-        font.family: homeFont.name
-        font.pixelSize: 20
+        font.family: arial
+        font.pixelSize: 24
+        font.bold: true
         color:"#333333"
         text: gameInfo.partsCut.toString() + "/" + gameInfo.partsCount.toString()
+      }
+    }
+
+    Rectangle {
+      id: switchLevelsGameRectangle
+      width: 350
+      height: 50
+      x: 650
+      y: 600
+
+      MouseArea {
+        id: previousLevelsArea
+        width: 40
+        height: 40
+        hoverEnabled: true
+        acceptedButtons: Qt.LeftButton
+        anchors.horizontalCenter: parent.left
+        anchors.verticalCenter: parent.verticalCenter
+        onClicked: {
+          SelectJS.setSelectedLevel(SelectJS.selectedLevel-1)
+//          stackView.replace(selectLevelItem)
+//          backToLevelsRequested()
+        }
+
+        Image {
+          height: 40
+          width: 40
+          source: {
+//            if (SelectJS.isFirstLevel()) {
+//              return "resources/images/previousLevelDisabled.png";
+//            } else {
+              if (previousLevelsArea.containsMouse) {
+                return "resources/images/previousLevelIn.png";
+              } else {
+                return "resources/images/previousLevelOut.png";
+              }
+//            }
+          }
+        }
+      }
+
+      MouseArea {
+        id: refreshLevelArea
+        width: 40
+        height: 40
+        hoverEnabled: true
+        acceptedButtons: Qt.LeftButton
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+        onClicked: {
+          refreshLevelRequested()
+        }
+
+        Image {
+          height: 40
+          width: 40
+          source: refreshLevelArea.containsMouse ? "resources/images/refreshIn.png" : "resources/images/refreshOut.png"
+        }
+      }
+
+      MouseArea {
+        id: nextLevelArea
+        width: 40
+        height: 40
+        hoverEnabled: true
+        acceptedButtons: Qt.LeftButton
+        anchors.horizontalCenter: parent.right
+        anchors.verticalCenter: parent.verticalCenter
+        onClicked: {
+//          stackView.replace(home)
+//          homePageRequested()
+        }
+
+        Image {
+          height: 40
+          width: 40
+          source: nextLevelArea.containsMouse ? "resources/images/nextLevelIn.png" : "resources/images/nextLevelOut.png"
+        }
       }
     }
 
@@ -617,6 +763,7 @@ Rectangle {
     source: "../PieceOfCake/resources/levels/pack1/levels.xml"
     query: "/levels/level"
 
+    XmlRole { name: "id"; query: "@id/number()" }
     XmlRole { name: "stars"; query: "@stars/string()" }
     XmlRole { name: "image"; query: "@image/string()" }
     XmlRole { name: "name"; query: "@name/string()" }

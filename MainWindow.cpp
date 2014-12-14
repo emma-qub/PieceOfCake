@@ -86,6 +86,9 @@ void MainWindow::initGame(void) {
 
   _homeWidget->rootContext()->setContextProperty("gameInfo", _gameController->getGameInfo());
   _homeWidget->engine()->addImportPath("../PieceOfCake");
+
+  QQuickItem* item = _homeWidget->rootObject();
+  connect(item, SIGNAL(refreshLevelRequested(void)), _gameController, SLOT(replay(void)));
 }
 
 void MainWindow::initLevelDesigner(void) {

@@ -3,10 +3,16 @@
 #include <cmath>    // sqrt, abs, atan2
 #include <cfloat>   // FLT_EPSILON
 
+#include "Point2d.h"
 
 Vector2d::Vector2d(const float& x, const float& y) {
   _coords[0] = x;
   _coords[1] = y;
+}
+
+Vector2d::Vector2d(const Point2d& A, const Point2d& B) {
+  _coords[0] = B.getX()-A.getX();
+  _coords[1] = B.getY()-A.getY();
 }
 
 Vector2d::Vector2d(const Vector2d& vector) {

@@ -6,6 +6,8 @@
 #include "GameModel.h"
 #include "GameInfo.h"
 
+#include "Vector2d.h"
+
 class GameController: public AbstractController {
   Q_OBJECT
 
@@ -42,17 +44,20 @@ public:
 
   LineType computeLineType(const Segment& line) const;
   void checkWinning(void);
-  void replay(void);
+  void translatePolygons(const QList<Vector2d>& shiftVectors);
   void clearGame(void);
+
+  Point2d computeGlobalBarycenter() const;
 
 public slots:
   virtual void openLevel(const QString& fileName);
   virtual void saveLevel(const QString& fileName) { Q_UNUSED(fileName) }
+  void replay(void);
 
 signals:
   void updateLine(LineType);
   void update(void);
-  void levelEnd(QList<float>, GameController::Ranking);
+  void levelEnd(QList<float>);
 
 private:
   GameModel* _model;

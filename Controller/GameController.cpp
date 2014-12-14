@@ -7,6 +7,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <QTimer>
 
 GameController::GameController(GameModel* model, QUndoStack* undoStack, QObject* parent):
   AbstractController(model, undoStack, parent),
@@ -229,27 +230,52 @@ GameController::LineType GameController::computeLineType(const Segment& line) co
 void GameController::checkWinning(void) {
   if (_gameInfo->linesDrawn() >= _gameInfo->linesCount()) {
     QList<float> orientedAreas;
+    QList<Vector2d> shiftVectors;
     float minArea = 100.0;
     float maxArea = 0.0;
+
     for (const Polygon& polygon: _model->getPolygonList()) {
       float currArea = qRound(10.0*polygon.orientedArea() * 100.0 / _orientedAreaTotal)/10.0;
       orientedAreas << currArea;
       minArea = qMin(currArea, minArea);
       maxArea = qMax(currArea, maxArea);
+
+      Vector2d currShift(computeGlobalBarycenter(), polygon.barycenter());
+      float currShiftLength = currShift.norm();
+      currShift.normalize();
+      currShift *= 0.2*currShiftLength;
+      shiftVectors << currShift;
     }
+
+    translatePolygons(shiftVectors);
 
     float gap = qAbs(maxArea - minArea);
 
     if (_gameInfo->partsCut() != _gameInfo->partsCount() || gap > _maxGapToWin)
-      emit levelEnd(orientedAreas, fail);
+      emit levelEnd(orientedAreas);
     else {
-      int rank = qCeil(gap / _maxGapToWin * 5);
+      // int rank = qCeil(gap / _maxGapToWin * 5);
       //updateLevelStats(rank);
-      emit levelEnd(orientedAreas, Ranking(6-rank));
+      emit levelEnd(orientedAreas);
     }
 
     _levelRunning = false;
   }
+}
+
+void GameController::translatePolygons(const QList<Vector2d>& shiftVectors) {
+  PolygonList newPolygons;
+
+  auto it = _model->getPolygonList().cbegin();
+  unsigned int currIndex = 0;
+  for (; it != _model->getPolygonList().cend(); ++it) {
+    Polygon newPolygon(*it);
+    newPolygon.translate(shiftVectors.at(currIndex));
+    newPolygons << newPolygon;
+    ++currIndex;
+  }
+
+  _model->setPolygonList(newPolygons);
 }
 
 void GameController::replay(void) {
@@ -267,6 +293,21 @@ void GameController::clearGame(void) {
   _levelRunning = false;
 
   emit update();
+}
+
+Point2d GameController::computeGlobalBarycenter() const {
+  Point2d globalBarycenter;
+  unsigned int polygonCount = 0;
+
+  for (const Polygon& polygon: _model->getPolygonList()) {
+    globalBarycenter += polygon.barycenter();
+    ++polygonCount;
+  }
+
+  assert(polygonCount > 0);
+  globalBarycenter /= polygonCount;
+
+  return globalBarycenter;
 }
 
 void GameController::openLevel(const QString& fileName) {

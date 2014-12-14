@@ -20,5 +20,19 @@
         <file>resources/images/rule2Pack1.png</file>
         <file>resources/images/rule3Pack1.png</file>
         <file>resources/images/homeIn.png</file>
+        <file>resources/images/eraserOut.png</file>
+        <file>resources/images/line.png</file>
+        <file>resources/images/parts.png</file>
+        <file>resources/images/backToLevelsOut.png</file>
+        <file>resources/images/backToLevelsIn.png</file>
+        <file>resources/images/nextLevelIn.png</file>
+        <file>resources/images/nextLevelDisabled.png</file>
+        <file>resources/images/previousLevelDisabled.png</file>
+        <file>resources/images/previousLevelIn.png</file>
+        <file>resources/images/nextLevelOut.png</file>
+        <file>resources/images/previousLevelOut.png</file>
+        <file>resources/images/eraserIn.png</file>
+        <file>resources/images/refreshIn.png</file>
+        <file>resources/images/refreshOut.png</file>
     </qresource>
 </RCC>

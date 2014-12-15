@@ -156,7 +156,7 @@ void GameView::drawFromModel(void) {
 void GameView::drawText(const QPoint& position, const QString& text, const QColor &color) {
   QPainter painter(&_image);
   painter.setPen(QPen(color, _myPenWidth, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-  painter.setFont(QFont("", 25));
+  painter.setFont(QFont("", 12, 99));
   QFontMetrics fm = painter.fontMetrics();
   int leftShift = -fm.width(text)/2;
   int topShift = fm.height()/4;

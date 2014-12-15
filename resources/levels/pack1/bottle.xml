@@ -12,8 +12,8 @@
             <vertex x="220" y="50"/>
         </polygon>
     </polygons>
-    <linescount value="1"/>
-    <partscount value="2"/>
+    <linescount value="2"/>
+    <partscount value="4"/>
     <maxgaptowin value="10"/>
     <hints/>
 </level>

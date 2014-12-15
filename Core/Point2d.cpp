@@ -102,6 +102,10 @@ float Point2d::distance(const Point2d& point1, const Point2d& point2) {
       + std::pow(point2._coords[1] - point1._coords[1], 2));
 }
 
+Point2d Point2d::middle(const Point2d& point1, const Point2d& point2) {
+  return Point2d((point1.getX() + point2.getX())/2.0f, (point1.getY() + point2.getY())/2.0f);
+}
+
 std::ostream& operator<<(std::ostream& os, const Point2d& point) {
   return os << "(Point) (" << point._coords[0] << "; " << point._coords[1] << ")";
 }

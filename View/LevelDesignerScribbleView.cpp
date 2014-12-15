@@ -18,6 +18,8 @@ LevelDesignerScribbleView::LevelDesignerScribbleView(LevelDesignerController* co
   _nearToBarycenter(false),
   _movingVertex(false),
   _movingPolygon(false),
+  _lengthOn(false),
+  _angleOn(true),
   _currPolygonRow(-1),
   _currVertexRow(-1),
   _beforeMovingVertexX(-1),
@@ -69,6 +71,13 @@ LevelDesignerScribbleView::LevelDesignerScribbleView(LevelDesignerController* co
   _alignToGridAction->setShortcut(QKeySequence("CTRL+I"));
   addAction(_alignToGridAction);
   connect(_alignToGridAction, SIGNAL(triggered()), _controller, SLOT(alignToGrid()));
+
+  _onLengthAciont = new QAction("Toggle length visible", this);
+  _onLengthAciont->setShortcut(QKeySequence("CTRL+ALT+L"));
+  _onLengthAciont->setCheckable(true);
+  _onLengthAciont->setChecked(_lengthOn);
+  addAction(_onLengthAciont);
+  connect(_onLengthAciont, SIGNAL(toggled(bool)), this, SLOT(toggleLength(bool)));
 }
 
 void LevelDesignerScribbleView::setModel(LevelDesignerModel* model) {
@@ -313,8 +322,9 @@ void LevelDesignerScribbleView::drawLine(const QPoint& a, const QPoint& b, const
   painter.drawLine(a, b);
 }
 
-void LevelDesignerScribbleView::drawText(const QString& text, const QPoint& position) {
+void LevelDesignerScribbleView::drawText(const QString& text, const QPoint& position, int weight) {
   QPainter painter(&_image);
+  painter.setFont(QFont("", 12, weight));
   painter.drawText(position, text);
 }
 
@@ -363,9 +373,10 @@ void LevelDesignerScribbleView::drawPolygon(const QModelIndex& polygonIndex, con
     return;
   }
 
-  for (int i = 0; i < _model->rowCount(polygonIndex); i++) {
+  int vertexCount = _model->rowCount(polygonIndex);
+  for (int i = 0; i < vertexCount; i++) {
     QModelIndex vertexIndex1 = _model->index(i, 0, polygonIndex);
-    QModelIndex vertexIndex2 = _model->index((i+1)%(_model->rowCount(polygonIndex)), 0, polygonIndex);
+    QModelIndex vertexIndex2 = _model->index((i+1)%(vertexCount), 0, polygonIndex);
 
     Point2d fstVertex(_model->vertexFromIndex(vertexIndex1));
     Point2d sndVertex(_model->vertexFromIndex(vertexIndex2));
@@ -387,6 +398,13 @@ void LevelDesignerScribbleView::drawPolygon(const QModelIndex& polygonIndex, con
 
     drawPoint(a);
     drawLine(a, b, color);
+
+    if (vertexCount > 1 &&_lengthOn) {
+      QString length = QString::number(Point2d::distance(fstVertex, sndVertex));
+      Point2d middle = Point2d::middle(fstVertex, sndVertex);
+      QPoint lengthPos(middle.getX(), middle.getY());
+      drawText(length, lengthPos, 75);
+    }
   }
 
   if (polygonIndex.isValid() && _model->rowCount(polygonIndex) > 2) {
@@ -488,4 +506,9 @@ void LevelDesignerScribbleView::saveFile(void) {
 void LevelDesignerScribbleView::saveAsFile(void) {
   if (isVisible())
     _controller->saveAsFile(this);
+}
+
+void LevelDesignerScribbleView::toggleLength(bool b) {
+  _lengthOn = b;
+  drawFromModel();
 }

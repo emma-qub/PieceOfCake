@@ -44,6 +44,7 @@ public:
   friend bool operator>=(const Point2d& point1, const Point2d& point2);
 
   static float distance(const Point2d& point1, const Point2d& point2);
+  static Point2d middle(const Point2d& point1, const Point2d& point2);
 
   friend std::ostream& operator<<(std::ostream& os, const Point2d& point);
   friend QDebug operator<<(QDebug d, const Point2d& point);

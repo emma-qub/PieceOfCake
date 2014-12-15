@@ -21,6 +21,7 @@ public:
     Blue7 = 0x1C97E4,
     Blue8 = 0x1993DB,
     Blue9 = 0x1043A7,
+    Blue10 = 0x509CC2,
     Brown = 0x97824F,
     Gold = 0xC4B028,
     Gray1 = 0x434343,
@@ -73,7 +74,7 @@ protected:
 public slots:
   void drawPoint(const QPoint& point, const QColor& color = QColor(0x2B74CF));
   void drawLine(const QPoint& a, const QPoint& b, const QColor &color);
-  void drawText(const QString& text, const QPoint& position);
+  void drawText(const QString& text, const QPoint& position, int weight = 50);
   void drawGrid(void);
   void drawFromModel(const QModelIndex& vertexIndex = QModelIndex(), int value = -1);
   void drawPolygon(const QModelIndex& polygonIndex, const QModelIndex& vertexIndex, int value, const QColor& color = NOT_SELECTED_COLOR);
@@ -87,6 +88,7 @@ public slots:
   void openFile(void);
   void saveFile(void);
   void saveAsFile(void);
+  void toggleLength(bool);
 
 protected:
   LevelDesignerModel* _model;
@@ -104,6 +106,7 @@ protected:
   QAction* _redoAction;
   QAction* _addPolygonAction;
   QAction* _alignToGridAction;
+  QAction* _onLengthAciont;
 
   bool _isMagnetic;
   bool _isStuck;
@@ -111,6 +114,8 @@ protected:
   bool _nearToBarycenter;
   bool _movingVertex;
   bool _movingPolygon;
+  bool _lengthOn;
+  bool _angleOn;
   int _currPolygonRow;
   int _currVertexRow;
   int _beforeMovingVertexX;

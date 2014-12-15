@@ -34,5 +34,7 @@
         <file>resources/images/eraserIn.png</file>
         <file>resources/images/refreshIn.png</file>
         <file>resources/images/refreshOut.png</file>
+        <file>resources/images/emptyStar.png</file>
+        <file>resources/images/star.png</file>
     </qresource>
 </RCC>

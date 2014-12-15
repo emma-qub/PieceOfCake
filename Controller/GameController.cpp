@@ -254,8 +254,7 @@ void GameController::checkWinning(void) {
     if (_gameInfo->partsCut() != _gameInfo->partsCount() || gap > _maxGapToWin)
       emit levelEnd(orientedAreas);
     else {
-      // int rank = qCeil(gap / _maxGapToWin * 5);
-      //updateLevelStats(rank);
+      _gameInfo->setStars(6-qCeil(gap / _maxGapToWin * 5));
       emit levelEnd(orientedAreas);
     }
 
@@ -288,6 +287,8 @@ void GameController::clearGame(void) {
   _gameInfo->setLinesCount(0);
   _gameInfo->setPartsCut(0);
   _gameInfo->setPartsCount(0);
+  _gameInfo->setStars(0);
+  _gameInfo->setStarsMax(0);
   _orientedAreaTotal = 0.0;
   _maxGapToWin = 0.0;
   _levelRunning = false;
@@ -325,6 +326,7 @@ void GameController::openLevel(const QString& fileName) {
   _gameInfo->setLinesCount(parser.getLinesCount());
   _gameInfo->setPartsCut(_model->getPolygonsCount());
   _gameInfo->setPartsCount(parser.getPartsCount());
+  _gameInfo->setStarsMax(parser.getStarsCount());
   _maxGapToWin = parser.getMaxGapToWin();
 
   for (const Polygon& polygon: _model->getPolygonList()) {

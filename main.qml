@@ -637,7 +637,6 @@ Rectangle {
         y: 50
         width: 300
         wrapMode: Text.Wrap
-        font.family: arial
         font.pixelSize: 24
         font.bold: true
         color:"#333333"
@@ -662,12 +661,83 @@ Rectangle {
         y: 100
         width: 300
         wrapMode: Text.Wrap
-        font.family: arial
         font.pixelSize: 24
         font.bold: true
         color:"#333333"
         text: gameInfo.partsCut.toString() + "/" + gameInfo.partsCount.toString()
       }
+    }
+
+    Rectangle {
+      id: starsRectangle
+      x: 650
+      y: 300
+      width: 375
+      height: 150
+
+      Text {
+        id: starsText
+        text: qsTr("Awards")
+        font.family: homeFont.name
+        font.bold: true
+        font.pixelSize: 24
+        color:"#333333"
+      }
+
+      Row {
+        x: 80
+        y: 50
+        Repeater {
+          model: gameInfo.stars < 6 ? gameInfo.stars : 5
+
+          Image {
+            id: lastStarsImage
+            source: "resources/images/star.png"
+          }
+        }
+        Repeater {
+          model: gameInfo.stars > -1 ? 5 - gameInfo.stars : 5
+
+          Image {
+            id: lastStarsEmptyImage
+            source: "resources/images/emptyStar.png"
+          }
+        }
+      }
+
+      Text {
+        id: lastStarsText
+        x: 10
+        y: 50
+        text: qsTr("Current:")
+        font.family: homeFont.name
+        font.bold: true
+        font.pixelSize: 18
+        color:"#333333"
+      }
+
+//      Image {
+      Text {
+        id: bestStarsImage
+        x: 90
+        y: 100
+        width: 40
+        height: 40
+        text: gameInfo.starsMax
+//        source: "resources/images/parts.png"
+      }
+
+      Text {
+        id: bestStarsText
+        x: 35
+        y: 90
+        text: qsTr("Best:")
+        font.family: homeFont.name
+        font.bold: true
+        font.pixelSize: 18
+        color:"#333333"
+      }
+
     }
 
     Rectangle {

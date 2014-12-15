@@ -4,7 +4,9 @@ GameInfo::GameInfo(void):
   _linesDrawn(-1),
   _linesCount(-1),
   _partsCut(-1),
-  _partsCount(-1) {
+  _partsCount(-1),
+  _stars(-1),
+  _starsMax(-1) {
 }
 
 int GameInfo::linesDrawn(void) const {
@@ -21,6 +23,14 @@ int GameInfo::partsCut(void) const {
 
 int GameInfo::partsCount(void) const {
   return _partsCount;
+}
+
+int GameInfo::stars(void) const {
+  return _stars;
+}
+
+int GameInfo::starsMax(void) const {
+  return _starsMax;
 }
 
 void GameInfo::setLinesDrawn(int value) {
@@ -48,5 +58,22 @@ void GameInfo::setPartsCount(int value) {
   if (value != _partsCount) {
     _partsCount = value;
     emit partsCountChanged();
+  }
+}
+
+void GameInfo::setStars(int value) {
+  if (value != _stars) {
+    _stars = value;
+    emit starsChanged();
+  }
+
+  if (_stars > _starsMax)
+    setStarsMax(_stars);
+}
+
+void GameInfo::setStarsMax(int value) {
+  if (value != _starsMax) {
+    _starsMax = value;
+    emit starsMaxChanged();
   }
 }

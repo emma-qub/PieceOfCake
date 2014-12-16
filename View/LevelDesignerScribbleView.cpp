@@ -58,9 +58,11 @@ LevelDesignerScribbleView::LevelDesignerScribbleView(LevelDesignerController* co
 
   _undoAction = _undoStack->createUndoAction(this, "&Undo");
   _undoAction->setShortcut(QKeySequence::Undo);
+  addAction(_undoAction);
 
   _redoAction = _undoStack->createRedoAction(this, "&Redo");
   _redoAction->setShortcut(QKeySequence::Redo);
+  addAction(_redoAction);
 
   _addPolygonAction = new QAction("&New Polygon", this);
   _addPolygonAction->setShortcut(QKeySequence("CTRL+SHIFT+N"));

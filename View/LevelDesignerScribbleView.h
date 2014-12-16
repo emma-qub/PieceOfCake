@@ -89,6 +89,7 @@ public slots:
   void saveFile(void);
   void saveAsFile(void);
   void toggleLength(bool);
+  void toggleAngle(bool);
 
 protected:
   LevelDesignerModel* _model;
@@ -106,7 +107,8 @@ protected:
   QAction* _redoAction;
   QAction* _addPolygonAction;
   QAction* _alignToGridAction;
-  QAction* _onLengthAciont;
+  QAction* _onLengthAction;
+  QAction* _onAngleAction;
 
   bool _isMagnetic;
   bool _isStuck;

@@ -13,4 +13,5 @@
   <level stars="0" id="9" image="resources/levels/pack1/lo.png" name="resources/levels/pack1/lo.xml"/>
   <level stars="0" id="10" image="resources/levels/pack1/share.png" name="resources/levels/pack1/share.xml"/>
   <level stars="0" id="11" image="resources/levels/pack1/bottle.png" name="resources/levels/pack1/bottle.xml"/>
+  <level stars="0" id="12" image="resources/levels/pack1/triangle3.png" name="resources/levels/pack1/triangle3.xml"/>
 </levels>

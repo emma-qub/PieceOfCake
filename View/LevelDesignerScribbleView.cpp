@@ -19,7 +19,7 @@ LevelDesignerScribbleView::LevelDesignerScribbleView(LevelDesignerController* co
   _movingVertex(false),
   _movingPolygon(false),
   _lengthOn(false),
-  _angleOn(true),
+  _angleOn(false),
   _currPolygonRow(-1),
   _currVertexRow(-1),
   _beforeMovingVertexX(-1),
@@ -72,12 +72,19 @@ LevelDesignerScribbleView::LevelDesignerScribbleView(LevelDesignerController* co
   addAction(_alignToGridAction);
   connect(_alignToGridAction, SIGNAL(triggered()), _controller, SLOT(alignToGrid()));
 
-  _onLengthAciont = new QAction("Toggle length visible", this);
-  _onLengthAciont->setShortcut(QKeySequence("CTRL+ALT+L"));
-  _onLengthAciont->setCheckable(true);
-  _onLengthAciont->setChecked(_lengthOn);
-  addAction(_onLengthAciont);
-  connect(_onLengthAciont, SIGNAL(toggled(bool)), this, SLOT(toggleLength(bool)));
+  _onLengthAction = new QAction("Toggle length visible", this);
+  _onLengthAction->setShortcut(QKeySequence("CTRL+SHIFT+ALT+L"));
+  _onLengthAction->setCheckable(true);
+  _onLengthAction->setChecked(_lengthOn);
+  addAction(_onLengthAction);
+  connect(_onLengthAction, SIGNAL(toggled(bool)), this, SLOT(toggleLength(bool)));
+
+  _onAngleAction = new QAction("Toggle angle visible", this);
+  _onAngleAction->setShortcut(QKeySequence("CTRL+SHIFT+ALT+A"));
+  _onAngleAction->setCheckable(true);
+  _onAngleAction->setChecked(_angleOn);
+  addAction(_onAngleAction);
+  connect(_onAngleAction, SIGNAL(toggled(bool)), this, SLOT(toggleAngle(bool)));
 }
 
 void LevelDesignerScribbleView::setModel(LevelDesignerModel* model) {
@@ -399,11 +406,27 @@ void LevelDesignerScribbleView::drawPolygon(const QModelIndex& polygonIndex, con
     drawPoint(a);
     drawLine(a, b, color);
 
-    if (vertexCount > 1 &&_lengthOn) {
-      QString length = QString::number(Point2d::distance(fstVertex, sndVertex));
+    if (_lengthOn && vertexCount > 1) {
+      QString length = QString::number(Point2d::distance(fstVertex, sndVertex), 'g', 4);
       Point2d middle = Point2d::middle(fstVertex, sndVertex);
       QPoint lengthPos(middle.getX(), middle.getY());
       drawText(length, lengthPos, 75);
+    }
+
+    if (_angleOn && vertexCount > 2) {
+      int prevIndex = (i-1)%(vertexCount);
+      if (prevIndex < 0)
+        prevIndex += vertexCount;
+
+      Point2d prevVertex = _model->vertexFromIndex(_model->index(prevIndex, 0, polygonIndex));
+      Vector2d AB(fstVertex, prevVertex);
+      Vector2d AC(fstVertex, sndVertex);
+      QString angle = QString::number(std::abs((Vector2d::angle(Vector2d(fstVertex, prevVertex), Vector2d(fstVertex, sndVertex))) * 180 / M_PI), 'g', 4);
+
+      Vector2d AD = (AB.normalized() + AC.normalized()) * 20.f;
+      Point2d D = fstVertex.applyVector(AD);
+
+      drawText(angle, QPoint(D.getX(), D.getY()), 75);
     }
   }
 
@@ -510,5 +533,10 @@ void LevelDesignerScribbleView::saveAsFile(void) {
 
 void LevelDesignerScribbleView::toggleLength(bool b) {
   _lengthOn = b;
+  drawFromModel();
+}
+
+void LevelDesignerScribbleView::toggleAngle(bool b) {
+  _angleOn = b;
   drawFromModel();
 }

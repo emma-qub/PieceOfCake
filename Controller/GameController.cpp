@@ -254,11 +254,72 @@ void GameController::checkWinning(void) {
     if (_gameInfo->partsCut() != _gameInfo->partsCount() || gap > _maxGapToWin)
       emit levelEnd(orientedAreas);
     else {
-      _gameInfo->setStars(6-qCeil(gap / _maxGapToWin * 5));
+      int starsMaxCount = 6-qCeil(gap / _maxGapToWin * 5);
+      updateStarsMax(starsMaxCount);
+      _gameInfo->setStars(starsMaxCount);
       emit levelEnd(orientedAreas);
     }
 
     _levelRunning = false;
+  }
+}
+
+void GameController::updateStarsMax(int starsMaxCount) {
+  ParserXML parser(_fileName);
+  int currentStarsCount = parser.getStarsCount();
+
+  if (currentStarsCount < starsMaxCount) {
+    parser.setStarsCount(starsMaxCount);
+    parser.writeXML();
+
+    QString levelName = "resources/levels/"+_fileName.split("resources/levels/").last();
+    QStringList levelPackPath = levelName.split("/");
+    levelPackPath.removeLast();
+    QString levelsFileName = "../PieceOfCake/"+levelPackPath.join("/")+"/levels.xml";
+
+    QFile XMLDoc(levelsFileName);
+    if (!XMLDoc.exists()) {
+      qDebug() << "Error:" << levelsFileName << "file not found";
+      return;
+    }
+
+    if(!XMLDoc.open(QIODevice::ReadOnly | QIODevice::Text)) {
+      qDebug() << "Cannot open XML file in GameController::updateStarsMax(int starsMaxCount)";
+      return;
+    }
+
+    QDomDocument doc("PieceOfCakeLevelsML");
+    if(!doc.setContent(&XMLDoc)) {
+      XMLDoc.close();
+      qDebug() << "Cannot set content of dom in GameController::updateStarsMax(int starsMaxCount)";
+      return;
+    }
+
+    XMLDoc.close();
+
+    QDomElement root = doc.firstChildElement("levels");
+
+    QDomNodeList levelList = root.elementsByTagName("level");
+    for (int k = 0; k < levelList.size(); ++k) {
+      QDomElement level = levelList.at(k).toElement();
+      QDomElement newLevel = level;
+      if (level.attribute("name") == levelName) {
+        newLevel.setAttribute("stars", starsMaxCount);
+        root.removeChild(level);
+        root.appendChild(newLevel);
+      }
+    }
+
+    if(!XMLDoc.open(QIODevice::WriteOnly | QIODevice::Text)) {
+      qDebug() << "Cannot open XML file in LevelDesignerController::saveLevel(const QString& fileName)";
+      return;
+    }
+
+    QTextStream inFile(&XMLDoc);
+    inFile << doc.toString(2);
+
+    XMLDoc.close();
+
   }
 }
 
@@ -326,7 +387,6 @@ void GameController::openLevel(const QString& fileName) {
   _gameInfo->setLinesCount(parser.getLinesCount());
   _gameInfo->setPartsCut(_model->getPolygonsCount());
   _gameInfo->setPartsCount(parser.getPartsCount());
-  std::cerr << "## " << parser.getStarsCount() << std::endl;
   _gameInfo->setStarsMax(parser.getStarsCount());
   _maxGapToWin = parser.getMaxGapToWin();
 

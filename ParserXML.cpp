@@ -339,8 +339,6 @@ void ParserXML::writeXML(int indent) {
     return;
   }
 
-  std::cerr << "##### " << getStarsCount() << std::endl;
-
   QTextStream inFile(&XMLDoc);
   inFile << _doc.toString(indent);
 

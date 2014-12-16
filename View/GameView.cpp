@@ -12,7 +12,7 @@ GameView::GameView(GameController* controller, QWidget* parent):
   _controller(controller) {
 
   _mousePositionLabel = new QLabel(this);
-  _mousePositionLabel->setFixedSize(300, 50);
+  _mousePositionLabel->setFixedSize(60, 50);
 
   resize(401, 401);
 

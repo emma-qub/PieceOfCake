@@ -83,9 +83,9 @@ function starsToString(stars) {
   else
     starsStr += "<font color='#AAA'>"
   for (k = 0; k < 5; k += 1) {
-    starsStr += "*";
     if (k === parseInt(stars) && k > 0)
       starsStr += "</font></b><font color='#AAA'>";
+    starsStr += "*";
   }
   starsStr += "</font>";
   return starsStr;

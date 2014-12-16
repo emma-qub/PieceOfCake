@@ -716,15 +716,25 @@ Rectangle {
         color:"#333333"
       }
 
-//      Image {
-      Text {
-        id: bestStarsImage
-        x: 90
-        y: 100
-        width: 40
-        height: 40
-        text: gameInfo.starsMax
-//        source: "resources/images/parts.png"
+      Row {
+        x: 80
+        y: 90
+        Repeater {
+          model: gameInfo.starsMax < 6 ? gameInfo.starsMax : 5
+
+          Image {
+            id: lastStarsMaxImage
+            source: "resources/images/star.png"
+          }
+        }
+        Repeater {
+          model: gameInfo.starsMax > -1 ? 5 - gameInfo.starsMax : 5
+
+          Image {
+            id: lastStarsEmptyMaxImage
+            source: "resources/images/emptyStar.png"
+          }
+        }
       }
 
       Text {
@@ -834,7 +844,7 @@ Rectangle {
     query: "/levels/level"
 
     XmlRole { name: "id"; query: "@id/number()" }
-    XmlRole { name: "stars"; query: "@stars/string()" }
+    XmlRole { name: "stars"; query: "@stars/number()" }
     XmlRole { name: "image"; query: "@image/string()" }
     XmlRole { name: "name"; query: "@name/string()" }
   }

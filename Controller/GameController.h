@@ -44,6 +44,7 @@ public:
 
   LineType computeLineType(const Segment& line) const;
   void checkWinning(void);
+  void updateStarsMax(int starsMaxCount);
   void translatePolygons(const QList<Vector2d>& shiftVectors);
   void clearGame(void);
 

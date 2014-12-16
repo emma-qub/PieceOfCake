@@ -2,18 +2,18 @@
 <level>
     <polygons>
         <polygon id="0">
-            <vertex y="100" x="100"/>
-            <vertex y="100" x="300"/>
-            <vertex y="150" x="350"/>
-            <vertex y="150" x="150"/>
-            <vertex y="350" x="150"/>
-            <vertex y="300" x="100"/>
+            <vertex x="100" y="100"/>
+            <vertex x="300" y="100"/>
+            <vertex x="350" y="150"/>
+            <vertex x="150" y="150"/>
+            <vertex x="150" y="350"/>
+            <vertex x="100" y="300"/>
         </polygon>
         <polygon id="1">
-            <vertex y="200" x="200"/>
-            <vertex y="200" x="300"/>
-            <vertex y="300" x="300"/>
-            <vertex y="300" x="200"/>
+            <vertex x="200" y="200"/>
+            <vertex x="300" y="200"/>
+            <vertex x="300" y="300"/>
+            <vertex x="200" y="300"/>
         </polygon>
     </polygons>
     <linescount value="2"/>

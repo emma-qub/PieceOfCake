@@ -23,6 +23,8 @@ ParserXML::ParserXML(void):
 
   root.appendChild(_doc.createElement("maxgaptowin"));
 
+  root.appendChild(_doc.createElement("starscount"));
+
   _hints = _doc.createElement("hints");
   root.appendChild(_hints);
 }
@@ -336,6 +338,8 @@ void ParserXML::writeXML(int indent) {
     qDebug() << "Cannot open XML file in ParserXML::writeXML";
     return;
   }
+
+  std::cerr << "##### " << getStarsCount() << std::endl;
 
   QTextStream inFile(&XMLDoc);
   inFile << _doc.toString(indent);

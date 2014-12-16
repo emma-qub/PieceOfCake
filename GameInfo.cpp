@@ -67,8 +67,10 @@ void GameInfo::setStars(int value) {
     emit starsChanged();
   }
 
-  if (_stars > _starsMax)
+  if (_stars > _starsMax) {
     setStarsMax(_stars);
+    emit starsMaxChanged();
+  }
 }
 
 void GameInfo::setStarsMax(int value) {

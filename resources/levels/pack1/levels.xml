@@ -1,17 +1,17 @@
 <!DOCTYPE PieceOfCakeLevelsML>
 <levels>
   <title>Cut Polygons</title>
-  <level stars="1" id="0" name="resources/levels/pack1/square.xml" image="resources/levels/pack1/square.png"/>
-  <level stars="2" id="1" name="resources/levels/pack1/square2.xml" image="resources/levels/pack1/square2.png"/>
-  <level stars="5" id="2" name="resources/levels/pack1/podium.xml" image="resources/levels/pack1/podium.png"/>
-  <level stars="3" id="3" name="resources/levels/pack1/fourSquares.xml" image="resources/levels/pack1/fourSquares.png"/>
-  <level stars="0" id="4" name="resources/levels/pack1/fiveSquares.xml" image="resources/levels/pack1/fiveSquares.png"/>
-  <level stars="0" id="5" name="resources/levels/pack1/triangle.xml" image="resources/levels/pack1/triangle.png"/>
-  <level stars="0" id="6" name="resources/levels/pack1/triangle2.xml" image="resources/levels/pack1/triangle2.png"/>
-  <level stars="0" id="7" name="resources/levels/pack1/hard.xml" image="resources/levels/pack1/hard.png"/>
-  <level stars="0" id="8" name="resources/levels/pack1/rss.xml" image="resources/levels/pack1/rss.png"/>
-  <level stars="0" id="9" name="resources/levels/pack1/lo.xml" image="resources/levels/pack1/lo.png"/>
-  <level stars="0" id="10" name="resources/levels/pack1/share.xml" image="resources/levels/pack1/share.png"/>
-  <level stars="0" id="11" name="resources/levels/pack1/bottle.xml" image="resources/levels/pack1/bottle.png"/>
-  <level stars="0" id="12" name="resources/levels/pack1/triangle3.xml" image="resources/levels/pack1/triangle3.png"/>
+  <level image="resources/levels/pack1/square.png" stars="0" id="0" name="resources/levels/pack1/square.xml"/>
+  <level image="resources/levels/pack1/square2.png" stars="0" id="1" name="resources/levels/pack1/square2.xml"/>
+  <level image="resources/levels/pack1/podium.png" stars="0" id="2" name="resources/levels/pack1/podium.xml"/>
+  <level image="resources/levels/pack1/fourSquares.png" stars="0" id="3" name="resources/levels/pack1/fourSquares.xml"/>
+  <level image="resources/levels/pack1/fiveSquares.png" stars="0" id="4" name="resources/levels/pack1/fiveSquares.xml"/>
+  <level image="resources/levels/pack1/triangle.png" stars="0" id="5" name="resources/levels/pack1/triangle.xml"/>
+  <level image="resources/levels/pack1/triangle2.png" stars="0" id="6" name="resources/levels/pack1/triangle2.xml"/>
+  <level image="resources/levels/pack1/hard.png" stars="0" id="7" name="resources/levels/pack1/hard.xml"/>
+  <level image="resources/levels/pack1/rss.png" stars="0" id="8" name="resources/levels/pack1/rss.xml"/>
+  <level image="resources/levels/pack1/lo.png" stars="0" id="9" name="resources/levels/pack1/lo.xml"/>
+  <level image="resources/levels/pack1/share.png" stars="0" id="10" name="resources/levels/pack1/share.xml"/>
+  <level image="resources/levels/pack1/bottle.png" stars="0" id="11" name="resources/levels/pack1/bottle.xml"/>
+  <level image="resources/levels/pack1/triangle3.png" stars="0" id="12" name="resources/levels/pack1/triangle3.xml"/>
 </levels>

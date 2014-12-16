@@ -326,6 +326,7 @@ void GameController::openLevel(const QString& fileName) {
   _gameInfo->setLinesCount(parser.getLinesCount());
   _gameInfo->setPartsCut(_model->getPolygonsCount());
   _gameInfo->setPartsCount(parser.getPartsCount());
+  std::cerr << "## " << parser.getStarsCount() << std::endl;
   _gameInfo->setStarsMax(parser.getStarsCount());
   _maxGapToWin = parser.getMaxGapToWin();
 

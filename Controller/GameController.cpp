@@ -300,15 +300,14 @@ void GameController::updateStarsMax(int starsMaxCount) {
     QDomElement root = doc.firstChildElement("levels");
 
     QDomNodeList levelList = root.elementsByTagName("level");
-    for (int k = 0; k < levelList.size(); ++k) {
-      QDomElement level = levelList.at(k).toElement();
-      QDomElement newLevel = level;
-      if (level.attribute("name") == levelName) {
-        newLevel.setAttribute("stars", starsMaxCount);
-        root.removeChild(level);
-        root.appendChild(newLevel);
+    int k = 0;
+    for (; k < levelList.size(); ++k) {
+      if (levelList.at(k).toElement().attribute("name") == levelName) {
+        break;
       }
     }
+
+    doc.elementsByTagName("level").at(k).toElement().setAttribute("stars", starsMaxCount);
 
     if(!XMLDoc.open(QIODevice::WriteOnly | QIODevice::Text)) {
       qDebug() << "Cannot open XML file in LevelDesignerController::saveLevel(const QString& fileName)";

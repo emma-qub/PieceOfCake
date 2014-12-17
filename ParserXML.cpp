@@ -29,7 +29,7 @@ ParserXML::ParserXML(void):
   root.appendChild(_hints);
 }
 
-ParserXML::ParserXML(QString xmlFileName):
+ParserXML::ParserXML(const QString& xmlFileName):
   _xmlFileName(xmlFileName),
   _doc(QDomDocument("PieceOfCakeML")) {
 

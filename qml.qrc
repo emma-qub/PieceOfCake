@@ -36,5 +36,6 @@
         <file>resources/images/refreshOut.png</file>
         <file>resources/images/emptyStar.png</file>
         <file>resources/images/star.png</file>
+        <file>createLevelSteps.js</file>
     </qresource>
 </RCC>

@@ -4,6 +4,7 @@ import QtQuick.Controls 1.1
 import QtQuick.XmlListModel 2.0
 
 import "selectLevel.js" as SelectJS
+import "createLevelSteps.js" as StepJS
 import gameinfo 1.0
 
 Rectangle {
@@ -290,6 +291,26 @@ Rectangle {
               anchors.verticalCenter: parent.verticalCenter
             }
           }
+
+          Rectangle {
+            id: perfectRectangle
+            width: 20
+            height: 20
+            x: 50
+            y: -10
+            radius: 10
+            border.width: 2
+            border.color: "#FC0"
+            visible: stars === 6
+            Text {
+              id: perfectText
+              text: qsTr("P")
+              color: "#FC0"
+              font.bold: true
+              anchors.horizontalCenter: parent.horizontalCenter
+              anchors.verticalCenter: parent.verticalCenter
+            }
+          }
         }
 
         Text {
@@ -476,6 +497,83 @@ Rectangle {
     }
 
     Rectangle {
+      id: createLevelStepsRectangle
+      width: 350
+      height: 100
+      x: 200
+      y: 100
+
+      Rectangle {
+        id: step1Rectangle
+        width: 10
+        height: 10
+        radius: 5
+        x: 20
+        y: 10
+        color: "steelblue"
+        Text {
+          id: step1Text
+          text: qsTr("Create")
+          color: "steelblue"
+          x: -20
+          y: 10
+        }
+      }
+
+      Rectangle {
+        id: step1Step2Rectangle
+        width: 140
+        height: 2
+        x: 30
+        y: 14
+        color:"lightgrey"
+      }
+
+      Rectangle {
+        id: step2Rectangle
+        width: 10
+        height: 10
+        radius: 5
+        x: 170
+        y: 10
+        color: "lightgrey"
+        Text {
+          id: step2Text
+          text: qsTr("Solve")
+          color:"lightgrey"
+          x: -15
+          y: 10
+        }
+      }
+
+      Rectangle {
+        id: step2Step3Rectangle
+        width: 140
+        height: 2
+        x: 180
+        y: 14
+        color:"lightgrey"
+      }
+
+      Rectangle {
+        id: step3Rectangle
+        width: 10
+        height: 10
+        radius: 5
+        x: 320
+        y: 10
+        color: "lightgrey"
+        Text {
+          id: step3Text
+          text: qsTr("Save")
+          color: "lightgrey"
+          x: -10
+          y: 10
+        }
+      }
+    }
+
+    Rectangle {
       id: homeCreateLevelRectangle
       width: 350
       height: 50
@@ -499,6 +597,49 @@ Rectangle {
           height: 40
           width: 40
           source: homeCreateLevelArea.containsMouse ? "resources/images/homeIn.png" : "resources/images/homeOut.png"
+        }
+      }
+
+      MouseArea {
+        id: nextStepMouseArea
+        width: 40
+        height: 40
+        hoverEnabled: true
+        acceptedButtons: Qt.LeftButton
+        anchors.right: parent.right
+        anchors.verticalCenter: parent.verticalCenter
+        onClicked: {
+          StepJS.incrementStep()
+        }
+
+        Text {
+          id: nextText
+          anchors.verticalCenter: parent.verticalCenter
+          color: nextStepMouseArea.containsMouse ? "#70a0d0" : "black"
+          font.bold: true
+          text: "Next"
+        }
+      }
+
+      MouseArea {
+        id: backStepMouseArea
+        width: 0
+        height: 0
+        hoverEnabled: true
+        acceptedButtons: Qt.LeftButton
+        anchors.left: parent.left
+        anchors.verticalCenter: parent.verticalCenter
+        onClicked: {
+          StepJS.decrementStep()
+        }
+
+        Text {
+          id: backText
+          anchors.verticalCenter: parent.verticalCenter
+          color: backStepMouseArea.containsMouse ? "#70a0d0" : "black"
+          font.bold: true
+          text: "Back"
+          visible: false
         }
       }
     }
@@ -706,6 +847,26 @@ Rectangle {
         }
       }
 
+      Rectangle {
+        id: perfectStarsRectangle
+        width: 30
+        height: 30
+        x: 240
+        y: 50
+        radius: 15
+        border.width: 2
+        border.color: "#FC0"
+        visible: gameInfo.stars === 6
+        Text {
+          id: perfectStarsText
+          text: qsTr("P")
+          color: "#FC0"
+          font.bold: true
+          anchors.horizontalCenter: parent.horizontalCenter
+          anchors.verticalCenter: parent.verticalCenter
+        }
+      }
+
       Text {
         id: lastStarsText
         x: 10
@@ -735,6 +896,26 @@ Rectangle {
             id: lastStarsEmptyMaxImage
             source: "resources/images/emptyStar.png"
           }
+        }
+      }
+
+      Rectangle {
+        id: perfectStarsMaxRectangle
+        width: 30
+        height: 30
+        x: 240
+        y: 90
+        radius: 15
+        border.width: 2
+        border.color: "#FC0"
+        visible: gameInfo.starsMax === 6
+        Text {
+          id: perfectStarsMaxText
+          text: qsTr("P")
+          color: "#FC0"
+          font.bold: true
+          anchors.horizontalCenter: parent.horizontalCenter
+          anchors.verticalCenter: parent.verticalCenter
         }
       }
 

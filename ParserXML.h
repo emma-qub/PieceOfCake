@@ -14,7 +14,7 @@ typedef QList<Hint> HintList;
 class ParserXML {
 public:
   ParserXML(void);
-  ParserXML(QString xmlFileName);
+  ParserXML(const QString& xmlFileName);
   ParserXML(const ParserXML& parserXML);
   virtual ~ParserXML(void);
 

@@ -548,6 +548,7 @@ Rectangle {
         anchors.verticalCenter: parent.verticalCenter
         onClicked: {
           SelectJS.setSelectedLevel(-1)
+          levelsModel.reload()
           stackView.replace(selectLevelItem)
           backToLevelsRequested()
         }

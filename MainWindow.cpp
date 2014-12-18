@@ -96,6 +96,8 @@ void MainWindow::initLevelDesigner(void) {
 
   _levelDesignerController = new LevelDesignerController(_levelDesignerModel, _levelDesignerUndoStack);
 
+  _homeWidget->rootContext()->setContextProperty("levelInfo", _levelDesignerController->getLevelInfo());
+
   _levelDesignerTreeView = new LevelDesignerTreeView(_levelDesignerController, this);
   _levelDesignerTreeView->setModel(_levelDesignerModel);
   _levelDesignerTreeView->move(650, 100);

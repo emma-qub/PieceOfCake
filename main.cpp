@@ -6,6 +6,7 @@
 #include "LevelDesignerModel.h"
 #include "LevelDesignerScribbleView.h"
 #include "GameInfo.h"
+#include "LevelInfo.h"
 
 #include <QtQml>
 
@@ -85,6 +86,7 @@ int main(int argc, char** argv) {
 //  QFontDatabase::addApplicationFont("../PieceOfCake/fonts/watermark.ttf");
 
   qmlRegisterType<GameInfo>("gameinfo", 1, 0, "GameInfo");
+  qmlRegisterType<LevelInfo>("levelinfo", 1, 0, "LevelInfo");
 
   MainWindow window;
   window.show();

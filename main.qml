@@ -6,6 +6,7 @@ import QtQuick.XmlListModel 2.0
 import "selectLevel.js" as SelectJS
 import "createLevelSteps.js" as StepJS
 import gameinfo 1.0
+import levelinfo 1.0
 
 Rectangle {
   id: homePage
@@ -608,6 +609,7 @@ Rectangle {
         acceptedButtons: Qt.LeftButton
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
+        enabled: levelInfo.levelReady
         onClicked: {
           StepJS.incrementStep()
         }
@@ -615,7 +617,7 @@ Rectangle {
         Text {
           id: nextText
           anchors.verticalCenter: parent.verticalCenter
-          color: nextStepMouseArea.containsMouse ? "#70a0d0" : "black"
+          color: nextStepMouseArea.enabled ? (nextStepMouseArea.containsMouse ? "#70a0d0" : "black") : "lightgrey"
           font.bold: true
           text: "Next"
         }

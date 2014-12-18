@@ -40,7 +40,8 @@ HEADERS += \
   ParserXML.h \
   tests.h \
     ThumbnailCreator.h \
-    GameInfo.h
+    GameInfo.h \
+    LevelInfo.h
 
 SOURCES += \
   # Controller
@@ -80,7 +81,8 @@ SOURCES += \
   ParserXML.cpp \
   main.cpp \
     ThumbnailCreator.cpp \
-    GameInfo.cpp
+    GameInfo.cpp \
+    LevelInfo.cpp
 
 INCLUDEPATH += \
   Controller \

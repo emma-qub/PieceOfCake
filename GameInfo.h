@@ -13,7 +13,7 @@ class GameInfo: public QObject {
   Q_PROPERTY(int starsMax READ starsMax WRITE setStarsMax NOTIFY starsMaxChanged)
 
 public:
-  GameInfo(void);
+  GameInfo(QObject* parent = nullptr);
 
   int linesDrawn(void) const;
   int linesCount(void) const;

@@ -1,6 +1,7 @@
 #include "GameInfo.h"
 
-GameInfo::GameInfo(void):
+GameInfo::GameInfo(QObject* parent):
+  QObject(parent),
   _linesDrawn(-1),
   _linesCount(-1),
   _partsCut(-1),

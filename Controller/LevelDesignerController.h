@@ -4,6 +4,7 @@
 #include "AbstractController.h"
 #include "LevelDesignerModel.h"
 #include "Commands.h"
+#include "LevelInfo.h"
 
 #include <QPoint>
 
@@ -12,6 +13,9 @@ class LevelDesignerController: public AbstractController {
 
 public:
   LevelDesignerController(LevelDesignerModel* model, QUndoStack* undoStack, QObject* parent = 0);
+  virtual ~LevelDesignerController(void);
+
+  LevelInfo* getLevelInfo(void) const;
 
   void initPolygon(void);
 
@@ -45,6 +49,9 @@ signals:
 
 protected:
   LevelDesignerModel* _model;
+
+private:
+  LevelInfo* _levelInfo;
 };
 
 #endif // POLYGONCONTROLLER_H

@@ -34,6 +34,10 @@ int GameInfo::starsMax(void) const {
   return _starsMax;
 }
 
+QString GameInfo::evaluation(void) const {
+  return _evaluation;
+}
+
 void GameInfo::setLinesDrawn(int value) {
   if (value != _linesDrawn) {
     _linesDrawn = value;
@@ -70,13 +74,30 @@ void GameInfo::setStars(int value) {
 
   if (_stars > _starsMax) {
     setStarsMax(_stars);
-    emit starsMaxChanged();
   }
+
+  if (value == -1)
+    setEvaluation("");
+  else if (value == 0)
+    setEvaluation("FAILED");
+  else if (0 < value && value <= 4)
+    setEvaluation("CLEAR");
+  else if (value == 5)
+    setEvaluation("GREAT");
+  else if (value == 6)
+    setEvaluation("PERFECT!");
 }
 
 void GameInfo::setStarsMax(int value) {
   if (value != _starsMax) {
     _starsMax = value;
     emit starsMaxChanged();
+  }
+}
+
+void GameInfo::setEvaluation(const QString& value) {
+  if (value != _evaluation) {
+    _evaluation = value;
+    emit evaluationChanged();
   }
 }

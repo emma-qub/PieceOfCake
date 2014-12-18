@@ -815,9 +815,9 @@ Rectangle {
     Rectangle {
       id: starsRectangle
       x: 650
-      y: 300
+      y: 350
       width: 375
-      height: 150
+      height: 300
 
       Text {
         id: starsText
@@ -828,9 +828,36 @@ Rectangle {
         color:"#333333"
       }
 
+      Rectangle {
+        id: evaluationRectangle
+        x: 10
+        y: 50
+        width: 200
+        height: 30
+
+        Text {
+          id: evaluationTitleText
+          font.family: homeFont.name
+          text: qsTr("Evaluation:")
+          font.bold: true
+          font.pixelSize: 18
+          color: "#333"
+        }
+
+        Text {
+          x: 100
+          y: 0
+          id: evaluationValueText
+          text: gameInfo.evaluation
+          font.bold: true
+          color: gameInfo.stars < 1 ? "#333" : "#FC0"
+          font.pixelSize: 24
+        }
+      }
+
       Row {
         x: 80
-        y: 50
+        y: 90
         Repeater {
           model: gameInfo.stars < 6 ? gameInfo.stars : 5
 
@@ -854,7 +881,7 @@ Rectangle {
         width: 30
         height: 30
         x: 240
-        y: 50
+        y: 90
         radius: 15
         border.width: 2
         border.color: "#FC0"
@@ -872,7 +899,7 @@ Rectangle {
       Text {
         id: lastStarsText
         x: 10
-        y: 50
+        y: 90
         text: qsTr("Current:")
         font.family: homeFont.name
         font.bold: true
@@ -882,7 +909,7 @@ Rectangle {
 
       Row {
         x: 80
-        y: 90
+        y: 130
         Repeater {
           model: gameInfo.starsMax < 6 ? gameInfo.starsMax : 5
 
@@ -906,7 +933,7 @@ Rectangle {
         width: 30
         height: 30
         x: 240
-        y: 90
+        y: 130
         radius: 15
         border.width: 2
         border.color: "#FC0"
@@ -924,7 +951,7 @@ Rectangle {
       Text {
         id: bestStarsText
         x: 35
-        y: 90
+        y: 130
         text: qsTr("Best:")
         font.family: homeFont.name
         font.bold: true

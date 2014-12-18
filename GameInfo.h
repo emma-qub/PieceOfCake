@@ -11,6 +11,7 @@ class GameInfo: public QObject {
   Q_PROPERTY(int partsCount READ partsCount WRITE setPartsCount NOTIFY partsCountChanged)
   Q_PROPERTY(int stars READ stars WRITE setStars NOTIFY starsChanged)
   Q_PROPERTY(int starsMax READ starsMax WRITE setStarsMax NOTIFY starsMaxChanged)
+  Q_PROPERTY(QString evaluation READ evaluation WRITE setEvaluation NOTIFY evaluationChanged)
 
 public:
   GameInfo(QObject* parent = nullptr);
@@ -21,6 +22,7 @@ public:
   int partsCount(void) const;
   int stars(void) const;
   int starsMax(void) const;
+  QString evaluation(void) const;
 
   void setLinesDrawn(int value);
   void setLinesCount(int value);
@@ -28,6 +30,7 @@ public:
   void setPartsCount(int value);
   void setStars(int value);
   void setStarsMax(int value);
+  void setEvaluation(const QString& value);
 
 signals:
   void linesDrawnChanged(void);
@@ -36,6 +39,7 @@ signals:
   void partsCountChanged(void);
   void starsChanged(void);
   void starsMaxChanged(void);
+  void evaluationChanged(void);
 
 private:
   int _linesDrawn;
@@ -44,6 +48,7 @@ private:
   int _partsCount;
   int _stars;
   int _starsMax;
+  QString _evaluation;
 };
 
 #endif // GAMEINFO_H

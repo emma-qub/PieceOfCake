@@ -228,7 +228,7 @@ GameController::LineType GameController::computeLineType(const Segment& line) co
 }
 
 void GameController::checkWinning(void) {
-  if (_gameInfo->linesDrawn() >= _gameInfo->linesCount()) {
+  if (_gameInfo->linesDrawn() >= _gameInfo->linesCount() || _gameInfo->partsCut() >= _gameInfo->partsCount()) {
     QList<float> orientedAreas;
     QList<Vector2d> shiftVectors;
     float minArea = 100.0;
@@ -262,7 +262,7 @@ void GameController::checkWinning(void) {
 
     float gap = qAbs(maxArea - minArea);
 
-    if (_gameInfo->partsCut() != _gameInfo->partsCount() || gap > _maxGapToWin) {
+    if (_gameInfo->partsCut() != _gameInfo->partsCount() || gap > _maxGapToWin || _gameInfo->partsCut() != _gameInfo->partsCount()) {
       _gameInfo->setStars(0);
       emit levelEnd(orientedAreas);
     } else {

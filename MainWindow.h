@@ -57,6 +57,9 @@ private:
   GameView* _gameView;
   GameModel* _gameModel;
 
+//  GameView* _testLevelView;
+//  TestLevelController* _testLevelController;
+
   QWidget* _gameWidget;
   QWidget* _levelDesignerWidget;
   QQuickWidget* _selectLevelWidget;

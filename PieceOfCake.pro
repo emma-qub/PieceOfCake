@@ -7,6 +7,7 @@ HEADERS += \
   Controller/AbstractController.h \
   Controller/GameController.h \
   Controller/LevelDesignerController.h \
+  Controller/TestLevelController.h \
   # Core
   Core/Point2d.h \
   Core/Polygon.h \
@@ -35,19 +36,20 @@ HEADERS += \
   ## REMOVE View/LevelDesignerWidget.h \
   # Root
   Commands.h \
+  GameInfo.h \
   Hint.h \
+  LevelInfo.h \
   MainWindow.h \
   ParserXML.h \
   tests.h \
-    ThumbnailCreator.h \
-    GameInfo.h \
-    LevelInfo.h
+  ThumbnailCreator.h
 
 SOURCES += \
   # Controller
   Controller/AbstractController.cpp \
   Controller/GameController.cpp \
   Controller/LevelDesignerController.cpp \
+  Controller/TestLevelController.cpp \
   # Core
   Core/Point2d.cpp \
   Core/Polygon.cpp \
@@ -76,13 +78,13 @@ SOURCES += \
   ## REMOVE View/LevelDesignerWidget.cpp \
   # Root
   Commands.cpp \
+  GameInfo.cpp \
   Hint.cpp \
+  LevelInfo.cpp \
+  main.cpp \
   MainWindow.cpp \
   ParserXML.cpp \
-  main.cpp \
-    ThumbnailCreator.cpp \
-    GameInfo.cpp \
-    LevelInfo.cpp
+  ThumbnailCreator.cpp
 
 INCLUDEPATH += \
   Controller \

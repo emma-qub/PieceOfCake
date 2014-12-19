@@ -190,51 +190,6 @@ void GameView::currentChanged(QModelIndex currentIndex, QModelIndex /*previousIn
 }
 
 void GameView::levelEnd(QList<float> orientedAreas) {
-//  QString rankingMessage;
-//  QString starsMessage;
-
   drawFromModel();
   drawAreaValues(orientedAreas);
-
-
-//  switch (ranking) {
-//  case GameController::fail:
-//    rankingMessage = "Fail";
-//    starsMessage = "";
-//    break;
-//  case GameController::poor:
-//    rankingMessage = "Poor";
-//    starsMessage = "*";
-//    break;
-//  case GameController::average:
-//    rankingMessage = "Average";
-//    starsMessage = "**";
-//    break;
-//  case GameController::nice:
-//    rankingMessage = "Nice";
-//    starsMessage = "***";
-//    break;
-//  case GameController::good:
-//    rankingMessage = "Good";
-//    starsMessage = "****";
-//    break;
-//  case GameController::great:
-//    rankingMessage = "Great";
-//    starsMessage = "*****";
-//    break;
-//  case GameController::perfect:
-//    rankingMessage = "Perfect";
-//    starsMessage = "***** P";
-//    break;
-//  default:
-//    rankingMessage = "Fail";
-//    break;
-//  }
-
-//  QMessageBox::StandardButton buttonClicked = QMessageBox::information(this, rankingMessage, starsMessage+"\nReplay?", QMessageBox::Yes, QMessageBox::No);
-
-//  if (buttonClicked == QMessageBox::Yes)
-//    _controller->replay();
-//  else
-//    _controller->clearGame();
 }

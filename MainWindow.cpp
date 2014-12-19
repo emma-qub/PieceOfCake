@@ -51,8 +51,19 @@ void MainWindow::hideWidgets(void) {
 }
 
 void MainWindow::showCreateLevel(void) {
+  hideWidgets();
   _levelDesignerTreeView->show();
   _levelDesignerScribbleView->show();
+}
+
+void MainWindow::showTestLevel(void) {
+  hideWidgets();
+  std::cerr << "TEST LEVEL REQUESTED" << std::endl;
+}
+
+void MainWindow::showSaveLevel(void) {
+  hideWidgets();
+  std::cerr << "SAVE LEVEL REQUESTED" << std::endl;
 }
 
 void MainWindow::updateQMLView(void) {
@@ -69,6 +80,8 @@ void MainWindow::initHome(void) {
   connect(item, SIGNAL(homePageRequested(void)), this, SLOT(hideWidgets(void)));
   connect(item, SIGNAL(createLevelRequested(void)), this, SLOT(showCreateLevel(void)));
   connect(item, SIGNAL(backToLevelsRequested(void)), this, SLOT(hideWidgets(void)));
+  connect(item, SIGNAL(testLevelRequested(void)), this, SLOT(showTestLevel(void)));
+  connect(item, SIGNAL(saveLevelRequested(void)), this, SLOT(showSaveLevel(void)));
 }
 
 void MainWindow::initGame(void) {

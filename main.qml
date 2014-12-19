@@ -19,6 +19,8 @@ Rectangle {
   signal homePageRequested()
   signal backToLevelsRequested()
   signal refreshLevelRequested()
+  signal testLevelRequested()
+  signal saveLevelRequested()
 
   // Home Page
   Item {
@@ -612,6 +614,10 @@ Rectangle {
         enabled: levelInfo.levelReady
         onClicked: {
           StepJS.incrementStep()
+          if (StepJS.getCurrentStep() === 2)
+            testLevelRequested();
+          else if (StepJS.getCurrentStep() === 3)
+            saveLevelRequested();
         }
 
         Text {
@@ -633,6 +639,10 @@ Rectangle {
         anchors.verticalCenter: parent.verticalCenter
         onClicked: {
           StepJS.decrementStep()
+          if (StepJS.getCurrentStep() === 1)
+            createLevelRequested();
+          else if (StepJS.getCurrentStep() === 2)
+            testLevelRequested();
         }
 
         Text {

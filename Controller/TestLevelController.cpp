@@ -19,5 +19,5 @@ void TestLevelController::checkWinning(void) {
 void TestLevelController::openLevel(const QString&) {
 }
 
-void TestLevelController::saveLevel(const QString&) {
-}
+//void TestLevelController::saveLevel(const QString&) {
+//}

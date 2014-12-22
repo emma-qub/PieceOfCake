@@ -15,8 +15,8 @@ public:
   inline void setTestIsOver(bool b) { _testIsOver = b; }
 
 public slots:
-  virtual void openLevel(const QString& fileName) final;
-  virtual void saveLevel(const QString& fileName) final;
+  void openLevel(const QString& fileName) final;
+  //void saveLevel(const QString& fileName) final;
 
 signals:
   void levelCanBeSaved(bool);

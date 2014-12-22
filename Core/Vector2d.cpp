@@ -102,12 +102,20 @@ float Vector2d::squaredNorm(void) const {
 
 
 Vector2d Vector2d::normalized(void) const {
-  float n = 1.0 / norm();
+  float vectorNorm = norm();
+  if (vectorNorm == 0.f)
+    throw std::runtime_error("Vector is nul, cannot normalize it.");
+
+  float n = 1.0 / vectorNorm;
   return Vector2d(_coords[0]*n, _coords[1]*n);
 }
 
 Vector2d& Vector2d::normalize(void) {
-  float n = 1.0 / norm();
+  float vectorNorm = norm();
+  if (vectorNorm == 0.f)
+    throw std::runtime_error("Vector is nul, cannot normalize it.");
+
+  float n = 1.0 / vectorNorm;
   _coords[0] *= n;
   _coords[1] *= n;
   return *this;

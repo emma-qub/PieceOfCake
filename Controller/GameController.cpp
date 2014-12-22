@@ -253,7 +253,10 @@ void GameController::checkWinning(void) {
 
       Vector2d currShift(computeGlobalBarycenter(), polygon.barycenter());
       float currShiftLength = currShift.norm();
-      currShift.normalize();
+      try {
+        currShift.normalize();
+      } catch (std::runtime_error&) {
+      }
       currShift *= 0.2*currShiftLength;
       shiftVectors << currShift;
     }

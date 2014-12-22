@@ -66,6 +66,9 @@ void Polygon::replaceVertex(int position, const Point2d& newVertex) {
 }
 
 void Polygon::translate(const Vector2d& direction) {
+  if (direction == Vector2d())
+    return;
+
   auto it = _vertices.begin();
   for (; it != _vertices.end(); ++it)
     it->move(direction.getX(), direction.getY());

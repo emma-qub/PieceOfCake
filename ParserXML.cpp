@@ -9,6 +9,7 @@ ParserXML::ParserXML(void):
   _xmlFileName(),
   _doc("PieceOfCakeML"),
   _polygonNodesCount(0),
+  _tapeNodesCount(0),
   _hintNodesCount(0) {
 
   QDomElement root = _doc.createElement("level");
@@ -16,6 +17,9 @@ ParserXML::ParserXML(void):
 
   _polygons = _doc.createElement("polygons");
   root.appendChild(_polygons);
+
+  _tapes = _doc.createElement("tapes");
+  root.appendChild(_tapes);
 
   root.appendChild(_doc.createElement("linescount"));
 
@@ -124,6 +128,18 @@ QDomElement ParserXML::polygonToNode(const Polygon& polygon, int id) {
   return element;
 }
 
+QDomElement ParserXML::tapeToNode(const Tape& tape, int id) {
+  QDomElement element(_doc.createElement("tape"));
+  element.setAttribute("id", id);
+
+  element.setAttribute("x", tape.getX());
+  element.setAttribute("y", tape.getY());
+  element.setAttribute("w", tape.getW());
+  element.setAttribute("h", tape.getH());
+
+  return element;
+}
+
 QDomElement ParserXML::hintToNode(const Hint& hint, int id) {
   QDomElement element(_doc.createElement("hint"));
   element.setAttribute("id", id);
@@ -138,13 +154,16 @@ void ParserXML::addPolygon(const Polygon& polygon) {
   _polygons.appendChild(polygonToNode(polygon, _polygonNodesCount++));
 }
 
+void ParserXML::addTape(const Tape& tape) {
+  _tapes.appendChild(tapeToNode(tape, _tapeNodesCount++));
+}
+
 void ParserXML::addHint(const Hint& hint) {
   _hints.appendChild(hintToNode(hint, _hintNodesCount++));
 }
 
-QDomElement ParserXML::getPolygon(int id) {
-  QDomNodeList nodeList = _polygons.elementsByTagName("polygon");
-
+QDomElement ParserXML::getElementById(const QDomElement& parent, const QString& name, int id)  {
+  QDomNodeList nodeList = parent.elementsByTagName(name);
   for (int k = 0; k < nodeList.size(); k++) {
     QDomElement element = nodeList.at(k).toElement();
     if (element.attribute("id").toInt() == id) {
@@ -152,20 +171,21 @@ QDomElement ParserXML::getPolygon(int id) {
     }
   }
 
-  qDebug() << "Error: cannot find polygon number" << QString::number(id);
+
+  qDebug() << "Error: cannot find element " << name << " with number" << QString::number(id);
   return QDomElement();
 }
 
-QDomElement ParserXML::getHint(int id) {
-  QDomNodeList nodeList = _hints.elementsByTagName("hint");
-  for (int k = 0; k < nodeList.size(); k++) {
-    QDomElement element = nodeList.at(k).toElement();
-    if (element.attribute("id").toInt() == id) {
-      return element;
-    }
-  }
+QDomElement ParserXML::getPolygon(int id) {
+  return getElementById(_polygons, "polygon", id);
+}
 
-  return QDomElement();
+QDomElement ParserXML::getTape(int id) {
+  return getElementById(_tapes, "tape", id);
+}
+
+QDomElement ParserXML::getHint(int id) {
+  return getElementById(_hints, "hint", id);
 }
 
 void ParserXML::setPartsCount(int partscount) {
@@ -190,6 +210,10 @@ void ParserXML::setTolerances(int tolerances) {
 
 void ParserXML::replacePolygon(const Polygon& polygon, int id) {
   _polygons.replaceChild(polygonToNode(polygon, id), getPolygon(id));
+}
+
+void ParserXML::replaceTape(const Tape& tape, int id) {
+  _tapes.replaceChild(tapeToNode(tape, id), getTape(id));
 }
 
 void ParserXML::replaceHint(const Hint& hint, int id) {
@@ -224,6 +248,11 @@ bool ParserXML::removeElement(QDomElement& supElement, QDomElement& subElement, 
 bool ParserXML::removePolygon(int id) {
   QDomElement element(getPolygon(id));
   return removeElement(_polygons, element, id);
+}
+
+bool ParserXML::removeTape(int id) {
+  QDomElement element(getTape(id));
+  return removeElement(_tapes, element, id);
 }
 
 bool ParserXML::removeHint(int id) {
@@ -297,6 +326,15 @@ Polygon ParserXML::createPolygon(const QDomElement& element) {
   return polygon;
 }
 
+Tape ParserXML::createTape(const QDomElement& element) {
+  return Tape(
+    element.attribute("x", "-1").toInt(),
+    element.attribute("y", "-1").toInt(),
+    element.attribute("w", "-1").toInt(),
+    element.attribute("h", "-1").toInt()
+  );
+}
+
 Hint ParserXML::createHint(const QDomElement& element) {
   QDomNodeList lines = element.elementsByTagName("line");
   QDomNodeList costs = element.elementsByTagName("cost");
@@ -311,15 +349,23 @@ Hint ParserXML::createHint(const QDomElement& element) {
 
 PolygonList ParserXML::createPolygonList(void) {
   PolygonList polygonList;
-  for (int k = 0; k < _polygonNodesCount; k++)
+  for (int k = 0; k < _polygonNodesCount; ++k)
     polygonList << createPolygon(getPolygon(k));
 
   return polygonList;
 }
 
+TapeList ParserXML::createTapeList(void) {
+  TapeList tapeList;
+  for (int k = 0; k < _tapeNodesCount; ++k)
+    tapeList << createTape(getTape(k));
+
+  return tapeList;
+}
+
 HintList ParserXML::createHintList(void) {
   HintList hintList;
-  for (int k = 0; k < _polygonNodesCount; k++)
+  for (int k = 0; k < _polygonNodesCount; ++k)
     hintList << createHint(getHint(k));
 
   return hintList;

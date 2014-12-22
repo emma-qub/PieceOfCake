@@ -18,17 +18,8 @@ public:
     noCrossing,
     unknownCrossing
   };
-  enum Ranking {
-    fail = 0,
-    poor = 1,
-    average = 2,
-    nice = 3,
-    good = 4,
-    great = 5,
-    perfect = 6
-  };
 
-  GameController(GameModel* model, QUndoStack* undoStack, QObject* parent = 0);
+  GameController(GameModel* model, QUndoStack* undoStack, QObject* parent = nullptr);
   virtual ~GameController(void);
 
   inline bool isLevelRunning() const { return _levelRunning; }
@@ -43,7 +34,7 @@ public:
   void sliceIt(const Segment& line);
 
   LineType computeLineType(const Segment& line) const;
-  void checkWinning(void);
+  virtual void checkWinning(void);
   void updateStarsMax(int starsMaxCount);
   void translatePolygons(const QList<Vector2d>& shiftVectors);
   void clearGame(void);
@@ -60,7 +51,7 @@ signals:
   void update(void);
   void levelEnd(QList<float>);
 
-private:
+protected:
   GameModel* _model;
   GameInfo* _gameInfo;
   float _orientedAreaTotal;

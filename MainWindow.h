@@ -22,6 +22,9 @@
 #include "GameView.h"
 #include "GameModel.h"
 
+// Test Level
+#include "TestLevelController.h"
+
 class MainWindow: public QMainWindow {
   Q_OBJECT
 
@@ -40,6 +43,7 @@ private:
   void initHome(void);
   void initGame(void);
   void initLevelDesigner(void);
+  void initTestLevel(void);
 
 private:
   AbstractController* _currentController;
@@ -57,8 +61,9 @@ private:
   GameView* _gameView;
   GameModel* _gameModel;
 
-//  GameView* _testLevelView;
-//  TestLevelController* _testLevelController;
+  GameView* _testLevelView;
+  TestLevelController* _testLevelController;
+  GameModel* _testLevelModel;
 
   QWidget* _gameWidget;
   QWidget* _levelDesignerWidget;

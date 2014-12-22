@@ -29,6 +29,7 @@ MainWindow::MainWindow(QWidget* parent):
 
   initGame();
   initLevelDesigner();
+  initTestLevel();
 
   // Change window title
   setWindowTitle("Graphical tests");
@@ -48,6 +49,7 @@ void MainWindow::hideWidgets(void) {
   _levelDesignerTreeView->hide();
   _levelDesignerScribbleView->hide();
   _gameView->hide();
+  _testLevelView->hide();
 }
 
 void MainWindow::showCreateLevel(void) {
@@ -58,6 +60,9 @@ void MainWindow::showCreateLevel(void) {
 
 void MainWindow::showTestLevel(void) {
   hideWidgets();
+  _testLevelView->show();
+  _testLevelModel->setPolygonList(_levelDesignerModel->getPolygonList());
+  _testLevelView->drawFromModel();
   std::cerr << "TEST LEVEL REQUESTED" << std::endl;
 }
 
@@ -124,4 +129,19 @@ void MainWindow::initLevelDesigner(void) {
 
   connect(_levelDesignerTreeView, SIGNAL(updateViewNotModel(QModelIndex,int)), _levelDesignerScribbleView, SLOT(drawFromModel(QModelIndex,int)));
   connect(_levelDesignerUndoStack, SIGNAL(indexChanged(int)), _levelDesignerController, SLOT(updateSavingState(int)));
+}
+
+void MainWindow::initTestLevel(void) {
+  _testLevelModel = new GameModel;
+  _testLevelModel->setPolygonList(_levelDesignerModel->getPolygonList());
+
+  _testLevelController = new TestLevelController(_testLevelModel, new QUndoStack);
+
+  _testLevelView = new GameView(_testLevelController, this);
+  _testLevelView->setModel(_testLevelModel);
+  _testLevelView->move(175, 150);
+  _testLevelView->hide();
+
+  QQuickItem* item = _homeWidget->rootObject();
+  connect(item, SIGNAL(refreshLevelRequested(void)), _testLevelView, SLOT(replay(void)));
 }

@@ -6,9 +6,11 @@
 #include "Point2d.h"
 #include "Segment.h"
 #include "Polygon.h"
+#include "Tape.h"
 #include "Hint.h"
 
 typedef QList<Polygon> PolygonList;
+typedef QList<Tape> TapeList;
 typedef QList<Hint> HintList;
 
 class ParserXML {
@@ -29,12 +31,16 @@ public:
   QDomElement starscountToNode(unsigned int starscount = 0);
   QDomElement tolerancesToNode(unsigned int tolerances = 1);
   QDomElement polygonToNode(const Polygon& polygon, int id);
+  QDomElement tapeToNode(const Tape& tape, int id);
   QDomElement hintToNode(const Hint& hint, int id);
 
   void addPolygon(const Polygon& polygon);
+  void addTape(const Tape& tape);
   void addHint(const Hint& hint);
 
+  QDomElement getElementById(const QDomElement& parent, const QString& name, int id);
   QDomElement getPolygon(int id);
+  QDomElement getTape(int id);
   QDomElement getHint(int id);
 
   void setPartsCount(int partscount);
@@ -43,10 +49,12 @@ public:
   void setStarsCount(int starscount);
   void setTolerances(int tolerances);
   void replacePolygon(const Polygon& polygon, int id);
+  void replaceTape(const Tape& tape, int id);
   void replaceHint(const Hint& hint, int id);
 
   bool removeElement(QDomElement& supElement, QDomElement& subElement, int id);
   bool removePolygon(int id);
+  bool removeTape(int id);
   bool removeHint(int id);
 
   int createInt(const QDomElement& element, const QString& attributeName);
@@ -60,9 +68,11 @@ public:
   int getStarsCount(void);
   int getTolerances(void);
   Polygon createPolygon(const QDomElement& element);
+  Tape createTape(const QDomElement& element);
   Hint createHint(const QDomElement& element);
 
   PolygonList createPolygonList(void);
+  TapeList createTapeList(void);
   HintList createHintList(void);
 
   inline QDomDocument getDoc() const { return _doc; }
@@ -76,8 +86,10 @@ private:
   QString _xmlFileName;
   QDomDocument _doc;
   QDomElement _polygons;
+  QDomElement _tapes;
   QDomElement _hints;
   int _polygonNodesCount;
+  int _tapeNodesCount;
   int _hintNodesCount;
 };
 

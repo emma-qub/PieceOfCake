@@ -262,15 +262,13 @@ void GameController::checkWinning(void) {
 
     float gap = qAbs(maxArea - minArea);
 
-    if (_gameInfo->partsCut() != _gameInfo->partsCount() || gap > _maxGapToWin || _gameInfo->partsCut() != _gameInfo->partsCount()) {
-      _gameInfo->setStars(0);
-      emit levelEnd(orientedAreas);
-    } else {
-      int starsCount = 6-qCeil(gap / _maxGapToWin * 5);
+    int starsCount = 0;
+    if (_gameInfo->partsCut() == _gameInfo->partsCount() && gap <= _maxGapToWin && _gameInfo->partsCut() == _gameInfo->partsCount()) {
+      starsCount = 6-qCeil(gap / _maxGapToWin * 5);
       updateStarsMax(starsCount);
       _gameInfo->setStars(starsCount);
-      emit levelEnd(orientedAreas);
     }
+    emit levelEnd(orientedAreas);
 
     _levelRunning = false;
   }

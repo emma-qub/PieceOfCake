@@ -1,18 +1,4 @@
 <!DOCTYPE PieceOfCakeLevelsML>
 <levels>
   <title>Cut Polygons</title>
-  <level id="0" name="resources/levels/pack1/square.xml" stars="0" image="resources/levels/pack1/square.png"/>
-  <level id="1" name="resources/levels/pack1/square2.xml" stars="0" image="resources/levels/pack1/square2.png"/>
-  <level id="2" name="resources/levels/pack1/podium.xml" stars="0" image="resources/levels/pack1/podium.png"/>
-  <level id="3" name="resources/levels/pack1/fourSquares.xml" stars="0" image="resources/levels/pack1/fourSquares.png"/>
-  <level id="4" name="resources/levels/pack1/fiveSquares.xml" stars="0" image="resources/levels/pack1/fiveSquares.png"/>
-  <level id="5" name="resources/levels/pack1/triangle.xml" stars="0" image="resources/levels/pack1/triangle.png"/>
-  <level id="6" name="resources/levels/pack1/triangle2.xml" stars="0" image="resources/levels/pack1/triangle2.png"/>
-  <level id="7" name="resources/levels/pack1/hard.xml" stars="0" image="resources/levels/pack1/hard.png"/>
-  <level id="8" name="resources/levels/pack1/rss.xml" stars="0" image="resources/levels/pack1/rss.png"/>
-  <level id="9" name="resources/levels/pack1/lo.xml" stars="0" image="resources/levels/pack1/lo.png"/>
-  <level id="10" name="resources/levels/pack1/share.xml" stars="0" image="resources/levels/pack1/share.png"/>
-  <level id="11" name="resources/levels/pack1/bottle.xml" stars="0" image="resources/levels/pack1/bottle.png"/>
-  <level id="12" name="resources/levels/pack1/triangle3.xml" stars="0" image="resources/levels/pack1/triangle3.png"/>
-  <level id="13" name="resources/levels/pack1/trianglesAndSquares.xml" stars="0" image="resources/levels/pack1/trianglesAndSquares.png"/>
 </levels>

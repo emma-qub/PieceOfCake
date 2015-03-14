@@ -34,7 +34,6 @@ public:
   void sliceIt(const Segment& line);
 
   LineType computeLineType(const Segment& line) const;
-  virtual void checkWinning(void);
   void updateStarsMax(int starsMaxCount);
   void translatePolygons(const QList<Vector2d>& shiftVectors);
   void clearGame(void);
@@ -45,6 +44,7 @@ public slots:
   virtual void openLevel(const QString& fileName);
   virtual void saveLevel(const QString& fileName) { Q_UNUSED(fileName) }
   void replay(void);
+  virtual void checkWinning(void);
 
 signals:
   void updateLine(LineType);

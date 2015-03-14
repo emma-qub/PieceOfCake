@@ -42,7 +42,8 @@ HEADERS += \
   MainWindow.h \
   ParserXML.h \
   tests.h \
-  ThumbnailCreator.h
+  ThumbnailCreator.h \
+    View/TestLevelView.h
 
 SOURCES += \
   # Controller
@@ -84,7 +85,8 @@ SOURCES += \
   main.cpp \
   MainWindow.cpp \
   ParserXML.cpp \
-  ThumbnailCreator.cpp
+  ThumbnailCreator.cpp \
+    View/TestLevelView.cpp
 
 INCLUDEPATH += \
   Controller \

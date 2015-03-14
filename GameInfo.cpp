@@ -80,7 +80,7 @@ void GameInfo::setStars(int value) {
     setEvaluation("");
   else if (value == 0)
     setEvaluation("FAILED");
-  else if (0 < value && value <= 4)
+  else if (1 <= value && value <= 4)
     setEvaluation("CLEAR");
   else if (value == 5)
     setEvaluation("GREAT");

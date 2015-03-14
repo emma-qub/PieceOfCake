@@ -4,17 +4,20 @@
 #include <QMessageBox>
 #include <QDoubleValidator>
 #include <QMap>
+#include <QDebug>
 
 #include <algorithm>
 #include <cassert>
 #include <QTimer>
+
+#define cerro(x) std::cerr << x << std::endl;
 
 GameController::GameController(GameModel* model, QUndoStack* undoStack, QObject* parent):
   AbstractController(model, undoStack, parent),
   _model(model),
   _gameInfo(new GameInfo),
   _orientedAreaTotal(0.0),
-  _maxGapToWin(0),
+  _maxGapToWin(10),
   _fileName(""),
   _levelRunning(false) {
 }
@@ -196,8 +199,6 @@ void GameController::sliceIt(const Segment& line) {
   _gameInfo->setLinesDrawn(_gameInfo->linesDrawn()+1);
 
   emit update();
-
-  checkWinning();
 }
 
 GameController::LineType GameController::computeLineType(const Segment& line) const {
@@ -246,6 +247,9 @@ void GameController::checkWinning(void) {
         //areaSum += currArea;
         //++currPolygonIndex;
       //}
+
+        cerro("CurrArea");
+        cerro(currArea);
 
       orientedAreas << currArea;
       minArea = qMin(currArea, minArea);

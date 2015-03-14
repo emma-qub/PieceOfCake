@@ -18,7 +18,7 @@ LevelDesignerScribbleView::LevelDesignerScribbleView(LevelDesignerController* co
   _nearToBarycenter(false),
   _movingVertex(false),
   _movingPolygon(false),
-  _lengthOn(false),
+  _lengthOn(true),
   _angleOn(false),
   _currPolygonRow(-1),
   _currVertexRow(-1),

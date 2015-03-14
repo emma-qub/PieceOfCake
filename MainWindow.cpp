@@ -13,6 +13,8 @@
 #include <QQmlProperty>
 #include <QtQml>
 
+#define cerro(x) std::cerr << x << std::endl;
+
 MainWindow::MainWindow(QWidget* parent):
   QMainWindow(parent) {
 
@@ -66,8 +68,12 @@ void MainWindow::showTestLevel(void) {
   std::cerr << "TEST LEVEL REQUESTED" << std::endl;
 }
 
-void MainWindow::showSaveLevel(void) {
-  hideWidgets();
+void MainWindow::showSaveLevel(bool b) {
+  if (b) {
+    hideWidgets();
+  } else {
+    cerro("Improve your cutting skills.");
+  }
   std::cerr << "SAVE LEVEL REQUESTED" << std::endl;
 }
 
@@ -86,7 +92,6 @@ void MainWindow::initHome(void) {
   connect(item, SIGNAL(createLevelRequested(void)), this, SLOT(showCreateLevel(void)));
   connect(item, SIGNAL(backToLevelsRequested(void)), this, SLOT(hideWidgets(void)));
   connect(item, SIGNAL(testLevelRequested(void)), this, SLOT(showTestLevel(void)));
-  connect(item, SIGNAL(saveLevelRequested(void)), this, SLOT(showSaveLevel(void)));
 }
 
 void MainWindow::initGame(void) {
@@ -137,11 +142,15 @@ void MainWindow::initTestLevel(void) {
 
   _testLevelController = new TestLevelController(_testLevelModel, new QUndoStack);
 
-  _testLevelView = new GameView(_testLevelController, this);
+  _testLevelView = new TestLevelView(_testLevelController, this);
   _testLevelView->setModel(_testLevelModel);
   _testLevelView->move(175, 150);
   _testLevelView->hide();
 
+  connect(_testLevelView, SIGNAL(newLineDrawn(Segment)), _testLevelController, SLOT(addNewLine(Segment)));
+
   QQuickItem* item = _homeWidget->rootObject();
   connect(item, SIGNAL(refreshLevelRequested(void)), _testLevelView, SLOT(replay(void)));
+  connect(item, SIGNAL(saveLevelRequested(void)), _testLevelController, SLOT(checkWinning(void)));
+  connect(_testLevelController, SIGNAL(levelCanBeSaved(bool)), this, SLOT(showSaveLevel(bool)));
 }

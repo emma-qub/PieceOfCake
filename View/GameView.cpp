@@ -82,6 +82,7 @@ void GameView::mouseReleaseEvent(QMouseEvent* event) {
       Point2d B(event->pos().x(), event->pos().y());
       Segment line(A, B);
       _controller->sliceIt(line);
+      _controller->checkWinning();
     }
     _scribbling = false;
   }

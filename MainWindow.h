@@ -24,6 +24,7 @@
 
 // Test Level
 #include "TestLevelController.h"
+#include "TestLevelView.h"
 
 class MainWindow: public QMainWindow {
   Q_OBJECT
@@ -36,7 +37,7 @@ public slots:
   void hideWidgets(void);
   void showCreateLevel(void);
   void showTestLevel(void);
-  void showSaveLevel(void);
+  void showSaveLevel(bool);
   void updateQMLView(void);
 
 private:
@@ -61,7 +62,7 @@ private:
   GameView* _gameView;
   GameModel* _gameModel;
 
-  GameView* _testLevelView;
+  TestLevelView* _testLevelView;
   TestLevelController* _testLevelController;
   GameModel* _testLevelModel;
 

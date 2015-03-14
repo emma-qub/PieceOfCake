@@ -1,0 +1,31 @@
+<!DOCTYPE PieceOfCakeML>
+<level>
+    <polygons>
+        <polygon id="0">
+            <vertex x="25" y="50"/>
+            <vertex x="375" y="50"/>
+            <vertex x="375" y="200"/>
+            <vertex x="325" y="200"/>
+            <vertex x="325" y="100"/>
+            <vertex x="75" y="100"/>
+            <vertex x="75" y="200"/>
+            <vertex x="25" y="200"/>
+        </polygon>
+        <polygon id="1">
+            <vertex x="25" y="200"/>
+            <vertex x="75" y="200"/>
+            <vertex x="75" y="300"/>
+            <vertex x="325" y="301"/>
+            <vertex x="325" y="200"/>
+            <vertex x="375" y="199"/>
+            <vertex x="375" y="350"/>
+            <vertex x="25" y="350"/>
+        </polygon>
+    </polygons>
+    <tapes/>
+    <linescount value="2"/>
+    <partscount value="6"/>
+    <maxgaptowin value="10"/>
+    <starscount value="5"/>
+    <hints/>
+</level>

@@ -202,19 +202,26 @@ void GameController::sliceIt(const Segment& line) {
 }
 
 GameController::LineType GameController::computeLineType(const Segment& line) const {
-  PolygonList polygonList = _model->getPolygonList();
-
   bool noCrossing = false;
   bool goodCrossing = false;
   bool badCrossing = false;
 
-  foreach (const Polygon& polygon, polygonList) {
+  PolygonList polygonList = _model->getPolygonList();
+  for (const Polygon& polygon: polygonList) {
     if (!polygon.isCrossing(line) && !polygon.isPointInside2(line.getA())) {
       noCrossing = true;
     } else if (polygon.isGoodSegment(line)) {
       goodCrossing = true;
     } else {
       badCrossing = true;
+    }
+  }
+
+  TapeList tapeList = _model->getTapeList();
+  for (const Tape& tape: tapeList) {
+    if (tape.crossing(line)) {
+      badCrossing = true;
+      break;
     }
   }
 
@@ -398,6 +405,9 @@ void GameController::openLevel(const QString& fileName) {
 
   PolygonList polygonList(parser.createPolygonList());
   _model->setPolygonList(polygonList);
+
+  TapeList tapeList(parser.createTapeList());
+  _model->setTapeList(tapeList);
 
   _gameInfo->setLinesDrawn(0);
   _gameInfo->setLinesCount(parser.getLinesCount());

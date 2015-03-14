@@ -18,8 +18,10 @@ ParserXML::ParserXML(void):
   _polygons = _doc.createElement("polygons");
   root.appendChild(_polygons);
 
-  _tapes = _doc.createElement("tapes");
-  root.appendChild(_tapes);
+  _lineModifiers = _doc.createElement("linemodifiers");
+  root.appendChild(_lineModifiers);
+  _tapes = _doc.createElement("obstacles");
+  _lineModifiers.appendChild(_tapes);
 
   root.appendChild(_doc.createElement("linescount"));
 
@@ -56,8 +58,10 @@ ParserXML::ParserXML(const QString& xmlFileName):
 
   _polygons = _doc.firstChildElement("level").firstChildElement("polygons");
   _hints = _doc.firstChildElement("level").firstChildElement("hints");
+  _tapes = _doc.firstChildElement("level").firstChildElement("linemodifiers").firstChildElement("tapes");
 
   _polygonNodesCount = _polygons.elementsByTagName("polygon").count();
+  _tapeNodesCount = _tapes.elementsByTagName("tape").count();
   _hintNodesCount = _hints.elementsByTagName("hint").count();
 
   XMLDoc.close();
@@ -365,7 +369,7 @@ TapeList ParserXML::createTapeList(void) {
 
 HintList ParserXML::createHintList(void) {
   HintList hintList;
-  for (int k = 0; k < _polygonNodesCount; ++k)
+  for (int k = 0; k < _hintNodesCount; ++k)
     hintList << createHint(getHint(k));
 
   return hintList;

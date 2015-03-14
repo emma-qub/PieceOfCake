@@ -86,8 +86,9 @@ private:
   QString _xmlFileName;
   QDomDocument _doc;
   QDomElement _polygons;
-  QDomElement _tapes;
+  QDomElement _lineModifiers;
   QDomElement _hints;
+  QDomElement _tapes;
   int _polygonNodesCount;
   int _tapeNodesCount;
   int _hintNodesCount;

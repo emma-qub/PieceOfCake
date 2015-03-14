@@ -139,7 +139,6 @@ void GameView::drawFromModel(void) {
   clearImage();
 
   PolygonList polygons = _model->getPolygonList();
-
   for (const Polygon& polygon: polygons) {
     QColor color(_model->getColor());
 
@@ -150,6 +149,24 @@ void GameView::drawFromModel(void) {
 
       //drawText(QPoint(fstVertex.getX(), fstVertex.getY()), QString::number(k));
       drawLine(QPoint(fstVertex.getX(), fstVertex.getY()), QPoint(sndVertex.getX(), sndVertex.getY()), color);
+    }
+  }
+
+  // Set painter
+  QPainter painter(&_image);
+  QColor color(Qt::red);
+  painter.setPen(QPen(color, _myPenWidth-1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+  QBrush brush(color, Qt::BDiagPattern);
+  painter.setBrush(brush);
+
+  // Draw tapes
+  TapeList tapes = _model->getTapeList();
+  for (const Tape& tape: tapes) {
+    painter.drawRect(tape.getX(), tape.getY(), tape.getW(), tape.getH());
+
+    for (int k = -2; k < 2; ++k) {
+      brush.setTransform(QTransform().translate(k, 0));
+      painter.fillRect(tape.getX(), tape.getY(), tape.getW(), tape.getH(), brush);
     }
   }
 }

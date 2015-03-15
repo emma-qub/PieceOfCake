@@ -2,21 +2,21 @@
 <level>
     <polygons>
         <polygon id="0">
-            <vertex y="50" x="50"/>
-            <vertex y="50" x="350"/>
-            <vertex y="350" x="350"/>
-            <vertex y="350" x="50"/>
+            <vertex x="50" y="50"/>
+            <vertex x="350" y="50"/>
+            <vertex x="350" y="350"/>
+            <vertex x="50" y="350"/>
         </polygon>
     </polygons>
     <linemodifiers>
         <tapes>
-            <tape id="0" y="325" x="25" w="50" h="50"/>
-            <tape id="1" y="25" x="325" w="50" h="50"/>
+            <tape id="0" h="50" x="25" w="50" y="325"/>
+            <tape id="1" h="50" x="325" w="50" y="25"/>
         </tapes>
     </linemodifiers>
     <linescount value="5"/>
     <partscount value="8"/>
     <maxgaptowin value="10"/>
-    <starscount value="3"/>
+    <starscount value="-1"/>
     <hints/>
 </level>

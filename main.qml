@@ -793,7 +793,7 @@ Rectangle {
         wrapMode: Text.Wrap
         font.pixelSize: 24
         font.bold: true
-        color:"#333333"
+        color: (gameInfo.stars === 0 && gameInfo.linesCount !== gameInfo.linesDrawn) ? "#AF0F0F" : "#333333"
         text: {
           var lines = gameInfo.linesCount - gameInfo.linesDrawn;
           return "x "+lines.toString();
@@ -817,7 +817,7 @@ Rectangle {
         wrapMode: Text.Wrap
         font.pixelSize: 24
         font.bold: true
-        color:"#333333"
+        color: (gameInfo.stars === 0 && gameInfo.partsCut !== gameInfo.partsCount) ? "#AF0F0F" : "#333333"
         text: gameInfo.partsCut.toString() + "/" + gameInfo.partsCount.toString()
       }
     }
@@ -851,7 +851,7 @@ Rectangle {
           text: qsTr("Evaluation:")
           font.bold: true
           font.pixelSize: 18
-          color: "#333"
+          color: "#333333"
         }
 
         Text {
@@ -860,7 +860,7 @@ Rectangle {
           id: evaluationValueText
           text: gameInfo.evaluation
           font.bold: true
-          color: gameInfo.stars < 1 ? "#333" : "#FC0"
+          color: gameInfo.stars < 1 ? "#AF0F0F" : "#FFCC00"
           font.pixelSize: 24
         }
       }

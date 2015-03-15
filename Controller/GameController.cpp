@@ -242,21 +242,9 @@ void GameController::checkWinning(void) {
     float minArea = 100.0;
     float maxArea = 0.0;
 
-    //float areaSum = 0.f;
-    //int polygonsCount = _model->getPolygonsCount();
-    //int currPolygonIndex = 0;
     for (const Polygon& polygon: _model->getPolygonList()) {
       float currArea = 0.f;
-      //if (currPolygonIndex == polygonsCount-1)
-        //currArea = 100 - areaSum;
-      //else {
-        currArea = qRound(10.0*polygon.orientedArea() * 100.0 / _orientedAreaTotal)/10.0;
-        //areaSum += currArea;
-        //++currPolygonIndex;
-      //}
-
-        cerro("CurrArea");
-        cerro(currArea);
+      currArea = qRound(10.0*polygon.orientedArea() * 100.0 / _orientedAreaTotal)/10.0;
 
       orientedAreas << currArea;
       minArea = qMin(currArea, minArea);
@@ -277,6 +265,7 @@ void GameController::checkWinning(void) {
     float gap = qAbs(maxArea - minArea);
 
     int starsCount = 0;
+    _gameInfo->setStars(starsCount);
     if (_gameInfo->partsCut() == _gameInfo->partsCount() && gap <= _maxGapToWin && _gameInfo->partsCut() == _gameInfo->partsCount()) {
       starsCount = 6-qCeil(gap / _maxGapToWin * 5);
       updateStarsMax(starsCount);

@@ -196,7 +196,8 @@ bool Polygon::isCrossing(const Segment& line) const {
 
   otherCount = fstVertexCount + sndVertexCount + regularCount;
 
-  return ((edgeCount == 0 && otherCount > 0)  || (edgeCount != 0 && regularCount > 0));
+  // Prevent from cutting through a polygon's edge since it's really not a good idea.
+  return (edgeCount == 0 && otherCount > 0);
 }
 
 bool Polygon::isGoodSegment(const Segment& line) const {

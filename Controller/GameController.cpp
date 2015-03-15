@@ -190,7 +190,7 @@ void GameController::sliceIt(const Segment& line) {
       globalVerticesCopy = globalVertices;
 
       Polygon newPolygon(newVertices);
-      // Don't add the new polygon if its area is lower than 0.1% of the total area.
+      // Don't add the new polygon if its area is less than 0.1% of the total area.
       // This allows users to draw several lines that pass near a point,
       // but not exactly on this point, since it's quite difficult to achieve.
       if (qRound(10.0*newPolygon.orientedArea() * 100.0 / _orientedAreaTotal)/10.0 >= 0.1)
@@ -248,8 +248,7 @@ void GameController::checkWinning(void) {
     float maxArea = 0.0;
 
     for (const Polygon& polygon: _model->getPolygonList()) {
-      float currArea = 0.f;
-      currArea = qRound(10.0*polygon.orientedArea() * 100.0 / _orientedAreaTotal)/10.0;
+      float currArea = computePolygonPercentageArea(polygon);
 
       orientedAreas << currArea;
       minArea = qMin(currArea, minArea);
@@ -372,6 +371,10 @@ void GameController::clearGame(void) {
   _levelRunning = false;
 
   emit update();
+}
+
+float GameController::computePolygonPercentageArea(const Polygon& polygon) const {
+  return qRound(10.0*polygon.orientedArea() * 100.0 / _orientedAreaTotal)/10.0;
 }
 
 Point2d GameController::computeGlobalBarycenter() const {

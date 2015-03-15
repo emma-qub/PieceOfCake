@@ -138,6 +138,7 @@ void GameView::circlePoint(const QPoint& point, const QColor& color, Qt::PenStyl
 void GameView::drawFromModel(void) {
   clearImage();
 
+  // Draw every polygon in model color
   PolygonList polygons = _model->getPolygonList();
   for (const Polygon& polygon: polygons) {
     QColor color(_model->getColor());
@@ -149,6 +150,23 @@ void GameView::drawFromModel(void) {
 
       //drawText(QPoint(fstVertex.getX(), fstVertex.getY()), QString::number(k));
       drawLine(QPoint(fstVertex.getX(), fstVertex.getY()), QPoint(sndVertex.getX(), sndVertex.getY()), color);
+    }
+  }
+
+  // Redraw too small polygons in red
+  for (const Polygon& polygon: polygons) {
+    QColor color("#AF0F0F");
+
+    // Determine if polygon's area is too small and draw it red if so
+    if (_controller->computePolygonPercentageArea(polygon) < 1.5) {
+      std::vector<Point2d> vertices = polygon.getVertices();
+      for (unsigned k = 0; k < vertices.size(); k++) {
+        Point2d fstVertex(vertices.at(k));
+        Point2d sndVertex(vertices.at((k+1)%vertices.size()));
+
+        //drawText(QPoint(fstVertex.getX(), fstVertex.getY()), QString::number(k));
+        drawLine(QPoint(fstVertex.getX(), fstVertex.getY()), QPoint(sndVertex.getX(), sndVertex.getY()), color);
+      }
     }
   }
 

@@ -38,6 +38,7 @@ public:
   void translatePolygons(const QList<Vector2d>& shiftVectors);
   void clearGame(void);
 
+  float computePolygonPercentageArea(const Polygon& polygon) const;
   Point2d computeGlobalBarycenter() const;
 
 public slots:

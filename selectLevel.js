@@ -46,7 +46,8 @@ function setSelectedPack(packNumber) {
     }
   }
 
-  rules1Rectangle.visible = (selectedPack === 0);
+  rulesPack1Rectangle.visible = (selectedPack === 0);
+  rulesPack2Rectangle.visible = (selectedPack === 1);
   levelsModel.source = "../PieceOfCake/resources/levels/pack"+(packNumber+1).toString()+"/levels.xml";
   packTitleText.text = getSelectedPackTitle();
 }

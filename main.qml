@@ -384,15 +384,14 @@ Rectangle {
     }
 
     Rectangle {
-      id: rules1Rectangle
+      id: rulesPack2Rectangle
       x: 650
       y: 300
       width: 375
       height: 250
-      visible: SelectJS.getSelectedPack() === 0
 
       Text {
-        id: rulesTitle
+        id: rulesPack2Title
         text: qsTr("Rules")
         font.family: homeFont.name
         font.bold: true
@@ -401,7 +400,48 @@ Rectangle {
       }
 
       Text {
-        id: rule1Text
+        id: rule1Pack2Text
+        y: 40
+        text: qsTr("  - Don't cut through adhesive tapes")
+        font.family: homeFont.name
+        font.pixelSize: 20
+        color:"#333333"
+      }
+
+      Image {
+        height: 100
+        width: 100
+        x: 0
+        y: 80
+        source: "resources/images/rule1Pack2.png";
+      }
+      Image {
+        height: 100
+        width: 100
+        x: 125
+        y: 80
+        source: "resources/images/rule2Pack2.png";
+      }
+    }
+
+    Rectangle {
+      id: rulesPack1Rectangle
+      x: 650
+      y: 300
+      width: 375
+      height: 250
+
+      Text {
+        id: rulesPack1Title
+        text: qsTr("Rules")
+        font.family: homeFont.name
+        font.bold: true
+        font.pixelSize: 24
+        color:"#333333"
+      }
+
+      Text {
+        id: rule1Pack1Text
         y: 40
         text: qsTr("  - Cut through the whole polygon")
         font.family: homeFont.name
@@ -432,7 +472,7 @@ Rectangle {
       }
 
       Text {
-        id: rule2Text
+        id: rule2Pack1Text
         y: 200
         text: qsTr("  - Respect number of lines and pieces")
         font.family: homeFont.name

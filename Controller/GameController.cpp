@@ -189,7 +189,12 @@ void GameController::sliceIt(const Segment& line) {
       globalVerticesCopy.clear();
       globalVerticesCopy = globalVertices;
 
-      newPolygonList << Polygon(newVertices);
+      Polygon newPolygon(newVertices);
+      // Don't add the new polygon if its area is lower than 0.1% of the total area.
+      // This allows users to draw several lines that pass near a point,
+      // but not exactly on this point, since it's quite difficult to achieve.
+      if (qRound(10.0*newPolygon.orientedArea() * 100.0 / _orientedAreaTotal)/10.0 >= 0.1)
+        newPolygonList << newPolygon;
       newVertices.clear();
     }
   }

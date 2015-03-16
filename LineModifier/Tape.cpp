@@ -8,6 +8,9 @@ Tape::Tape(int x, int y, int w, int h):
   _h(h) {
 }
 
+Tape::~Tape(void) {
+}
+
 int Tape::getX() const
 {
   return _x;

@@ -8,6 +8,7 @@ public:
 //  static int _width;
 
   Portal(void);
+  ~Portal(void);
 
 //  virtual std::vector<Segment> deviateLine(const Segment& line);
 

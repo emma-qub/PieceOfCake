@@ -3,3 +3,6 @@
 Deviation::Deviation(void):
   LineModifier() {
 }
+
+Deviation::~Deviation(void) {
+}

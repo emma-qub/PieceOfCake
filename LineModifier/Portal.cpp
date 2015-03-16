@@ -11,6 +11,9 @@ Portal::Portal(void):
 
 }
 
+Portal::~Portal(void) {
+}
+
 //std::vector<Segment> Portal::transform(const Segment& line) {
 //  std::vector<Segment> res;
 

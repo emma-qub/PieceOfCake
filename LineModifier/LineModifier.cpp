@@ -2,3 +2,6 @@
 
 LineModifier::LineModifier(void) {
 }
+
+LineModifier::~LineModifier(void) {
+}

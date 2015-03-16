@@ -3,3 +3,6 @@
 Obstacle::Obstacle(void):
   LineModifier() {
 }
+
+Obstacle::~Obstacle(void) {
+}

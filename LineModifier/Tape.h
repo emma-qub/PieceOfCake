@@ -8,6 +8,7 @@
 class Tape: public Obstacle {
 public:
   Tape(int x, int y, int w, int h);
+  ~Tape(void);
 
   int getX() const;
   void setX(int x);

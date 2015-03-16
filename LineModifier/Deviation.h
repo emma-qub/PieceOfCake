@@ -9,6 +9,7 @@
 class Deviation: LineModifier {
 public:
   Deviation(void);
+  ~Deviation(void);
 
   virtual std::vector<Segment> deviateLine(const Segment& line) const = 0;
 };

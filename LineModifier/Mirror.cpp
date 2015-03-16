@@ -3,3 +3,6 @@
 Mirror::Mirror(void):
   Deviation() {
 }
+
+Mirror::~Mirror(void) {
+}

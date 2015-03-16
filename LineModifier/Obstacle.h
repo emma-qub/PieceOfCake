@@ -7,6 +7,7 @@
 class Obstacle: LineModifier {
 public:
   Obstacle(void);
+  ~Obstacle(void);
 
   virtual bool crossing(const Segment& line) const = 0;
 };

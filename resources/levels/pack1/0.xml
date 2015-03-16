@@ -11,7 +11,7 @@
     <linemodifiers/>
     <linescount value="1"/>
     <partscount value="2"/>
-    <maxgaptowin value="10"/>
+    <maxgaptowin value="100"/>
     <starscount value="6"/>
     <hints/>
 </level>

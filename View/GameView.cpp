@@ -50,7 +50,10 @@ void GameView::mouseMoveEvent(QMouseEvent* event) {
     _goodSegment = false;
 
     Segment line(firstPoint, Point2d(currPoint.x(), currPoint.y()));
-    GameController::LineType lineType = _controller->computeLineType(line);
+    std::vector<Segment> lines;
+    _controller->computeMirrorLines(-1.f, line, lines);
+
+    GameController::LineType lineType = _controller->computeLineType(lines);
     QColor color;
     switch (lineType) {
     case GameController::noCrossing:
@@ -69,7 +72,8 @@ void GameView::mouseMoveEvent(QMouseEvent* event) {
 
     clearImage();
     drawFromModel();
-    drawLine(_firstPoint, currPoint, color, Qt::DashLine);
+    for (const Segment& currLine: lines)
+      drawLine(currLine, color, Qt::DashLine);
   }
 }
 
@@ -81,7 +85,9 @@ void GameView::mouseReleaseEvent(QMouseEvent* event) {
       Point2d A(_firstPoint.x(), _firstPoint.y());
       Point2d B(event->pos().x(), event->pos().y());
       Segment line(A, B);
-      _controller->sliceIt(line);
+      std::vector<Segment> lines;
+      _controller->computeMirrorLines(-1.f, line, lines);
+      _controller->sliceIt(lines);
       _controller->checkWinning();
     }
     _scribbling = false;
@@ -127,6 +133,14 @@ void GameView::drawLine(const QPoint& begin, const QPoint& end, const QColor& co
   update();
 }
 
+void GameView::drawLine(const Point2d& begin, const Point2d& end, const QColor& color, Qt::PenStyle penStyle) {
+  drawLine(QPoint(begin.getX(), begin.getY()), QPoint(end.getX(), end.getY()), color, penStyle);
+}
+
+void GameView::drawLine(const Segment& line, const QColor& color, Qt::PenStyle penStyle) {
+  drawLine(line.getA(), line.getB(), color, penStyle);
+}
+
 void GameView::circlePoint(const QPoint& point, const QColor& color, Qt::PenStyle penStyle) {
   QPainter painter(&_image);
   painter.setPen(QPen(color, 2, penStyle, Qt::RoundCap, Qt::BevelJoin));
@@ -149,7 +163,7 @@ void GameView::drawFromModel(void) {
       Point2d sndVertex(vertices.at((k+1)%vertices.size()));
 
       //drawText(QPoint(fstVertex.getX(), fstVertex.getY()), QString::number(k));
-      drawLine(QPoint(fstVertex.getX(), fstVertex.getY()), QPoint(sndVertex.getX(), sndVertex.getY()), color);
+      drawLine(fstVertex, sndVertex, color);
     }
   }
 
@@ -165,14 +179,14 @@ void GameView::drawFromModel(void) {
         Point2d sndVertex(vertices.at((k+1)%vertices.size()));
 
         //drawText(QPoint(fstVertex.getX(), fstVertex.getY()), QString::number(k));
-        drawLine(QPoint(fstVertex.getX(), fstVertex.getY()), QPoint(sndVertex.getX(), sndVertex.getY()), color);
+        drawLine(fstVertex, sndVertex, color);
       }
     }
   }
 
   // Set painter
   QPainter painter(&_image);
-  QColor color(Qt::red);
+  QColor color("#AF0F0F");
   painter.setPen(QPen(color, _myPenWidth-1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
   QBrush brush(color, Qt::BDiagPattern);
   painter.setBrush(brush);
@@ -186,6 +200,17 @@ void GameView::drawFromModel(void) {
       brush.setTransform(QTransform().translate(k, 0));
       painter.fillRect(tape.getX(), tape.getY(), tape.getW(), tape.getH(), brush);
     }
+  }
+
+  // Draw mirrors
+  MirrorList mirrors = _model->getMirrorList();
+  color = QColor("#1990DB");
+
+  for (const Mirror& mirror: mirrors) {
+    painter.setPen(QPen(color, _myPenWidth+3, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+    Point2d A = mirror.getMirrorLine().getA();
+    Point2d B = mirror.getMirrorLine().getB();
+    painter.drawLine(A.getX(), A.getY(), B.getX(), B.getY());
   }
 }
 

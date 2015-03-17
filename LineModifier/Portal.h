@@ -3,7 +3,7 @@
 
 #include "Deviation.h"
 
-class Portal: Deviation {
+class Portal: public Deviation {
 public:
 //  static int _width;
 

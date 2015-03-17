@@ -31,12 +31,15 @@ public:
   void cleanIntersections(const Polygon& polygon, std::vector<Point2d*>& intersections) const;
   void getVerticesAndIntersections(const Segment& line, const Polygon& polygon,
     std::vector<Point2d*>& globalVertices, std::vector<Point2d*>& intersections) const;
-  void sliceIt(const Segment& line);
+  void sliceIt(const std::vector<Segment>& lines);
 
-  LineType computeLineType(const Segment& line) const;
+  LineType computeLineType(const std::vector<Segment>& lines) const;
   void updateStarsMax(int starsMaxCount);
   void translatePolygons(const QList<Vector2d>& shiftVectors);
   void clearGame(void);
+
+  Mirror getNearestMirror(const Segment& line) const;
+  void computeMirrorLines(float firstLineLength, const Segment& line, std::vector<Segment>& lines) const;
 
   float computePolygonPercentageArea(const Polygon& polygon) const;
   Point2d computeGlobalBarycenter() const;

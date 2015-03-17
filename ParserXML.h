@@ -7,10 +7,12 @@
 #include "Segment.h"
 #include "Polygon.h"
 #include "Tape.h"
+#include "Mirror.h"
 #include "Hint.h"
 
 typedef QList<Polygon> PolygonList;
 typedef QList<Tape> TapeList;
+typedef QList<Mirror> MirrorList;
 typedef QList<Hint> HintList;
 
 class ParserXML {
@@ -32,15 +34,18 @@ public:
   QDomElement tolerancesToNode(unsigned int tolerances = 1);
   QDomElement polygonToNode(const Polygon& polygon, int id);
   QDomElement tapeToNode(const Tape& tape, int id);
+  QDomElement mirrorToNode(const Mirror& mirror, int id);
   QDomElement hintToNode(const Hint& hint, int id);
 
   void addPolygon(const Polygon& polygon);
   void addTape(const Tape& tape);
+  void addMirror(const Mirror& mirror);
   void addHint(const Hint& hint);
 
   QDomElement getElementById(const QDomElement& parent, const QString& name, int id);
   QDomElement getPolygon(int id);
   QDomElement getTape(int id);
+  QDomElement getMirror(int id);
   QDomElement getHint(int id);
 
   void setPartsCount(int partscount);
@@ -48,31 +53,38 @@ public:
   void setMaxGapToWin(int maxgaptowin);
   void setStarsCount(int starscount);
   void setTolerances(int tolerances);
+
   void replacePolygon(const Polygon& polygon, int id);
   void replaceTape(const Tape& tape, int id);
+  void replaceMirror(const Mirror& mirror, int id);
   void replaceHint(const Hint& hint, int id);
 
   bool removeElement(QDomElement& supElement, QDomElement& subElement, int id);
   bool removePolygon(int id);
   bool removeTape(int id);
+  bool removeMirror(int id);
   bool removeHint(int id);
 
   int createInt(const QDomElement& element, const QString& attributeName);
   float createFloat(const QDomElement& element, const QString& attributeName);
   Point2d createPoint(const QDomElement& element);
   Segment createSegment(const QDomElement& element);
+
   int getIntValue(const QString& tagName, const QString& attributeName = "value");
   int getPartsCount(void);
   int getLinesCount(void);
   int getMaxGapToWin(void);
   int getStarsCount(void);
   int getTolerances(void);
+
   Polygon createPolygon(const QDomElement& element);
   Tape createTape(const QDomElement& element);
+  Mirror createMirror(const QDomElement& element);
   Hint createHint(const QDomElement& element);
 
   PolygonList createPolygonList(void);
   TapeList createTapeList(void);
+  MirrorList createMirrorList(void);
   HintList createHintList(void);
 
   inline QDomDocument getDoc() const { return _doc; }
@@ -84,13 +96,18 @@ public:
 
 private:
   QString _xmlFileName;
+
   QDomDocument _doc;
+
   QDomElement _polygons;
   QDomElement _lineModifiers;
-  QDomElement _hints;
   QDomElement _tapes;
+  QDomElement _mirrors;
+  QDomElement _hints;
+
   int _polygonNodesCount;
   int _tapeNodesCount;
+  int _mirrorNodesCount;
   int _hintNodesCount;
 };
 

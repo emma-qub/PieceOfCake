@@ -4,7 +4,7 @@
 #include "LineModifier.h"
 #include "Segment.h"
 
-class Obstacle: LineModifier {
+class Obstacle: public LineModifier {
 public:
   Obstacle(void);
   ~Obstacle(void);

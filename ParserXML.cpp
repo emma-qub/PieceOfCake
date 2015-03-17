@@ -10,6 +10,7 @@ ParserXML::ParserXML(void):
   _doc("PieceOfCakeML"),
   _polygonNodesCount(0),
   _tapeNodesCount(0),
+  _mirrorNodesCount(0),
   _hintNodesCount(0) {
 
   QDomElement root = _doc.createElement("level");
@@ -20,8 +21,12 @@ ParserXML::ParserXML(void):
 
   _lineModifiers = _doc.createElement("linemodifiers");
   root.appendChild(_lineModifiers);
-  _tapes = _doc.createElement("obstacles");
+
+  _tapes = _doc.createElement("tapes");
   _lineModifiers.appendChild(_tapes);
+
+  _mirrors = _doc.createElement("mirrors");
+  _lineModifiers.appendChild(_mirrors);
 
   root.appendChild(_doc.createElement("linescount"));
 
@@ -57,11 +62,13 @@ ParserXML::ParserXML(const QString& xmlFileName):
   }
 
   _polygons = _doc.firstChildElement("level").firstChildElement("polygons");
-  _hints = _doc.firstChildElement("level").firstChildElement("hints");
   _tapes = _doc.firstChildElement("level").firstChildElement("linemodifiers").firstChildElement("tapes");
+  _mirrors = _doc.firstChildElement("level").firstChildElement("linemodifiers").firstChildElement("mirrors");
+  _hints = _doc.firstChildElement("level").firstChildElement("hints");
 
   _polygonNodesCount = _polygons.elementsByTagName("polygon").count();
   _tapeNodesCount = _tapes.elementsByTagName("tape").count();
+  _mirrorNodesCount = _mirrors.elementsByTagName("mirror").count();
   _hintNodesCount = _hints.elementsByTagName("hint").count();
 
   XMLDoc.close();
@@ -144,6 +151,19 @@ QDomElement ParserXML::tapeToNode(const Tape& tape, int id) {
   return element;
 }
 
+QDomElement ParserXML::mirrorToNode(const Mirror& mirror, int id) {
+  QDomElement element(_doc.createElement("mirror"));
+  element.setAttribute("id", id);
+
+  Segment mirrorLine(mirror.getMirrorLine());
+  element.setAttribute("xa", mirrorLine.getA().getX());
+  element.setAttribute("ya", mirrorLine.getA().getY());
+  element.setAttribute("xb", mirrorLine.getB().getX());
+  element.setAttribute("yb", mirrorLine.getB().getY());
+
+  return element;
+}
+
 QDomElement ParserXML::hintToNode(const Hint& hint, int id) {
   QDomElement element(_doc.createElement("hint"));
   element.setAttribute("id", id);
@@ -160,6 +180,10 @@ void ParserXML::addPolygon(const Polygon& polygon) {
 
 void ParserXML::addTape(const Tape& tape) {
   _tapes.appendChild(tapeToNode(tape, _tapeNodesCount++));
+}
+
+void ParserXML::addMirror(const Mirror& mirror) {
+  _mirrors.appendChild(mirrorToNode(mirror, _mirrorNodesCount++));
 }
 
 void ParserXML::addHint(const Hint& hint) {
@@ -186,6 +210,10 @@ QDomElement ParserXML::getPolygon(int id) {
 
 QDomElement ParserXML::getTape(int id) {
   return getElementById(_tapes, "tape", id);
+}
+
+QDomElement ParserXML::getMirror(int id) {
+  return getElementById(_mirrors, "mirror", id);
 }
 
 QDomElement ParserXML::getHint(int id) {
@@ -218,6 +246,10 @@ void ParserXML::replacePolygon(const Polygon& polygon, int id) {
 
 void ParserXML::replaceTape(const Tape& tape, int id) {
   _tapes.replaceChild(tapeToNode(tape, id), getTape(id));
+}
+
+void ParserXML::replaceMirror(const Mirror& mirror, int id) {
+  _tapes.replaceChild(mirrorToNode(mirror, id), getMirror(id));
 }
 
 void ParserXML::replaceHint(const Hint& hint, int id) {
@@ -257,6 +289,11 @@ bool ParserXML::removePolygon(int id) {
 bool ParserXML::removeTape(int id) {
   QDomElement element(getTape(id));
   return removeElement(_tapes, element, id);
+}
+
+bool ParserXML::removeMirror(int id) {
+  QDomElement element(getMirror(id));
+  return removeElement(_mirrors, element, id);
 }
 
 bool ParserXML::removeHint(int id) {
@@ -339,6 +376,15 @@ Tape ParserXML::createTape(const QDomElement& element) {
   );
 }
 
+Mirror ParserXML::createMirror(const QDomElement& element) {
+  return Mirror(
+    element.attribute("xa", "-1").toInt(),
+    element.attribute("ya", "-1").toInt(),
+    element.attribute("xb", "-1").toInt(),
+    element.attribute("yb", "-1").toInt()
+  );
+}
+
 Hint ParserXML::createHint(const QDomElement& element) {
   QDomNodeList lines = element.elementsByTagName("line");
   QDomNodeList costs = element.elementsByTagName("cost");
@@ -365,6 +411,14 @@ TapeList ParserXML::createTapeList(void) {
     tapeList << createTape(getTape(k));
 
   return tapeList;
+}
+
+MirrorList ParserXML::createMirrorList(void) {
+  MirrorList mirrorList;
+  for (int k = 0; k < _mirrorNodesCount; ++k)
+    mirrorList << createMirror(getMirror(k));
+
+  return mirrorList;
 }
 
 HintList ParserXML::createHintList(void) {

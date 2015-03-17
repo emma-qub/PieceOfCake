@@ -6,24 +6,26 @@
 GameModel::GameModel(QObject* parent):
   QStandardItemModel(parent),
   _polygonsCount(-1),
-  _tapesCount(-1) {
+  _tapesCount(-1),
+  _mirrorsCount(-1) {
 
   int r = std::rand()%255;
   int g = std::rand()%255;
   int b = std::rand()%255;
   _color = QColor(r, g, b);
 
-  _rootItem = invisibleRootItem();
-
   _polygonsItem = new QStandardItem("Polygons");
   appendRow(_polygonsItem);
 
   _tapesItem = new QStandardItem("Tapes");
   appendRow(_tapesItem);
+
+  _mirrorsItem = new QStandardItem("Mirrors");
+  appendRow(_mirrorsItem);
 }
 
 void GameModel::setPolygonList(const PolygonList& polygonList) {
-  // Remove every vertex from polygon list
+  // Remove every polygon from polygon list
   _polygonList.clear();
 
   // Fill polygon list with new polygons
@@ -37,16 +39,30 @@ void GameModel::setPolygonList(const PolygonList& polygonList) {
 }
 
 void GameModel::setTapeList(const TapeList& tapeList) {
-  // Remove every vertex from polygon list
+  // Remove every tape from tape list
   _tapeList.clear();
 
-  // Fill polygon list with new polygons
+  // Fill tape list with new tapes
   _tapeList = tapeList;
 
-  // Update polygons count
+  // Update tapes count
   _tapesCount = _tapeList.size();
 
-  // Populate model with new polygons
+  // Populate model with new tapes
+  populate();
+}
+
+void GameModel::setMirrorList(const MirrorList& mirrorList) {
+  // Remove every mirror from mirror list
+  _mirrorList.clear();
+
+  // Fill mirror list with new mirrors
+  _mirrorList = mirrorList;
+
+  // Update mirrors count
+  _mirrorsCount = _mirrorList.size();
+
+  // Populate model with new mirrors
   populate();
 }
 
@@ -59,6 +75,9 @@ void GameModel::populate(void) {
   _tapesItem = new QStandardItem("Tapes");
   appendRow(_tapesItem);
 
+  _mirrorsItem = new QStandardItem("Mirrors");
+  appendRow(_mirrorsItem);
+
   // Add every polygon to model
   for (const Polygon& polygon: _polygonList) {
     appendPolygon(polygon);
@@ -67,6 +86,11 @@ void GameModel::populate(void) {
   // Add every tape to model
   for (const Tape& tape: _tapeList) {
     appendTape(tape);
+  }
+
+  // Add every mirror to model
+  for (const Mirror& mirror: _mirrorList) {
+    appendMirror(mirror);
   }
 }
 
@@ -115,6 +139,24 @@ void GameModel::appendTape(const Tape& tape) {
   insertTape(_tapesItem->rowCount(), tape);
 }
 
+void GameModel::insertMirror(int mirrorRow, const Mirror& mirror) {
+  // Insert a row to store mirror
+  QStandardItem* mirrorItem = new QStandardItem("Mirror"+QString::number(mirrorRow));
+  _tapesItem->insertRow(mirrorRow, mirrorItem);
+
+  // Insert four rows to store x and y coordinates and width and height
+  Segment mirrorLine = mirror.getMirrorLine();
+  QStandardItem* xaItem = new QStandardItem(QString::number(mirrorLine.getA().getX()));
+  QStandardItem* yaItem = new QStandardItem(QString::number(mirrorLine.getA().getY()));
+  QStandardItem* xbItem = new QStandardItem(QString::number(mirrorLine.getB().getX()));
+  QStandardItem* ybItem = new QStandardItem(QString::number(mirrorLine.getB().getY()));
+  mirrorItem->insertRows(0, QList<QStandardItem*>() << xaItem << yaItem << xbItem << ybItem);
+}
+
+void GameModel::appendMirror(const Mirror& mirror) {
+  insertMirror(_mirrorsItem->rowCount(), mirror);
+}
+
 void GameModel::clearPolygons(void) {
   QStandardItemModel::clear();
   _polygonList.clear();
@@ -125,4 +167,10 @@ void GameModel::clearTapes(void) {
   QStandardItemModel::clear();
   _tapeList.clear();
   _tapesCount = 0;
+}
+
+void GameModel::clearMirrors(void) {
+  QStandardItemModel::clear();
+  _mirrorList.clear();
+  _mirrorsCount = 0;
 }

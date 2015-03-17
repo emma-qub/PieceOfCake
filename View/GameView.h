@@ -27,6 +27,8 @@ public:
   void resizeImage(QImage* image, const QSize& newSize);
   void drawLineTo(const QPoint& endPoint);
   void drawLine(const QPoint& begin, const QPoint& end, const QColor &color = Qt::black, Qt::PenStyle penStyle = Qt::SolidLine);
+  void drawLine(const Point2d& begin, const Point2d& end, const QColor &color = Qt::black, Qt::PenStyle penStyle = Qt::SolidLine);
+  void drawLine(const Segment& line, const QColor &color = Qt::black, Qt::PenStyle penStyle = Qt::SolidLine);
   void circlePoint(const QPoint& point, const QColor& color = Qt::red, Qt::PenStyle penStyle = Qt::SolidLine);
   void drawText(const QPoint& position, const QString& text, const QColor &color = QColor(0x777700));
   void drawAreaValues(const QList<float>& orientedAreas);

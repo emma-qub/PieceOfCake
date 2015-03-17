@@ -24,6 +24,7 @@ public:
   };
 
   Segment(const Point2d& a = Point2d(), const Point2d& b = Point2d());
+  Segment(int xa, int ya, int xb, int yb);
   Segment(const Segment& segment);
   virtual ~Segment(void) {}
 
@@ -32,7 +33,8 @@ public:
   inline void setA(const Point2d& a) { _boundaries[0] = a; }
   inline void setB(const Point2d& b) { _boundaries[1] = b; }
 
-  Point2d getCenter();
+  Point2d getCenter(void) const;
+  Vector2d getNormal(void) const;
 
   Point2d getOtherBoundary(const Point2d& boundary);
 
@@ -44,7 +46,10 @@ public:
 
   float orientedArea(void) const;
 
+  float length(void) const;
+
   friend bool operator==(const Segment& segment1, const Segment& segment2);
+  friend bool operator!=(const Segment& segment1, const Segment& segment2);
   friend bool operator<(const Segment& segment1, const Segment& segment2);
 
   Segment& operator=(const Segment& segment);

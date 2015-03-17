@@ -1,0 +1,41 @@
+<!DOCTYPE PieceOfCakeML>
+<level>
+    <polygons>
+        <polygon id="0">
+            <vertex x="50" y="50"/>
+            <vertex x="200" y="50"/>
+            <vertex x="200" y="200"/>
+            <vertex x="50" y="200"/>
+        </polygon>
+        <polygon id="1">
+            <vertex x="200" y="50"/>
+            <vertex x="350" y="50"/>
+            <vertex x="350" y="200"/>
+            <vertex x="200" y="200"/>
+        </polygon>
+        <polygon id="2">
+            <vertex x="50" y="200"/>
+            <vertex x="200" y="200"/>
+            <vertex x="200" y="350"/>
+            <vertex x="50" y="350"/>
+        </polygon>
+        <polygon id="3">
+            <vertex x="200" y="200"/>
+            <vertex x="350" y="200"/>
+            <vertex x="350" y="350"/>
+            <vertex x="200" y="350"/>
+        </polygon>
+    </polygons>
+    <linemodifiers>
+        <mirrors>
+            <mirror xa="150" xb="250" id="0" ya="49" yb="49"/>
+            <mirror xa="351" xb="351" id="1" ya="150" yb="250"/>
+            <mirror xa="150" xb="250" id="2" ya="351" yb="351"/>
+        </mirrors>
+    </linemodifiers>
+    <linescount value="1"/>
+    <partscount value="8"/>
+    <maxgaptowin value="10"/>
+    <starscount value="-1"/>
+    <hints/>
+</level>

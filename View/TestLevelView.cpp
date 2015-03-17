@@ -45,10 +45,10 @@ void TestLevelView::mouseMoveEvent(QMouseEvent* event) {
 
     _goodSegment = false;
 
-//    if ()
     Segment line(firstPoint, Point2d(currPoint.x(), currPoint.y()));
-
-    GameController::LineType lineType = _controller->computeLineType(line);
+    std::vector<Segment> lines;
+    _controller->computeMirrorLines(-1.f, line, lines);
+    GameController::LineType lineType = _controller->computeLineType(lines);
     QColor color;
     switch (lineType) {
     case GameController::noCrossing:
@@ -79,7 +79,9 @@ void TestLevelView::mouseReleaseEvent(QMouseEvent* event) {
       Point2d A(_firstPoint.x(), _firstPoint.y());
       Point2d B(event->pos().x(), event->pos().y());
       Segment line(A, B);
-      _controller->sliceIt(line);
+      std::vector<Segment> lines;
+      _controller->computeMirrorLines(-1.f, line, lines);
+      _controller->sliceIt(lines);
       GameInfo* g = _controller->getGameInfo();
       std::cerr << g->linesCount() << std::endl;
       std::cerr << g->linesDrawn() << std::endl;

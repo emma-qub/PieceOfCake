@@ -25,8 +25,8 @@ public:
   std::vector<Point2d> getTapeVertices(void) const;
   std::vector<Segment> getTapeEdges(void) const;
 
-  std::string getName(void) const override;
-  bool crossing(const Segment& line) const override;
+  std::string getName(void) const final;
+  bool crossing(const Segment& line) const final;
 
 private:
   int _x;

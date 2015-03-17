@@ -139,66 +139,79 @@ void GameController::getVerticesAndIntersections(const Segment& line, const Poly
   cleanIntersections(polygon, intersections);
 }
 
-void GameController::sliceIt(const Segment& line) {
+void GameController::sliceIt(const std::vector<Segment>& lines) {
   PolygonList newPolygonList;
 
-  for (const Polygon& polygon: _model->getPolygonList()) {
-    std::vector<Point2d*> globalVertices;
-    std::vector<Point2d*> intersections;
-    getVerticesAndIntersections(line, polygon, globalVertices, intersections);
+  for (const Segment& line: lines) {
+//    // Extend line length, to get mirror that are on polygon edge
+//    Vector2d AB(currLine.getA(), currLine.getB());
+//    AB *= 1.1;
+//    AB.setX(qRound(AB.getX()));
+//    AB.setY(qRound(AB.getY()));
+//    Vector2d BA(-AB);
+//    Segment line(currLine.getB()+Point2d(BA.getX(), BA.getY()), currLine.getA()+Point2d(AB.getX(), AB.getY()));
+//    std::cerr << currLine << " " << line << " " << Vector2d::areColinear(currLine.getNormal(), line.getNormal()) << std::endl;
 
-    std::vector<Point2d> newVertices;
+    // Browse every polygon and slice it!
+    for (const Polygon& polygon: _model->getPolygonList()) {
+      std::vector<Point2d*> globalVertices;
+      std::vector<Point2d*> intersections;
+      getVerticesAndIntersections(line, polygon, globalVertices, intersections);
 
-    std::vector<std::pair<Point2d*, Point2d*>> cuttingSegments = getCuttingSegments(intersections);
+      std::vector<Point2d> newVertices;
 
-    while (stillHasBaseVertices(globalVertices, intersections)) {
+      std::vector<std::pair<Point2d*, Point2d*>> cuttingSegments = getCuttingSegments(intersections);
 
-      // We really don't want the first point to be an intersection. Trust me.
-      Point2d* p = globalVertices.at(0);
-      while (std::find(intersections.begin(), intersections.end(), p) != intersections.end()) {
-        globalVertices.erase(globalVertices.begin());
-        globalVertices.push_back(p);
-        p = globalVertices.at(0);
-      }
-      std::vector<Point2d*> globalVerticesCopy(globalVertices);
+      while (stillHasBaseVertices(globalVertices, intersections)) {
 
-      bool lookingForOtherBound = false;
-      Point2d* otherBound = nullptr;
-      for (Point2d* currVerrtex: globalVerticesCopy) {
-        if (lookingForOtherBound) {
-          if (otherBound == currVerrtex) {
-            newVertices.push_back(*currVerrtex);
-            lookingForOtherBound = false;
-          }
-        } else {
-          if (std::find(intersections.begin(), intersections.end(), currVerrtex) != intersections.end()) {
-            // If the intersection is not equal to the last point, we add it
-            if (newVertices.size() > 0 && (std::find(newVertices.begin(), newVertices.end(), *currVerrtex) == newVertices.end())) {
+        // We really don't want the first point to be an intersection. Trust me.
+        Point2d* p = globalVertices.at(0);
+        while (std::find(intersections.begin(), intersections.end(), p) != intersections.end()) {
+          globalVertices.erase(globalVertices.begin());
+          globalVertices.push_back(p);
+          p = globalVertices.at(0);
+        }
+        std::vector<Point2d*> globalVerticesCopy(globalVertices);
+
+        bool lookingForOtherBound = false;
+        Point2d* otherBound = nullptr;
+        for (Point2d* currVerrtex: globalVerticesCopy) {
+          if (lookingForOtherBound) {
+            if (otherBound == currVerrtex) {
               newVertices.push_back(*currVerrtex);
+              lookingForOtherBound = false;
             }
-            otherBound = getOtherBound(currVerrtex, cuttingSegments);
-            lookingForOtherBound = true;
           } else {
-            newVertices.push_back(*currVerrtex);
-            auto it = std::find(globalVertices.begin(), globalVertices.end(), currVerrtex);
-            assert(it != globalVertices.end());
-            globalVertices.erase(it);
+            if (std::find(intersections.begin(), intersections.end(), currVerrtex) != intersections.end()) {
+              // If the intersection is not equal to the last point, we add it
+              if (newVertices.size() > 0 && (std::find(newVertices.begin(), newVertices.end(), *currVerrtex) == newVertices.end())) {
+                newVertices.push_back(*currVerrtex);
+              }
+              otherBound = getOtherBound(currVerrtex, cuttingSegments);
+              lookingForOtherBound = true;
+            } else {
+              newVertices.push_back(*currVerrtex);
+              auto it = std::find(globalVertices.begin(), globalVertices.end(), currVerrtex);
+              assert(it != globalVertices.end());
+              globalVertices.erase(it);
+            }
           }
         }
-      }
-      globalVerticesCopy.clear();
-      globalVerticesCopy = globalVertices;
+        globalVerticesCopy.clear();
+        globalVerticesCopy = globalVertices;
 
-      Polygon newPolygon(newVertices);
-      // Don't add the new polygon if its area is less than 0.1% of the total area.
-      // This allows users to draw several lines that pass near a point,
-      // but not exactly on this point, since it's quite difficult to achieve.
-      if (qRound(10.0*newPolygon.orientedArea() * 100.0 / _orientedAreaTotal)/10.0 >= 0.1)
-        newPolygonList << newPolygon;
-      newVertices.clear();
+        Polygon newPolygon(newVertices);
+        // Don't add the new polygon if its area is less than 0.1% of the total area.
+        // This allows users to draw several lines that pass near a point,
+        // but not exactly on this point, since it's quite difficult to achieve.
+        if (qRound(10.0*newPolygon.orientedArea() * 100.0 / _orientedAreaTotal)/10.0 >= 0.1)
+          newPolygonList << newPolygon;
+        newVertices.clear();
+      }
     }
+    _model->setPolygonList(newPolygonList);
+    newPolygonList.clear();
   }
-  _model->setPolygonList(newPolygonList);
 
   _gameInfo->setPartsCut(_model->getPolygonsCount());
   _gameInfo->setLinesDrawn(_gameInfo->linesDrawn()+1);
@@ -206,27 +219,29 @@ void GameController::sliceIt(const Segment& line) {
   emit update();
 }
 
-GameController::LineType GameController::computeLineType(const Segment& line) const {
+GameController::LineType GameController::computeLineType(const std::vector<Segment>& lines) const {
   bool noCrossing = false;
   bool goodCrossing = false;
   bool badCrossing = false;
 
   PolygonList polygonList = _model->getPolygonList();
-  for (const Polygon& polygon: polygonList) {
-    if (!polygon.isCrossing(line) && !polygon.isPointInside2(line.getA())) {
-      noCrossing = true;
-    } else if (polygon.isGoodSegment(line)) {
-      goodCrossing = true;
-    } else {
-      badCrossing = true;
+  for (const Segment& line: lines) {
+    for (const Polygon& polygon: polygonList) {
+      if (!polygon.isCrossing(line) && !polygon.isPointInside2(line.getA())) {
+        noCrossing = true;
+      } else if (polygon.isGoodSegment(line)) {
+        goodCrossing = true;
+      } else {
+        badCrossing = true;
+      }
     }
-  }
 
-  TapeList tapeList = _model->getTapeList();
-  for (const Tape& tape: tapeList) {
-    if (tape.crossing(line)) {
-      badCrossing = true;
-      break;
+    TapeList tapeList = _model->getTapeList();
+    for (const Tape& tape: tapeList) {
+      if (tape.crossing(line)) {
+        badCrossing = true;
+        break;
+      }
     }
   }
 
@@ -360,6 +375,8 @@ void GameController::replay(void) {
 
 void GameController::clearGame(void) {
   _model->clearPolygons();
+  _model->clearTapes();
+  _model->clearMirrors();
   _gameInfo->setLinesCount(0);
   _gameInfo->setLinesCount(0);
   _gameInfo->setPartsCut(0);
@@ -371,6 +388,61 @@ void GameController::clearGame(void) {
   _levelRunning = false;
 
   emit update();
+}
+
+Mirror GameController::getNearestMirror(const Segment& line) const {
+  MirrorList mirrors = _model->getMirrorList();
+
+  float minDist = -1;
+  Mirror nearestMirror;
+
+  for (const Mirror mirror: mirrors) {
+    std::vector<Segment> mirroredLines = mirror.deviateLine(line);
+    // If there is at least one reflected line
+    if (mirroredLines.size() > 1) {
+      if (minDist == -1)
+        mirroredLines.at(0).length();
+      else
+        qMin(minDist, mirroredLines.at(0).length());
+      nearestMirror = mirror;
+    }
+  }
+
+  return nearestMirror;
+}
+
+void GameController::computeMirrorLines(float firstLineLength, const Segment& line, std::vector<Segment>& lines) const {
+  Mirror nearestMirror = getNearestMirror(line);
+  std::vector<Segment> mirroredLines = nearestMirror.deviateLine(line);
+
+  if (!nearestMirror.isNullMirror()) {
+    // Init firstLineLength
+    if (firstLineLength == -1.f)
+      firstLineLength = mirroredLines.at(0).length();
+
+    // At least two line has to be here: the line drawn and its reflexion
+    assert(mirroredLines.size() > 1);
+
+    // Erase previous line, since it go through current mirror
+    if (lines.size() > 1)
+      lines.erase(lines.end()-1);
+
+    // Get the mirrorLined the length of the firstLine
+    Segment mirroredLine = mirroredLines.at(1);
+    Point2d A = mirroredLine.getA();
+    Point2d B = mirroredLine.getB();
+    Vector2d lu = firstLineLength*Vector2d(A, B).normalize();
+    Point2d BB(lu.getX(), lu.getY());
+    mirroredLine.setB(A + BB);
+
+    // Push line and its reflexion
+    lines.push_back(mirroredLines.at(0));
+    lines.push_back(mirroredLine);
+
+    computeMirrorLines(firstLineLength, mirroredLine, lines);
+  } else {
+    lines.push_back(line);
+  }
 }
 
 float GameController::computePolygonPercentageArea(const Polygon& polygon) const {
@@ -405,6 +477,9 @@ void GameController::openLevel(const QString& fileName) {
 
   TapeList tapeList(parser.createTapeList());
   _model->setTapeList(tapeList);
+
+  MirrorList mirrorList(parser.createMirrorList());
+  _model->setMirrorList(mirrorList);
 
   _gameInfo->setLinesDrawn(0);
   _gameInfo->setLinesCount(parser.getLinesCount());

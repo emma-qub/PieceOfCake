@@ -6,11 +6,12 @@
 
 #include <vector>
 
-class Deviation: LineModifier {
+class Deviation: public LineModifier {
 public:
   Deviation(void);
   ~Deviation(void);
 
+//  virtual std::vector<Segment> deviateLine(const Segment& line) const = 0;
   virtual std::vector<Segment> deviateLine(const Segment& line) const = 0;
 };
 

@@ -12,13 +12,22 @@ Segment::Segment(const Point2d& a, const Point2d& b) {
   _boundaries[1] = b;
 }
 
+Segment::Segment(int xa, int ya, int xb, int yb) {
+  _boundaries[0] = Point2d(xa, ya);
+  _boundaries[1] = Point2d(xb, yb);
+}
+
 Segment::Segment(const Segment& segment) {
   _boundaries[0] = segment._boundaries[0];
   _boundaries[1] = segment._boundaries[1];
 }
 
-Point2d Segment::getCenter() {
+Point2d Segment::getCenter() const {
   return Point2d((getA().getX() + getB().getX())/2.0, (getA().getY() + getB().getY())/2.0);
+}
+
+Vector2d Segment::getNormal(void) const {
+  return Vector2d(-(getB().getY() - getA().getY()), (getB().getX() - getA().getX()));
 }
 
 Point2d Segment::getOtherBoundary(const Point2d& boundary) {
@@ -109,6 +118,11 @@ float Segment::orientedArea(void) const {
   return h*(base1+base2)/2;
 }
 
+float Segment::length(void) const {
+  return std::sqrt((_boundaries[1].getX()-_boundaries[0].getX()) * (_boundaries[1].getX()-_boundaries[0].getX())
+                 + (_boundaries[1].getY()-_boundaries[0].getY()) * (_boundaries[1].getY()-_boundaries[0].getY()));
+}
+
 Point2d Segment::intersectionPoint(const Segment& AB, const Segment& PQ) {
   if (AB.computeIntersection(PQ) != Segment::Regular) {
     std::cerr << "Error within intersectionPoint: no intersection." << std::endl;
@@ -142,6 +156,10 @@ Point2d Segment::intersectionPoint(const Segment& AB, const Segment& PQ) {
 
 bool operator==(const Segment& segment1, const Segment& segment2) {
   return (segment1.getA() == segment2.getA() && segment1.getB() == segment2.getB());
+}
+
+bool operator!=(const Segment& segment1, const Segment& segment2) {
+  return !(segment1 == segment2);
 }
 
 bool operator<(const Segment& segment1, const Segment& segment2) {

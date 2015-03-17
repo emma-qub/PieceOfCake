@@ -2,21 +2,23 @@
 #define PORTAL_H
 
 #include "Deviation.h"
+#include "Vector2d.h"
 
 class Portal: public Deviation {
+
 public:
-//  static int _width;
+  Portal(const Segment& entrance, const Segment& exit);
+  virtual ~Portal(void);
 
-  Portal(void);
-  ~Portal(void);
+  std::string getName() const final;
+  std::vector<Segment> deviateLine(const Segment& line) const final;
 
-//  virtual std::vector<Segment> deviateLine(const Segment& line);
+private:
+  Segment _entrance;
+  Segment _exit;
 
-//private:
-//  Point2d _fstPosition;
-//  Point2d _sndPosition;
-//  Vector2d _fstDirection;
-//  Vector2d _sndDirection;
+  Vector2d _normalEntrance;
+  Vector2d _normalExit;
 };
 
 #endif // PORTAL_H

@@ -30,6 +30,7 @@ public:
   Point2d& operator/=(const float& k);
 
   friend Point2d operator+(const Point2d& point1, const Point2d& point2);
+  friend Point2d operator+(const Point2d& origine, const Vector2d& direction);
   Point2d& operator+=(const Point2d& point);
 
   friend Vector2d operator-(const Point2d& point1, const Point2d& point2);

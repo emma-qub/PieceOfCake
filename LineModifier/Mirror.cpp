@@ -20,9 +20,6 @@ std::vector<Segment> Mirror::deviateLine(const Segment& line) const {
   if (_mirrorLine.computeIntersection(line) == Segment::Regular) {
     Point2d intersection(Segment::intersectionPoint(_mirrorLine, line));
 
-    // Mirror's normal
-    //Vector2d n(line.getNormal());
-
     // mirror's bounds coordinates
     int xc = _mirrorLine.getA().getX();
     int yc = _mirrorLine.getA().getY();

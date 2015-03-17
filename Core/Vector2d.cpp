@@ -4,6 +4,7 @@
 #include <cfloat>   // FLT_EPSILON
 
 #include "Point2d.h"
+#include "Segment.h"
 
 Vector2d::Vector2d(const float& x, const float& y) {
   _coords[0] = x;
@@ -18,6 +19,10 @@ Vector2d::Vector2d(const Point2d& A, const Point2d& B) {
 Vector2d::Vector2d(const Vector2d& vector) {
   _coords[0] = vector._coords[0];
   _coords[1] = vector._coords[1];
+}
+
+Vector2d Vector2d::fromSegment(const Segment& segment) {
+  return Vector2d(segment.getA(), segment.getB());
 }
 
 bool operator==(const Vector2d& vector1, const Vector2d& vector2) {

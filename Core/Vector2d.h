@@ -5,10 +5,12 @@
 #include <cassert>
 
 class Point2d;
+class Segment;
 
 class Vector2d {
 public:
   Vector2d(const float& x = 0.0, const float& y = 0.0);
+  Vector2d(const Segment& segment);
   Vector2d(const Point2d& A, const Point2d& B);
   Vector2d(const Vector2d& vector);
   virtual ~Vector2d(void) {}
@@ -21,6 +23,8 @@ public:
 
   inline float operator[](int i) const { assert(i < 2); assert(-1 < i); return _coords[i]; }
   inline float& operator[](const int& i) { assert(i < 2); assert(-1 < i); return _coords[i]; }
+
+  static Vector2d fromSegment(const Segment& segment);
 
   friend bool operator==(const Vector2d& vector1, const Vector2d& vector2);
   friend bool operator!=(const Vector2d& vector1, const Vector2d& vector2);

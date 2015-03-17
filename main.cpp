@@ -19,6 +19,7 @@
 #define GNUPLOT 0
 #define QML 0
 #define Thumbnail 0
+#define PORTAL 0
 
 #if Thumbnail
 # include "ThumbnailCreator.h"
@@ -34,8 +35,19 @@
 # include <QApplication>
 #endif
 
+#if PORTAL
+# include "Portal.h"
+#endif
+
 int main(int argc, char** argv) {
   srand(time(NULL));  // init rand;
+
+#if PORTAL
+  Portal p(Segment(10, 40, 10, 20), Segment(40, 10, 20, 10));
+  std::vector<Segment> lines(p.deviateLine(Segment(20, 40, 0, 30)));
+  for (const Segment& line: lines)
+    std::cerr << line << std::endl;
+#endif
 
 #if Thumbnail
 

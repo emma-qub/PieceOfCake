@@ -28,14 +28,14 @@
     </polygons>
     <linemodifiers>
         <mirrors>
-            <mirror xa="150" xb="250" id="0" ya="49" yb="49"/>
-            <mirror xa="351" xb="351" id="1" ya="150" yb="250"/>
-            <mirror xa="150" xb="250" id="2" ya="351" yb="351"/>
+            <mirror yb="49" xa="150" ya="49" xb="250" id="0"/>
+            <mirror yb="250" xa="351" ya="150" xb="351" id="1"/>
+            <mirror yb="351" xa="150" ya="351" xb="250" id="2"/>
         </mirrors>
     </linemodifiers>
     <linescount value="1"/>
     <partscount value="8"/>
     <maxgaptowin value="10"/>
-    <starscount value="-1"/>
+    <starscount value="5"/>
     <hints/>
 </level>

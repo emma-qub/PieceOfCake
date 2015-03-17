@@ -54,6 +54,10 @@ Point2d operator+(const Point2d& point1, const Point2d& point2) {
       point1._coords[1] + point2._coords[1]);
 }
 
+Point2d operator+(const Point2d& origine, const Vector2d& direction) {
+  return origine + Point2d(direction.getX(), direction.getY());
+}
+
 Point2d& Point2d::operator+=(const Point2d& point) {
   _coords[0] += point._coords[0];
   _coords[1] += point._coords[1];

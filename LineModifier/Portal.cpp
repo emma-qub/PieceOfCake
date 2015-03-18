@@ -51,24 +51,17 @@ std::vector<Segment> Portal::deviateLine(const Segment& line) const {
     float ratio = Point2d::distance(in.getA(), I)/out.length();
     Point2d J = out.getA().applyVector(ratio*Vector2d::fromSegment(out));
 
-    cerro("I ");cerro(I);cerro("");
-    cerro("J ");cerro(J);cerro("");
-
     // Compute extended point
     Point2d A1 = I.applyVector(Vector2d(line.getA(), I));
-    cerro("A1 ");cerro(A1);cerro("");
 
     // Compute point after moving rotation's center to origin
     Point2d A2 = A1.applyVector(Vector2d(-I.getX(), -I.getY()));
-    cerro("A2 ");cerro(A2);cerro("");
 
     // Apply rotation
     Point2d A3(A2.getX()*cos(theta)-A2.getY()*sin(theta), A2.getX()*sin(theta)+A2.getY()*cos(theta));
-    cerro("A3 ");cerro(A3);cerro("");
 
     // Translate back
     Point2d A4 = A3.applyVector(Vector2d(J.getX(), J.getY()));
-    cerro("A4 ");cerro(A4);cerro("");
 
     // Add in line and out line
     deviatedLines.push_back(Segment(line.getA(), I));

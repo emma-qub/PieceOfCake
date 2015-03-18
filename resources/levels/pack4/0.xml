@@ -1,0 +1,21 @@
+<!DOCTYPE PieceOfCakeML>
+<level>
+    <polygons>
+        <polygon id="0">
+            <vertex x="100" y="100"/>
+            <vertex x="100" y="300"/>
+            <vertex x="300" y="300"/>
+            <vertex x="300" y="100"/>
+        </polygon>
+    </polygons>
+    <linemodifiers>
+        <portals>
+            <portal xaOut="250" yaIn="250" ybOut="50" xbIn="50" id="0" xbOut="150" ybIn="150" xaIn="50" yaOut="50"/>
+        </portals>
+    </linemodifiers>
+    <linescount value="1"/>
+    <partscount value="4"/>
+    <maxgaptowin value="10"/>
+    <starscount value="6"/>
+    <hints/>
+</level>

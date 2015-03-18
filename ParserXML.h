@@ -8,11 +8,13 @@
 #include "Polygon.h"
 #include "Tape.h"
 #include "Mirror.h"
+#include "Portal.h"
 #include "Hint.h"
 
 typedef QList<Polygon> PolygonList;
 typedef QList<Tape> TapeList;
 typedef QList<Mirror> MirrorList;
+typedef QList<Portal> PortalList;
 typedef QList<Hint> HintList;
 
 class ParserXML {
@@ -35,17 +37,20 @@ public:
   QDomElement polygonToNode(const Polygon& polygon, int id);
   QDomElement tapeToNode(const Tape& tape, int id);
   QDomElement mirrorToNode(const Mirror& mirror, int id);
+  QDomElement portalToNode(const Portal& portal, int id);
   QDomElement hintToNode(const Hint& hint, int id);
 
   void addPolygon(const Polygon& polygon);
   void addTape(const Tape& tape);
   void addMirror(const Mirror& mirror);
+  void addPortal(const Portal& portal);
   void addHint(const Hint& hint);
 
   QDomElement getElementById(const QDomElement& parent, const QString& name, int id);
   QDomElement getPolygon(int id);
   QDomElement getTape(int id);
   QDomElement getMirror(int id);
+  QDomElement getPortal(int id);
   QDomElement getHint(int id);
 
   void setPartsCount(int partscount);
@@ -57,12 +62,14 @@ public:
   void replacePolygon(const Polygon& polygon, int id);
   void replaceTape(const Tape& tape, int id);
   void replaceMirror(const Mirror& mirror, int id);
+  void replacePortal(const Portal& portal, int id);
   void replaceHint(const Hint& hint, int id);
 
   bool removeElement(QDomElement& supElement, QDomElement& subElement, int id);
   bool removePolygon(int id);
   bool removeTape(int id);
   bool removeMirror(int id);
+  bool removePortal(int id);
   bool removeHint(int id);
 
   int createInt(const QDomElement& element, const QString& attributeName);
@@ -80,11 +87,13 @@ public:
   Polygon createPolygon(const QDomElement& element);
   Tape createTape(const QDomElement& element);
   Mirror createMirror(const QDomElement& element);
+  Portal createPortal(const QDomElement& element);
   Hint createHint(const QDomElement& element);
 
   PolygonList createPolygonList(void);
   TapeList createTapeList(void);
   MirrorList createMirrorList(void);
+  PortalList createPortalList(void);
   HintList createHintList(void);
 
   inline QDomDocument getDoc() const { return _doc; }
@@ -103,11 +112,13 @@ private:
   QDomElement _lineModifiers;
   QDomElement _tapes;
   QDomElement _mirrors;
+  QDomElement _portals;
   QDomElement _hints;
 
   int _polygonNodesCount;
   int _tapeNodesCount;
   int _mirrorNodesCount;
+  int _portalNodesCount;
   int _hintNodesCount;
 };
 

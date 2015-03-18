@@ -51,7 +51,7 @@ void GameView::mouseMoveEvent(QMouseEvent* event) {
 
     Segment line(firstPoint, Point2d(currPoint.x(), currPoint.y()));
     std::vector<Segment> lines;
-    _controller->computeMirrorLines(-1.f, line, lines);
+    _controller->computeDeviateLines(-1.f, line, lines);
 
     GameController::LineType lineType = _controller->computeLineType(lines);
     QColor color;
@@ -86,7 +86,7 @@ void GameView::mouseReleaseEvent(QMouseEvent* event) {
       Point2d B(event->pos().x(), event->pos().y());
       Segment line(A, B);
       std::vector<Segment> lines;
-      _controller->computeMirrorLines(-1.f, line, lines);
+      _controller->computeDeviateLines(-1.f, line, lines);
       _controller->sliceIt(lines);
       _controller->checkWinning();
     }
@@ -202,15 +202,31 @@ void GameView::drawFromModel(void) {
     }
   }
 
-  // Draw mirrors
-  MirrorList mirrors = _model->getMirrorList();
-  color = QColor("#1990DB");
+  // Draw deviations
+  DeviationList deviations = _model->getDeviationList();
 
-  for (const Mirror& mirror: mirrors) {
-    painter.setPen(QPen(color, _myPenWidth+3, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-    Point2d A = mirror.getMirrorLine().getA();
-    Point2d B = mirror.getMirrorLine().getB();
-    painter.drawLine(A.getX(), A.getY(), B.getX(), B.getY());
+  for (Deviation* deviation: deviations) {
+    if (Mirror* mirror = dynamic_cast<Mirror*>(deviation)) {
+      color = QColor("#1990DB");
+      painter.setPen(QPen(color, _myPenWidth+3, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+      Point2d A = mirror->getMirrorLine().getA();
+      Point2d B = mirror->getMirrorLine().getB();
+      painter.drawLine(A.getX(), A.getY(), B.getX(), B.getY());
+    } else if (Portal* portal = dynamic_cast<Portal*>(deviation)) {
+      // Draw In (orange)
+      color = QColor("#FF8000");
+      painter.setPen(QPen(color, _myPenWidth, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+      Point2d A(portal->getIn().getA());
+      Point2d B(portal->getIn().getB());
+      painter.drawLine(A.getX(), A.getY(), B.getX(), B.getY());
+
+      // Draw Out (blue)
+      color = QColor("#60A0FF");
+      painter.setPen(QPen(color, _myPenWidth, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+      Point2d C(portal->getOut().getA());
+      Point2d D(portal->getOut().getB());
+      painter.drawLine(C.getX(), C.getY(), D.getX(), D.getY());
+    }
   }
 }
 

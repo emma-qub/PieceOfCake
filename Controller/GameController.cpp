@@ -377,6 +377,8 @@ void GameController::clearGame(void) {
   _model->clearPolygons();
   _model->clearTapes();
   _model->clearMirrors();
+  _model->clearPortals();
+  _model->clearDeviations();
   _gameInfo->setLinesCount(0);
   _gameInfo->setLinesCount(0);
   _gameInfo->setPartsCut(0);
@@ -390,56 +392,56 @@ void GameController::clearGame(void) {
   emit update();
 }
 
-Mirror GameController::getNearestMirror(const Segment& line) const {
-  MirrorList mirrors = _model->getMirrorList();
+Deviation* GameController::getNearestDeviation(const Segment& line) const {
+  DeviationList deviations = _model->getDeviationList();
 
   float minDist = -1;
-  Mirror nearestMirror;
+  Deviation* nearestDeviation = nullptr;
 
-  for (const Mirror mirror: mirrors) {
-    std::vector<Segment> mirroredLines = mirror.deviateLine(line);
+  for (Deviation* deviation: deviations) {
+    std::vector<Segment> deviateLines = deviation->deviateLine(line);
     // If there is at least one reflected line
-    if (mirroredLines.size() > 1) {
+    if (deviateLines.size() > 1) {
       if (minDist == -1)
-        mirroredLines.at(0).length();
+        deviateLines.at(0).length();
       else
-        qMin(minDist, mirroredLines.at(0).length());
-      nearestMirror = mirror;
+        qMin(minDist, deviateLines.at(0).length());
+      nearestDeviation = deviation;
     }
   }
 
-  return nearestMirror;
+  return nearestDeviation;
 }
 
-void GameController::computeMirrorLines(float firstLineLength, const Segment& line, std::vector<Segment>& lines) const {
-  Mirror nearestMirror = getNearestMirror(line);
-  std::vector<Segment> mirroredLines = nearestMirror.deviateLine(line);
+void GameController::computeDeviateLines(float firstLineLength, const Segment& line, std::vector<Segment>& lines) const {
+  Deviation* nearestDeviation = getNearestDeviation(line);
 
-  if (!nearestMirror.isNullMirror()) {
+  if (nearestDeviation) {
+    std::vector<Segment> deviateLines = nearestDeviation->deviateLine(line);
     // Init firstLineLength
     if (firstLineLength == -1.f)
-      firstLineLength = mirroredLines.at(0).length();
+      firstLineLength = deviateLines.at(0).length();
 
     // At least two line has to be here: the line drawn and its reflexion
-    assert(mirroredLines.size() > 1);
+    assert(deviateLines.size() > 1);
 
     // Erase previous line, since it go through current mirror
     if (lines.size() > 1)
       lines.erase(lines.end()-1);
 
     // Get the mirrorLined the length of the firstLine
-    Segment mirroredLine = mirroredLines.at(1);
-    Point2d A = mirroredLine.getA();
-    Point2d B = mirroredLine.getB();
+    Segment deviateLine = deviateLines.at(1);
+    Point2d A = deviateLine.getA();
+    Point2d B = deviateLine.getB();
     Vector2d lu = firstLineLength*Vector2d(A, B).normalize();
     Point2d BB(lu.getX(), lu.getY());
-    mirroredLine.setB(A + BB);
+    deviateLine.setB(A + BB);
 
     // Push line and its reflexion
-    lines.push_back(mirroredLines.at(0));
-    lines.push_back(mirroredLine);
+    lines.push_back(deviateLines.at(0));
+    lines.push_back(deviateLine);
 
-    computeMirrorLines(firstLineLength, mirroredLine, lines);
+    computeDeviateLines(firstLineLength, deviateLine, lines);
   } else {
     lines.push_back(line);
   }
@@ -479,7 +481,15 @@ void GameController::openLevel(const QString& fileName) {
   _model->setTapeList(tapeList);
 
   MirrorList mirrorList(parser.createMirrorList());
-  _model->setMirrorList(mirrorList);
+  PortalList portalList(parser.createPortalList());
+  DeviationList deviationsList;
+  for (const Mirror& mirror: mirrorList) {
+    deviationsList.push_back(new Mirror(mirror));
+  }
+  for (const Portal& portal: portalList) {
+    deviationsList.push_back(new Portal(portal));
+  }
+  _model->setDeviationList(deviationsList);
 
   _gameInfo->setLinesDrawn(0);
   _gameInfo->setLinesCount(parser.getLinesCount());

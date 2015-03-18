@@ -38,8 +38,8 @@ public:
   void translatePolygons(const QList<Vector2d>& shiftVectors);
   void clearGame(void);
 
-  Mirror getNearestMirror(const Segment& line) const;
-  void computeMirrorLines(float firstLineLength, const Segment& line, std::vector<Segment>& lines) const;
+  Deviation* getNearestDeviation(const Segment& line) const;
+  void computeDeviateLines(float firstLineLength, const Segment& line, std::vector<Segment>& lines) const;
 
   float computePolygonPercentageArea(const Polygon& polygon) const;
   Point2d computeGlobalBarycenter() const;

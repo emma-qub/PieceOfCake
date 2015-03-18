@@ -47,7 +47,7 @@ void TestLevelView::mouseMoveEvent(QMouseEvent* event) {
 
     Segment line(firstPoint, Point2d(currPoint.x(), currPoint.y()));
     std::vector<Segment> lines;
-    _controller->computeMirrorLines(-1.f, line, lines);
+    _controller->computeDeviateLines(-1.f, line, lines);
     GameController::LineType lineType = _controller->computeLineType(lines);
     QColor color;
     switch (lineType) {
@@ -80,7 +80,7 @@ void TestLevelView::mouseReleaseEvent(QMouseEvent* event) {
       Point2d B(event->pos().x(), event->pos().y());
       Segment line(A, B);
       std::vector<Segment> lines;
-      _controller->computeMirrorLines(-1.f, line, lines);
+      _controller->computeDeviateLines(-1.f, line, lines);
       _controller->sliceIt(lines);
       GameInfo* g = _controller->getGameInfo();
       std::cerr << g->linesCount() << std::endl;

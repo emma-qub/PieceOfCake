@@ -28,6 +28,9 @@ ParserXML::ParserXML(void):
   _mirrors = _doc.createElement("mirrors");
   _lineModifiers.appendChild(_mirrors);
 
+  _portals = _doc.createElement("portals");
+  _lineModifiers.appendChild(_portals);
+
   root.appendChild(_doc.createElement("linescount"));
 
   root.appendChild(_doc.createElement("partscount"));
@@ -64,11 +67,13 @@ ParserXML::ParserXML(const QString& xmlFileName):
   _polygons = _doc.firstChildElement("level").firstChildElement("polygons");
   _tapes = _doc.firstChildElement("level").firstChildElement("linemodifiers").firstChildElement("tapes");
   _mirrors = _doc.firstChildElement("level").firstChildElement("linemodifiers").firstChildElement("mirrors");
+  _portals = _doc.firstChildElement("level").firstChildElement("linemodifiers").firstChildElement("portals");
   _hints = _doc.firstChildElement("level").firstChildElement("hints");
 
   _polygonNodesCount = _polygons.elementsByTagName("polygon").count();
   _tapeNodesCount = _tapes.elementsByTagName("tape").count();
   _mirrorNodesCount = _mirrors.elementsByTagName("mirror").count();
+  _portalNodesCount = _portals.elementsByTagName("portal").count();
   _hintNodesCount = _hints.elementsByTagName("hint").count();
 
   XMLDoc.close();
@@ -164,6 +169,25 @@ QDomElement ParserXML::mirrorToNode(const Mirror& mirror, int id) {
   return element;
 }
 
+QDomElement ParserXML::portalToNode(const Portal& portal, int id) {
+  QDomElement element(_doc.createElement("portal"));
+  element.setAttribute("id", id);
+
+  Segment portalLineIn(portal.getIn());
+  element.setAttribute("xaIn", portalLineIn.getA().getX());
+  element.setAttribute("yaIn", portalLineIn.getA().getY());
+  element.setAttribute("xbIn", portalLineIn.getB().getX());
+  element.setAttribute("ybIn", portalLineIn.getB().getY());
+
+  Segment portalLineOut(portal.getOut());
+  element.setAttribute("xaOut", portalLineOut.getA().getX());
+  element.setAttribute("yaOut", portalLineOut.getA().getY());
+  element.setAttribute("xbOut", portalLineOut.getB().getX());
+  element.setAttribute("ybOut", portalLineOut.getB().getY());
+
+  return element;
+}
+
 QDomElement ParserXML::hintToNode(const Hint& hint, int id) {
   QDomElement element(_doc.createElement("hint"));
   element.setAttribute("id", id);
@@ -184,6 +208,10 @@ void ParserXML::addTape(const Tape& tape) {
 
 void ParserXML::addMirror(const Mirror& mirror) {
   _mirrors.appendChild(mirrorToNode(mirror, _mirrorNodesCount++));
+}
+
+void ParserXML::addPortal(const Portal& portal) {
+  _portals.appendChild(portalToNode(portal, _portalNodesCount++));
 }
 
 void ParserXML::addHint(const Hint& hint) {
@@ -214,6 +242,10 @@ QDomElement ParserXML::getTape(int id) {
 
 QDomElement ParserXML::getMirror(int id) {
   return getElementById(_mirrors, "mirror", id);
+}
+
+QDomElement ParserXML::getPortal(int id) {
+  return getElementById(_portals, "portal", id);
 }
 
 QDomElement ParserXML::getHint(int id) {
@@ -249,7 +281,11 @@ void ParserXML::replaceTape(const Tape& tape, int id) {
 }
 
 void ParserXML::replaceMirror(const Mirror& mirror, int id) {
-  _tapes.replaceChild(mirrorToNode(mirror, id), getMirror(id));
+  _mirrors.replaceChild(mirrorToNode(mirror, id), getMirror(id));
+}
+
+void ParserXML::replacePortal(const Portal& portal, int id) {
+  _portals.replaceChild(portalToNode(portal, id), getPortal(id));
 }
 
 void ParserXML::replaceHint(const Hint& hint, int id) {
@@ -294,6 +330,11 @@ bool ParserXML::removeTape(int id) {
 bool ParserXML::removeMirror(int id) {
   QDomElement element(getMirror(id));
   return removeElement(_mirrors, element, id);
+}
+
+bool ParserXML::removePortal(int id) {
+  QDomElement element(getPortal(id));
+  return removeElement(_portals, element, id);
 }
 
 bool ParserXML::removeHint(int id) {
@@ -385,6 +426,19 @@ Mirror ParserXML::createMirror(const QDomElement& element) {
   );
 }
 
+Portal ParserXML::createPortal(const QDomElement& element) {
+  return Portal(
+      element.attribute("xaIn", "-1").toInt(),
+      element.attribute("yaIn", "-1").toInt(),
+      element.attribute("xbIn", "-1").toInt(),
+      element.attribute("ybIn", "-1").toInt(),
+      element.attribute("xaOut", "-1").toInt(),
+      element.attribute("yaOut", "-1").toInt(),
+      element.attribute("xbOut", "-1").toInt(),
+      element.attribute("ybOut", "-1").toInt()
+  );
+}
+
 Hint ParserXML::createHint(const QDomElement& element) {
   QDomNodeList lines = element.elementsByTagName("line");
   QDomNodeList costs = element.elementsByTagName("cost");
@@ -419,6 +473,14 @@ MirrorList ParserXML::createMirrorList(void) {
     mirrorList << createMirror(getMirror(k));
 
   return mirrorList;
+}
+
+PortalList ParserXML::createPortalList(void) {
+  PortalList portalList;
+  for (int k = 0; k < _portalNodesCount; ++k)
+    portalList << createPortal(getPortal(k));
+
+  return portalList;
 }
 
 HintList ParserXML::createHintList(void) {

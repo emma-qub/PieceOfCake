@@ -13,8 +13,6 @@ public:
   std::string getName() const final;
   std::vector<Segment> deviateLine(const Segment& line) const final;
 
-  inline bool isNullMirror(void) { return _mirrorLine == Segment(Point2d(-1, -1), Point2d(-1, -1)); }
-
 private:
   Segment _mirrorLine;
 };

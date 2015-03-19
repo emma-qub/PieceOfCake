@@ -10,7 +10,7 @@
     </polygons>
     <linemodifiers>
         <portals>
-            <portal id="0" xaIn="50" yaIn="250" xbIn="50" ybIn="150" xaOut="250" yaOut="50" xbOut="150" ybOut="50"/>
+            <portal id="0" xaIn="25" yaIn="125" xbIn="125" ybIn="25" xaOut="375" yaOut="125" xbOut="275" ybOut="25"/>
         </portals>
     </linemodifiers>
     <linescount value="1"/>

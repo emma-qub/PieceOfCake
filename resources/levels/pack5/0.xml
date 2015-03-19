@@ -2,10 +2,10 @@
 <level>
     <polygons>
         <polygon id="0">
-            <vertex x="50" y="50"/>
-            <vertex x="150" y="50"/>
-            <vertex x="150" y="150"/>
-            <vertex x="50" y="150"/>
+            <vertex x="50" y="100"/>
+            <vertex x="150" y="100"/>
+            <vertex x="150" y="200"/>
+            <vertex x="50" y="200"/>
         </polygon>
         <polygon id="1">
             <vertex x="250" y="250"/>
@@ -16,12 +16,12 @@
     </polygons>
     <linemodifiers>
         <refractors>
-            <refractor ya="150" id="0" yb="50" xa="250" indice="-1" xb="350"/>
+            <refractor yb="100" id="0" xa="250" ya="200" xb="350" indice="-1"/>
         </refractors>
     </linemodifiers>
     <linescount value="1"/>
     <partscount value="4"/>
     <maxgaptowin value="10"/>
-    <starscount value="-1"/>
+    <starscount value="6"/>
     <hints/>
 </level>

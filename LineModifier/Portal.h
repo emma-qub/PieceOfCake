@@ -18,6 +18,7 @@ public:
 
   std::string getName() const final;
   std::vector<Segment> deviateLine(const Segment& line) const final;
+  virtual std::vector<Segment> deviateLine2(const Segment& line) const final;
 
 private:
   Segment _in;

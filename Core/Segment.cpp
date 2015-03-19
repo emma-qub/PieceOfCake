@@ -27,7 +27,11 @@ Point2d Segment::getCenter() const {
 }
 
 Vector2d Segment::getNormal(void) const {
-  return Vector2d(-(getB().getY() - getA().getY()), (getB().getX() - getA().getX()));
+  return Vector2d(-(getB().getY() - getA().getY()), (getB().getX() - getA().getX())).normalized();
+}
+
+Vector2d Segment::getDirection(void) const {
+  return Vector2d::fromSegment(*this).normalized();
 }
 
 Point2d Segment::getOtherBoundary(const Point2d& boundary) {

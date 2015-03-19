@@ -35,6 +35,7 @@ public:
 
   Point2d getCenter(void) const;
   Vector2d getNormal(void) const;
+  Vector2d getDirection(void) const;
 
   Point2d getOtherBoundary(const Point2d& boundary);
 

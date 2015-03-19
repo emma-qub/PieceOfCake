@@ -1,0 +1,27 @@
+<!DOCTYPE PieceOfCakeML>
+<level>
+    <polygons>
+        <polygon id="0">
+            <vertex x="50" y="50"/>
+            <vertex x="150" y="50"/>
+            <vertex x="150" y="150"/>
+            <vertex x="50" y="150"/>
+        </polygon>
+        <polygon id="1">
+            <vertex x="250" y="250"/>
+            <vertex x="350" y="250"/>
+            <vertex x="350" y="350"/>
+            <vertex x="250" y="350"/>
+        </polygon>
+    </polygons>
+    <linemodifiers>
+        <refractors>
+            <refractor ya="150" id="0" yb="50" xa="250" indice="-1" xb="350"/>
+        </refractors>
+    </linemodifiers>
+    <linescount value="1"/>
+    <partscount value="4"/>
+    <maxgaptowin value="10"/>
+    <starscount value="-1"/>
+    <hints/>
+</level>

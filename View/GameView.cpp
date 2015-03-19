@@ -226,6 +226,12 @@ void GameView::drawFromModel(void) {
       Point2d C(portal->getOut().getA());
       Point2d D(portal->getOut().getB());
       painter.drawLine(C.getX(), C.getY(), D.getX(), D.getY());
+    } else if (Refractor* refractor = dynamic_cast<Refractor*>(deviation)) {
+      color = QColor("grey");
+      painter.setPen(QPen(color, _myPenWidth+3, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+      Point2d A = refractor->getRefractorLine().getA();
+      Point2d B = refractor->getRefractorLine().getB();
+      painter.drawLine(A.getX(), A.getY(), B.getX(), B.getY());
     }
   }
 }

@@ -11,6 +11,8 @@ ParserXML::ParserXML(void):
   _polygonNodesCount(0),
   _tapeNodesCount(0),
   _mirrorNodesCount(0),
+  _portalNodesCount(0),
+  _refractorNodesCount(0),
   _hintNodesCount(0) {
 
   QDomElement root = _doc.createElement("level");
@@ -30,6 +32,9 @@ ParserXML::ParserXML(void):
 
   _portals = _doc.createElement("portals");
   _lineModifiers.appendChild(_portals);
+
+  _refractors = _doc.createElement("refractors");
+  _lineModifiers.appendChild(_refractors);
 
   root.appendChild(_doc.createElement("linescount"));
 
@@ -68,12 +73,14 @@ ParserXML::ParserXML(const QString& xmlFileName):
   _tapes = _doc.firstChildElement("level").firstChildElement("linemodifiers").firstChildElement("tapes");
   _mirrors = _doc.firstChildElement("level").firstChildElement("linemodifiers").firstChildElement("mirrors");
   _portals = _doc.firstChildElement("level").firstChildElement("linemodifiers").firstChildElement("portals");
+  _refractors = _doc.firstChildElement("level").firstChildElement("linemodifiers").firstChildElement("refractors");
   _hints = _doc.firstChildElement("level").firstChildElement("hints");
 
   _polygonNodesCount = _polygons.elementsByTagName("polygon").count();
   _tapeNodesCount = _tapes.elementsByTagName("tape").count();
   _mirrorNodesCount = _mirrors.elementsByTagName("mirror").count();
   _portalNodesCount = _portals.elementsByTagName("portal").count();
+  _refractorNodesCount = _refractors.elementsByTagName("refractor").count();
   _hintNodesCount = _hints.elementsByTagName("hint").count();
 
   XMLDoc.close();
@@ -188,6 +195,22 @@ QDomElement ParserXML::portalToNode(const Portal& portal, int id) {
   return element;
 }
 
+QDomElement ParserXML::refractorToNode(const Refractor& refractor, int id) {
+  QDomElement element(_doc.createElement("refractor"));
+  element.setAttribute("id", id);
+
+  Segment refractorLineIn(refractor.getRefractorLine());
+  element.setAttribute("xa", refractorLineIn.getA().getX());
+  element.setAttribute("ya", refractorLineIn.getA().getY());
+  element.setAttribute("xb", refractorLineIn.getB().getX());
+  element.setAttribute("yb", refractorLineIn.getB().getY());
+
+  float indice(refractor.getIndice());
+  element.setAttribute("indice", indice);
+
+  return element;
+}
+
 QDomElement ParserXML::hintToNode(const Hint& hint, int id) {
   QDomElement element(_doc.createElement("hint"));
   element.setAttribute("id", id);
@@ -212,6 +235,10 @@ void ParserXML::addMirror(const Mirror& mirror) {
 
 void ParserXML::addPortal(const Portal& portal) {
   _portals.appendChild(portalToNode(portal, _portalNodesCount++));
+}
+
+void ParserXML::addRefractor(const Refractor& refractor) {
+  _refractors.appendChild(refractorToNode(refractor, _refractorNodesCount++));
 }
 
 void ParserXML::addHint(const Hint& hint) {
@@ -246,6 +273,10 @@ QDomElement ParserXML::getMirror(int id) {
 
 QDomElement ParserXML::getPortal(int id) {
   return getElementById(_portals, "portal", id);
+}
+
+QDomElement ParserXML::getRefractor(int id) {
+  return getElementById(_refractors, "refractor", id);
 }
 
 QDomElement ParserXML::getHint(int id) {
@@ -286,6 +317,10 @@ void ParserXML::replaceMirror(const Mirror& mirror, int id) {
 
 void ParserXML::replacePortal(const Portal& portal, int id) {
   _portals.replaceChild(portalToNode(portal, id), getPortal(id));
+}
+
+void ParserXML::replaceRefractor(const Refractor& refractor, int id) {
+  _refractors.replaceChild(refractorToNode(refractor, id), getRefractor(id));
 }
 
 void ParserXML::replaceHint(const Hint& hint, int id) {
@@ -335,6 +370,11 @@ bool ParserXML::removeMirror(int id) {
 bool ParserXML::removePortal(int id) {
   QDomElement element(getPortal(id));
   return removeElement(_portals, element, id);
+}
+
+bool ParserXML::removeRefractor(int id) {
+  QDomElement element(getRefractor(id));
+  return removeElement(_refractors, element, id);
 }
 
 bool ParserXML::removeHint(int id) {
@@ -439,6 +479,16 @@ Portal ParserXML::createPortal(const QDomElement& element) {
   );
 }
 
+Refractor ParserXML::createRefractor(const QDomElement& element) {
+  return Refractor(
+      element.attribute("xa", "-1").toInt(),
+      element.attribute("ya", "-1").toInt(),
+      element.attribute("xb", "-1").toInt(),
+      element.attribute("yb", "-1").toInt(),
+      element.attribute("indice", "-1.").toFloat()
+  );
+}
+
 Hint ParserXML::createHint(const QDomElement& element) {
   QDomNodeList lines = element.elementsByTagName("line");
   QDomNodeList costs = element.elementsByTagName("cost");
@@ -481,6 +531,14 @@ PortalList ParserXML::createPortalList(void) {
     portalList << createPortal(getPortal(k));
 
   return portalList;
+}
+
+RefractorList ParserXML::createRefractorList(void) {
+  RefractorList refractorList;
+  for (int k = 0; k < _refractorNodesCount; ++k)
+    refractorList << createRefractor(getRefractor(k));
+
+  return refractorList;
 }
 
 HintList ParserXML::createHintList(void) {

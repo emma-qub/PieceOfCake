@@ -9,12 +9,14 @@
 #include "Tape.h"
 #include "Mirror.h"
 #include "Portal.h"
+#include "Refractor.h"
 #include "Hint.h"
 
 typedef QList<Polygon> PolygonList;
 typedef QList<Tape> TapeList;
 typedef QList<Mirror> MirrorList;
 typedef QList<Portal> PortalList;
+typedef QList<Refractor> RefractorList;
 typedef QList<Hint> HintList;
 
 class ParserXML {
@@ -38,12 +40,14 @@ public:
   QDomElement tapeToNode(const Tape& tape, int id);
   QDomElement mirrorToNode(const Mirror& mirror, int id);
   QDomElement portalToNode(const Portal& portal, int id);
+  QDomElement refractorToNode(const Refractor& refractor, int id);
   QDomElement hintToNode(const Hint& hint, int id);
 
   void addPolygon(const Polygon& polygon);
   void addTape(const Tape& tape);
   void addMirror(const Mirror& mirror);
   void addPortal(const Portal& portal);
+  void addRefractor(const Refractor& refractor);
   void addHint(const Hint& hint);
 
   QDomElement getElementById(const QDomElement& parent, const QString& name, int id);
@@ -51,6 +55,7 @@ public:
   QDomElement getTape(int id);
   QDomElement getMirror(int id);
   QDomElement getPortal(int id);
+  QDomElement getRefractor(int id);
   QDomElement getHint(int id);
 
   void setPartsCount(int partscount);
@@ -63,6 +68,7 @@ public:
   void replaceTape(const Tape& tape, int id);
   void replaceMirror(const Mirror& mirror, int id);
   void replacePortal(const Portal& portal, int id);
+  void replaceRefractor(const Refractor& refractor, int id);
   void replaceHint(const Hint& hint, int id);
 
   bool removeElement(QDomElement& supElement, QDomElement& subElement, int id);
@@ -70,6 +76,7 @@ public:
   bool removeTape(int id);
   bool removeMirror(int id);
   bool removePortal(int id);
+  bool removeRefractor(int id);
   bool removeHint(int id);
 
   int createInt(const QDomElement& element, const QString& attributeName);
@@ -88,12 +95,14 @@ public:
   Tape createTape(const QDomElement& element);
   Mirror createMirror(const QDomElement& element);
   Portal createPortal(const QDomElement& element);
+  Refractor createRefractor(const QDomElement& element);
   Hint createHint(const QDomElement& element);
 
   PolygonList createPolygonList(void);
   TapeList createTapeList(void);
   MirrorList createMirrorList(void);
   PortalList createPortalList(void);
+  RefractorList createRefractorList(void);
   HintList createHintList(void);
 
   inline QDomDocument getDoc() const { return _doc; }
@@ -113,12 +122,14 @@ private:
   QDomElement _tapes;
   QDomElement _mirrors;
   QDomElement _portals;
+  QDomElement _refractors;
   QDomElement _hints;
 
   int _polygonNodesCount;
   int _tapeNodesCount;
   int _mirrorNodesCount;
   int _portalNodesCount;
+  int _refractorNodesCount;
   int _hintNodesCount;
 };
 

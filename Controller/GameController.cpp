@@ -378,6 +378,7 @@ void GameController::clearGame(void) {
   _model->clearTapes();
   _model->clearMirrors();
   _model->clearPortals();
+  _model->clearRefractors();
   _model->clearDeviations();
   _gameInfo->setLinesCount(0);
   _gameInfo->setLinesCount(0);
@@ -482,12 +483,16 @@ void GameController::openLevel(const QString& fileName) {
 
   MirrorList mirrorList(parser.createMirrorList());
   PortalList portalList(parser.createPortalList());
+  RefractorList refractorList(parser.createRefractorList());
   DeviationList deviationsList;
   for (const Mirror& mirror: mirrorList) {
     deviationsList.push_back(new Mirror(mirror));
   }
   for (const Portal& portal: portalList) {
     deviationsList.push_back(new Portal(portal));
+  }
+  for (const Refractor& refractor: refractorList) {
+    deviationsList.push_back(new Refractor(refractor));
   }
   _model->setDeviationList(deviationsList);
 

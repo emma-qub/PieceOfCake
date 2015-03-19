@@ -8,11 +8,13 @@
 #include "Tape.h"
 #include "Mirror.h"
 #include "Portal.h"
+#include "Refractor.h"
 
 typedef QList<Polygon> PolygonList;
 typedef QList<Tape> TapeList;
 typedef QList<Mirror> MirrorList;
 typedef QList<Portal> PortalList;
+typedef QList<Refractor> RefractorList;
 typedef QList<Deviation*> DeviationList;
 
 class GameModel: public QStandardItemModel {
@@ -29,12 +31,6 @@ public:
 
   inline TapeList getTapeList(void) const { return _tapeList; }
   void setTapeList(const TapeList& tapeList);
-
-//  inline MirrorList getMirrorList(void) const { return _mirrorList; }
-//  void setMirrorList(const MirrorList& mirrorList);
-
-//  inline PortalList getPortalList(void) const { return _portalList; }
-//  void setPortalList(const PortalList& portalList);
 
   inline DeviationList getDeviationList(void) const { return _deviationList; }
   void setDeviationList(const DeviationList& deviationList);
@@ -54,10 +50,14 @@ public:
   void insertPortal(int portalRow, const Portal& portal);
   void appendPortal(const Portal& portal);
 
+  void insertRefractor(int refractorRow, const Refractor& refractor);
+  void appendRefractor(const Refractor& refractor);
+
   void clearPolygons(void);
   void clearTapes(void);
   void clearMirrors(void);
   void clearPortals(void);
+  void clearRefractors(void);
   void clearDeviations(void);
 
 private:
@@ -67,18 +67,21 @@ private:
   TapeList _tapeList;
   MirrorList _mirrorList;
   PortalList _portalList;
+  RefractorList _refractorList;
   DeviationList _deviationList;
 
   int _polygonsCount;
   int _tapesCount;
   int _mirrorsCount;
   int _portalsCount;
+  int _refractorsCount;
   int _deviationsCount;
 
   QStandardItem* _polygonsItem;
   QStandardItem* _tapesItem;
   QStandardItem* _mirrorsItem;
   QStandardItem* _portalsItem;
+  QStandardItem* _refractorsItem;
 };
 
 #endif // GAMEMODEL_HXX

@@ -9,6 +9,7 @@ GameModel::GameModel(QObject* parent):
   _tapesCount(-1),
   _mirrorsCount(-1),
   _portalsCount(-1),
+  _refractorsCount(-1),
   _deviationsCount(-1) {
 
   int r = std::rand()%255;
@@ -27,6 +28,9 @@ GameModel::GameModel(QObject* parent):
 
   _portalsItem = new QStandardItem("Portals");
   appendRow(_portalsItem);
+
+  _refractorsItem = new QStandardItem("Refractors");
+  appendRow(_refractorsItem);
 }
 
 void GameModel::setPolygonList(const PolygonList& polygonList) {
@@ -57,47 +61,19 @@ void GameModel::setTapeList(const TapeList& tapeList) {
   populate();
 }
 
-//void GameModel::setMirrorList(const MirrorList& mirrorList) {
-//  // Remove every mirror from mirror list
-//  _mirrorList.clear();
-
-//  // Fill mirror list with new mirrors
-//  _mirrorList = mirrorList;
-
-//  // Update mirrors count
-//  _mirrorsCount = _mirrorList.size();
-
-//  // Populate model with new mirrors
-//  populate();
-//}
-
-//void GameModel::setPortalList(const PortalList& portalList) {
-//  // Remove every portal from portal list
-//  _portalList.clear();
-
-//  // Fill portal list with new portals
-//  _portalList = portalList;
-
-//  // Update portals count
-//  _portalsCount = _portalList.size();
-
-//  // Populate model with new portals
-//  populate();
-//}
-
 void GameModel::setDeviationList(const DeviationList& deviationList) {
-  // Remove every portal from portal list
+  // Remove every deviation from deviation list
   for (Deviation* deviation: _deviationList)
     delete deviation;
   _deviationList.clear();
 
-  // Fill portal list with new portals
+  // Fill deviation list with new deviations
   _deviationList = deviationList;
 
-  // Update portals count
+  // Update deviation count
   _deviationsCount = _deviationList.size();
 
-  // Populate model with new portals
+  // Populate model with new deviations
   populate();
 }
 
@@ -115,6 +91,9 @@ void GameModel::populate(void) {
 
   _portalsItem = new QStandardItem("Portals");
   appendRow(_portalsItem);
+
+  _refractorsItem = new QStandardItem("Refractors");
+  appendRow(_refractorsItem);
 
   // Add every polygon to model
   for (const Polygon& polygon: _polygonList) {
@@ -134,6 +113,11 @@ void GameModel::populate(void) {
   // Add every portal to model
   for (const Portal& portal: _portalList) {
     appendPortal(portal);
+  }
+
+  // Add every refractor to model
+  for (const Refractor& refractor: _refractorList) {
+    appendRefractor(refractor);
   }
 }
 
@@ -185,7 +169,7 @@ void GameModel::appendTape(const Tape& tape) {
 void GameModel::insertMirror(int mirrorRow, const Mirror& mirror) {
   // Insert a row to store mirror
   QStandardItem* mirrorItem = new QStandardItem("Mirror"+QString::number(mirrorRow));
-  _tapesItem->insertRow(mirrorRow, mirrorItem);
+  _mirrorsItem->insertRow(mirrorRow, mirrorItem);
 
   // Insert four rows to store x and y coordinates of mirror's bounds
   Segment mirrorLine = mirror.getMirrorLine();
@@ -203,7 +187,7 @@ void GameModel::appendMirror(const Mirror& mirror) {
 void GameModel::insertPortal(int portalRow, const Portal& portal) {
   // Insert a row to store portal
   QStandardItem* portalItem = new QStandardItem("Portal"+QString::number(portalRow));
-  _tapesItem->insertRow(portalRow, portalItem);
+  _portalsItem->insertRow(portalRow, portalItem);
 
   // Insert eight rows to store x and y coordinates of in and out portals bounds
   Segment portalIn = portal.getIn();
@@ -223,6 +207,26 @@ void GameModel::insertPortal(int portalRow, const Portal& portal) {
 
 void GameModel::appendPortal(const Portal& portal) {
   insertPortal(_portalsItem->rowCount(), portal);
+}
+
+void GameModel::insertRefractor(int refractorRow, const Refractor& refractor) {
+  // Insert a row to store refractor
+  QStandardItem* refractorItem = new QStandardItem("Refractor"+QString::number(refractorRow));
+  _refractorsItem->insertRow(refractorRow, refractorItem);
+
+  // Insert eight rows to store x and y coordinates of in and out refractors bounds
+  Segment refractorLine = refractor.getRefractorLine();
+  QStandardItem* xa = new QStandardItem(QString::number(refractorLine.getA().getX()));
+  QStandardItem* ya = new QStandardItem(QString::number(refractorLine.getA().getY()));
+  QStandardItem* xb = new QStandardItem(QString::number(refractorLine.getB().getX()));
+  QStandardItem* yb = new QStandardItem(QString::number(refractorLine.getB().getY()));
+  QStandardItem* indice = new QStandardItem(QString::number(refractor.getIndice()));
+
+  refractorItem->insertRows(0, QList<QStandardItem*>() << xa << ya << xb << yb << indice);
+}
+
+void GameModel::appendRefractor(const Refractor& refractor) {
+  insertRefractor(_refractorsItem->rowCount(), refractor);
 }
 
 void GameModel::clearPolygons(void) {
@@ -247,6 +251,12 @@ void GameModel::clearPortals(void) {
   QStandardItemModel::clear();
   _portalList.clear();
   _portalsCount = 0;
+}
+
+void GameModel::clearRefractors(void) {
+  QStandardItemModel::clear();
+  _refractorList.clear();
+  _refractorsCount = 0;
 }
 
 void GameModel::clearDeviations(void) {

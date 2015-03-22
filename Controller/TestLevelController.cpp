@@ -2,8 +2,9 @@
 
 #define cerro(x) std::cerr << x << std::endl;
 
-TestLevelController::TestLevelController(GameModel* model, QUndoStack* undoStack, QObject* parent):
-  GameController(model, undoStack, parent) {
+TestLevelController::TestLevelController(GameModel* model, QUndoStack* undoStack, LevelInfo* levelInfo, QObject* parent):
+  GameController(model, undoStack, parent),
+  _levelInfo(levelInfo) {
 
   _levelRunning = true;
   _gameInfo->setLinesCount(0);
@@ -38,4 +39,6 @@ void TestLevelController::openLevel(const QString&) {
 void TestLevelController::addNewLine(const Segment& line) {
   _gameInfo->setLinesCount(_gameInfo->linesDrawn());
   _gameInfo->setPartsCount(_gameInfo->partsCut());
+
+  _levelInfo->updateLevelReadyToBeCut(_gameInfo->linesDrawn());
 }

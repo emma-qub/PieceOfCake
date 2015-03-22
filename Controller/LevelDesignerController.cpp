@@ -4,10 +4,10 @@
 
 #include <QDebug>
 
-LevelDesignerController::LevelDesignerController(LevelDesignerModel *model, QUndoStack* undoStack, QObject* parent):
+LevelDesignerController::LevelDesignerController(LevelDesignerModel *model, QUndoStack* undoStack, LevelInfo* levelInfo, QObject* parent):
   AbstractController(model, undoStack, parent),
   _model(model),
-  _levelInfo(new LevelInfo) {
+  _levelInfo(levelInfo) {
 
   addPolygon(0, Polygon());
 
@@ -15,7 +15,6 @@ LevelDesignerController::LevelDesignerController(LevelDesignerModel *model, QUnd
 }
 
 LevelDesignerController::~LevelDesignerController(void) {
-  delete _levelInfo;
 }
 
 LevelInfo* LevelDesignerController::getLevelInfo(void) const {
@@ -33,7 +32,7 @@ void LevelDesignerController::addPolygon(int polygonRow, const Polygon& polygon)
     emit enableStats(true);
   }
 
-  _levelInfo->updateLevelReady(_model->getPolygonList());
+  _levelInfo->updateLevelReadyToBeTested(_model->getPolygonList());
 }
 
 void LevelDesignerController::removePolygon(int polygonRow, const Polygon& polygon) {
@@ -53,7 +52,7 @@ void LevelDesignerController::removePolygon(int polygonRow, const Polygon& polyg
     emit enableStats(false);
   }
 
-  _levelInfo->updateLevelReady(_model->getPolygonList());
+  _levelInfo->updateLevelReadyToBeTested(_model->getPolygonList());
 }
 
 void LevelDesignerController::movePolygon(int polygonRow, int oldX, int oldY, int newX, int newY, bool pushToStack) {
@@ -73,7 +72,7 @@ void LevelDesignerController::addVertex(int polygonRow, int vertexRow, const Poi
   QUndoCommand* addVertexCommand = new AddVertexCommand(_model, polygonRow, vertexRow, vertex, polygonRow, vertexRow);
   _undoStack->push(addVertexCommand);
 
-  _levelInfo->updateLevelReady(_model->getPolygonList());
+  _levelInfo->updateLevelReadyToBeTested(_model->getPolygonList());
 }
 
 void LevelDesignerController::removeVertex(int polygonRow, int vertexRow, const Point2d& vertex) {
@@ -89,7 +88,7 @@ void LevelDesignerController::removeVertex(int polygonRow, int vertexRow, const 
   QUndoCommand* removeVertexCommand = new RemoveVertexCommand(_model, polygonRow, vertexRow, vertex, polygonRow, newVertexRow);
   _undoStack->push(removeVertexCommand);
 
-  _levelInfo->updateLevelReady(_model->getPolygonList());
+  _levelInfo->updateLevelReadyToBeTested(_model->getPolygonList());
 }
 
 void LevelDesignerController::moveVertex(int polygonRow, int vertexRow, int oldX, int oldY, int newX, int newY, bool pushToStack) {
@@ -124,7 +123,7 @@ void LevelDesignerController::clear(void) {
   emit updateReset();
   emitUpdate(0);
 
-  _levelInfo->updateLevelReady(_model->getPolygonList());
+  _levelInfo->updateLevelReadyToBeTested(_model->getPolygonList());
 }
 
 void LevelDesignerController::appendPolygon(void) {
@@ -229,7 +228,7 @@ void LevelDesignerController::openLevel(const QString& fileName) {
   emit updateStats();
   emitUpdate(0);
 
-  _levelInfo->updateLevelReady(_model->getPolygonList());
+  _levelInfo->updateLevelReadyToBeTested(_model->getPolygonList());
 }
 
 void LevelDesignerController::alignToGrid(void) {
@@ -268,5 +267,5 @@ void LevelDesignerController::alignToGrid(void) {
 void LevelDesignerController::emitUpdate(int) {
   emit selection();
   emit update();
-  _levelInfo->updateLevelReady(_model->getPolygonList());
+  _levelInfo->updateLevelReadyToBeTested(_model->getPolygonList());
 }

@@ -2,12 +2,13 @@
 #define TESTLEVELCONTROLLER_HXX
 
 #include "GameController.h"
+#include "LevelInfo.h"
 
 class TestLevelController: public GameController {
   Q_OBJECT
 
 public:
-  TestLevelController(GameModel* model, QUndoStack* undoStack, QObject* parent = nullptr);
+  TestLevelController(GameModel* model, QUndoStack* undoStack, LevelInfo* levelInfo, QObject* parent = nullptr);
   virtual ~TestLevelController(void);
 
   inline void setTestIsOver(bool b) { _testIsOver = b; }
@@ -23,7 +24,7 @@ signals:
 
 private:
   bool _testIsOver;
-
+  LevelInfo* _levelInfo;
 };
 
 #endif // TESTLEVELCONTROLLER_HXX

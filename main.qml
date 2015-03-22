@@ -22,6 +22,10 @@ Rectangle {
   signal testLevelRequested()
   signal saveLevelRequested()
 
+  function qmlIncrementStep() {
+    StepJS.incrementStep();
+  }
+
   // Home Page
   Item {
     id: home
@@ -474,7 +478,7 @@ Rectangle {
       Text {
         id: rule2Pack1Text
         y: 200
-        text: qsTr("  - Respect number of lines and pieces")
+        text: qsTr("  - Respect number of lines and parts")
         font.family: homeFont.name
         font.pixelSize: 20
         color:"#333333"
@@ -651,13 +655,18 @@ Rectangle {
         acceptedButtons: Qt.LeftButton
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
-        enabled: levelInfo.levelReady
+        enabled: {
+          (StepJS.getCurrentStep() === 1 && levelInfo.levelReadyToBeTested)
+        ||(StepJS.getCurrentStep() === 2 && levelInfo.levelReadyToBeCut);
+        }
         onClicked: {
-          StepJS.incrementStep()
-          if (StepJS.getCurrentStep() === 2)
+          if (StepJS.getCurrentStep() === 1) {
+            StepJS.incrementStep();
+            nextStepMouseArea.enabled = false;
             testLevelRequested();
-          else if (StepJS.getCurrentStep() === 3)
+          } else if (StepJS.getCurrentStep() === 2) {
             saveLevelRequested();
+          }
         }
 
         Text {
@@ -679,9 +688,10 @@ Rectangle {
         anchors.verticalCenter: parent.verticalCenter
         onClicked: {
           StepJS.decrementStep()
-          if (StepJS.getCurrentStep() === 1)
+          if (StepJS.getCurrentStep() === 1) {
+            nextStepMouseArea.enabled = true;
             createLevelRequested();
-          else if (StepJS.getCurrentStep() === 2)
+          } else if (StepJS.getCurrentStep() === 2)
             testLevelRequested();
         }
 

@@ -23,6 +23,8 @@ function updateQMLWidgets() {
   nextStepMouseArea.height = StepJS.getCurrentStep() < 3 ? 40 : 0;
   nextText.visible = StepJS.getCurrentStep() < 3;
 
+  nextText.enabled = false;
+
   backStepMouseArea.width = StepJS.getCurrentStep() > 1 ? 40 : 0;
   backStepMouseArea.height = StepJS.getCurrentStep() > 1 ? 40 : 0;
   backText.visible = StepJS.getCurrentStep() > 1;

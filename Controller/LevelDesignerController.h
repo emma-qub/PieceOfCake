@@ -12,7 +12,7 @@ class LevelDesignerController: public AbstractController {
   Q_OBJECT
 
 public:
-  LevelDesignerController(LevelDesignerModel* model, QUndoStack* undoStack, QObject* parent = 0);
+  LevelDesignerController(LevelDesignerModel* model, QUndoStack* undoStack, LevelInfo* levelInfo, QObject* parent = 0);
   virtual ~LevelDesignerController(void);
 
   LevelInfo* getLevelInfo(void) const;

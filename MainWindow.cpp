@@ -16,7 +16,8 @@
 #define cerro(x) std::cerr << x << std::endl;
 
 MainWindow::MainWindow(QWidget* parent):
-  QMainWindow(parent) {
+  QMainWindow(parent),
+  _levelInfo(new LevelInfo){
 
   // Create undo stack to manage undo/redo actions in level designer
   _levelDesignerUndoStack = new QUndoStack;
@@ -38,6 +39,10 @@ MainWindow::MainWindow(QWidget* parent):
 
   // Resize
   setFixedSize(1200, 756);
+}
+
+MainWindow::~MainWindow(void) {
+  delete _levelInfo;
 }
 
 void MainWindow::openLevel(QString levelName) {
@@ -71,6 +76,7 @@ void MainWindow::showTestLevel(void) {
 void MainWindow::showSaveLevel(bool b) {
   if (b) {
     hideWidgets();
+    QMetaObject::invokeMethod(_homeWidget->rootObject(), "qmlIncrementStep");
   } else {
     cerro("Improve your cutting skills.");
   }
@@ -117,9 +123,9 @@ void MainWindow::initGame(void) {
 void MainWindow::initLevelDesigner(void) {
   _levelDesignerModel = new LevelDesignerModel;
 
-  _levelDesignerController = new LevelDesignerController(_levelDesignerModel, _levelDesignerUndoStack);
+  _levelDesignerController = new LevelDesignerController(_levelDesignerModel, _levelDesignerUndoStack, _levelInfo);
 
-  _homeWidget->rootContext()->setContextProperty("levelInfo", _levelDesignerController->getLevelInfo());
+  _homeWidget->rootContext()->setContextProperty("levelInfo", _levelInfo);
 
   _levelDesignerTreeView = new LevelDesignerTreeView(_levelDesignerController, this);
   _levelDesignerTreeView->setModel(_levelDesignerModel);
@@ -140,7 +146,7 @@ void MainWindow::initTestLevel(void) {
   _testLevelModel = new GameModel;
   _testLevelModel->setPolygonList(_levelDesignerModel->getPolygonList());
 
-  _testLevelController = new TestLevelController(_testLevelModel, new QUndoStack);
+  _testLevelController = new TestLevelController(_testLevelModel, new QUndoStack, _levelInfo);
 
   _testLevelView = new TestLevelView(_testLevelController, this);
   _testLevelView->setModel(_testLevelModel);

@@ -30,7 +30,8 @@ class MainWindow: public QMainWindow {
   Q_OBJECT
 
 public:
-  explicit MainWindow(QWidget* parent = NULL);
+  explicit MainWindow(QWidget* parent = nullptr);
+  ~MainWindow(void);
 
 public slots:
   void openLevel(QString levelName);
@@ -70,6 +71,8 @@ private:
   QWidget* _levelDesignerWidget;
   QQuickWidget* _selectLevelWidget;
   QQuickWidget* _homeWidget;
+
+  LevelInfo* _levelInfo;
 };
 
 #endif // MAINWINDOW_H

@@ -20,6 +20,8 @@ GameController::GameController(GameModel* model, QUndoStack* undoStack, QObject*
   _maxGapToWin(10),
   _fileName(""),
   _levelRunning(false) {
+
+  _polygonListPerTurn = QList<PolygonList>() << _model->getPolygonList();
 }
 
 GameController::~GameController(void) {
@@ -140,6 +142,7 @@ void GameController::getVerticesAndIntersections(const Segment& line, const Poly
 }
 
 void GameController::sliceIt(const std::vector<Segment>& lines) {
+  PolygonList oldPolygonList = _model->getPolygonList();
   PolygonList newPolygonList;
 
   for (const Segment& line: lines) {
@@ -212,6 +215,8 @@ void GameController::sliceIt(const std::vector<Segment>& lines) {
     _model->setPolygonList(newPolygonList);
     newPolygonList.clear();
   }
+
+  _polygonListPerTurn << _model->getPolygonList();
 
   _gameInfo->setPartsCut(_model->getPolygonsCount());
   _gameInfo->setLinesDrawn(_gameInfo->linesDrawn()+1);
@@ -293,6 +298,32 @@ void GameController::checkWinning(void) {
     emit levelEnd(orientedAreas);
 
     _levelRunning = false;
+  }
+}
+
+void GameController::undoSliceIt(void) {
+  if (_polygonListPerTurn.size() > 1) {
+    std::cerr << "Before" << std::endl;
+    for (const PolygonList& currPolyList: _polygonListPerTurn) {
+      for (const Polygon& currPoly: currPolyList) {
+        std::cerr << currPoly << std::endl;
+      }
+      std::cerr << std::endl;
+    }
+    _polygonListPerTurn.pop_back();
+    std::cerr << "After" << std::endl;
+    for (const PolygonList& currPolyList: _polygonListPerTurn) {
+      for (const Polygon& currPoly: currPolyList) {
+        std::cerr << currPoly << std::endl;
+      }
+      std::cerr << std::endl;
+    }
+    _model->setPolygonList(_polygonListPerTurn.last());
+    _gameInfo->setLinesDrawn(_gameInfo->linesDrawn()-1);
+    _gameInfo->setPartsCut(_model->getPolygonsCount());
+    _levelRunning = true;
+
+    emit update();
   }
 }
 
@@ -389,6 +420,7 @@ void GameController::clearGame(void) {
   _orientedAreaTotal = 0.0;
   _maxGapToWin = 0.0;
   _levelRunning = false;
+  _polygonListPerTurn.clear();
 
   emit update();
 }
@@ -509,6 +541,8 @@ void GameController::openLevel(const QString& fileName) {
   }
 
   _levelRunning = true;
+
+  _polygonListPerTurn << _model->getPolygonList();
 
   emit update();
 }

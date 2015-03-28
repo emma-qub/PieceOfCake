@@ -49,6 +49,7 @@ public slots:
   virtual void saveLevel(const QString& fileName) { Q_UNUSED(fileName) }
   void replay(void);
   virtual void checkWinning(void);
+  void undoSliceIt(void);
 
 signals:
   void updateLine(LineType);
@@ -62,6 +63,7 @@ protected:
   int _maxGapToWin;
   QString _fileName;
   bool _levelRunning;
+  QList<PolygonList> _polygonListPerTurn;
 };
 
 bool pointCompare(const Point2d* A, const Point2d* B);

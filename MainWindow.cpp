@@ -118,6 +118,7 @@ void MainWindow::initGame(void) {
 
   QQuickItem* item = _homeWidget->rootObject();
   connect(item, SIGNAL(refreshLevelRequested(void)), _gameController, SLOT(replay(void)));
+  connect(item, SIGNAL(undoSliceItRequested(void)), _gameController, SLOT(undoSliceIt(void)));
 }
 
 void MainWindow::initLevelDesigner(void) {

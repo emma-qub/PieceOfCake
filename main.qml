@@ -21,6 +21,7 @@ Rectangle {
   signal refreshLevelRequested()
   signal testLevelRequested()
   signal saveLevelRequested()
+  signal undoSliceItRequested()
 
   function qmlIncrementStep() {
     StepJS.incrementStep();
@@ -792,8 +793,7 @@ Rectangle {
         anchors.horizontalCenter: parent.right
         anchors.verticalCenter: parent.verticalCenter
         onClicked: {
-//          stackView.replace(home)
-//          homePageRequested()
+          undoSliceItRequested()
         }
 
         Image {

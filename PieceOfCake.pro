@@ -44,7 +44,8 @@ HEADERS += \
   tests.h \
   ThumbnailCreator.h \
     View/TestLevelView.h \
-    LineModifier/Refractor.h
+    LineModifier/Refractor.h \
+    Model/LineModifierModel.h
 
 SOURCES += \
   # Controller
@@ -88,7 +89,8 @@ SOURCES += \
   ParserXML.cpp \
   ThumbnailCreator.cpp \
     View/TestLevelView.cpp \
-    LineModifier/Refractor.cpp
+    LineModifier/Refractor.cpp \
+    Model/LineModifierModel.cpp
 
 INCLUDEPATH += \
   Controller \

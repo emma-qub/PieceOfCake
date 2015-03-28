@@ -136,7 +136,7 @@ void LevelDesignerController::saveLevel(const QString& fileName) {
   parser.initFileName(fileName);
 
   PolygonList polygonList(_model->getPolygonList());
-  foreach (const Polygon& polygon, polygonList) {
+  for (const Polygon& polygon: polygonList) {
     parser.addPolygon(polygon);
   }
 

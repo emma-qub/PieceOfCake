@@ -26,7 +26,7 @@ LevelDesignerModel::~LevelDesignerModel(void) {
 }
 
 void LevelDesignerModel::setPolygonList(const PolygonList& polygonList) {
-  foreach (const Polygon& polygon, polygonList) {
+  for (const Polygon& polygon: polygonList) {
     appendPolygon(polygon);
   }
 }

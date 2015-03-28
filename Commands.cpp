@@ -38,7 +38,7 @@ RemoveVertexCommand::RemoveVertexCommand(LevelDesignerModel* model, int polygonR
 }
 
 void RemoveVertexCommand::undo(void) {
-  _model->insertVertex(_polygonRow, _vertexRow, _vertex, true);
+  _model->insertVertex(_polygonRow, _vertexRow, _vertex, false);
   _model->popSelection();
 }
 

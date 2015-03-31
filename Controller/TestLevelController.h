@@ -13,6 +13,8 @@ public:
 
   inline void setTestIsOver(bool b) { _testIsOver = b; }
 
+  void resetGameInfo(void);
+
 public slots:
   void openLevel(const QString& fileName) final;
   //void saveLevel(const QString& fileName) final;

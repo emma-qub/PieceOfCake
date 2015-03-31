@@ -399,7 +399,6 @@ void GameController::clearGame(void) {
   _model->clearRefractors();
   _model->clearDeviations();
   _gameInfo->setLinesCount(0);
-  _gameInfo->setLinesCount(0);
   _gameInfo->setPartsCut(0);
   _gameInfo->setPartsCount(0);
   _gameInfo->setStars(-1);

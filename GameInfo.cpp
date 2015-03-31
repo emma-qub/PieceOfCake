@@ -101,3 +101,12 @@ void GameInfo::setEvaluation(const QString& value) {
     emit evaluationChanged();
   }
 }
+
+void GameInfo::reset(void) {
+  setLinesDrawn(0);
+  setLinesCount(0);
+  setPartsCut(0);
+  setPartsCount(0);
+  setStars(0);
+  setEvaluation("");
+}

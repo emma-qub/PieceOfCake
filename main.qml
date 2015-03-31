@@ -693,11 +693,12 @@ Rectangle {
         anchors.verticalCenter: parent.verticalCenter
         onClicked: {
           StepJS.decrementStep()
-          if (StepJS.getCurrentStep() === 1) {
-            nextStepMouseArea.enabled = true;
+          if (StepJS.getCurrentStep() === 1)
             createLevelRequested();
-          } else if (StepJS.getCurrentStep() === 2)
+          else if (StepJS.getCurrentStep() === 2)
             testLevelRequested();
+
+          nextStepMouseArea.enabled = true;
         }
 
         Text {

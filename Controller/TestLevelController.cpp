@@ -14,6 +14,10 @@ TestLevelController::TestLevelController(GameModel* model, QUndoStack* undoStack
 TestLevelController::~TestLevelController(void) {
 }
 
+void TestLevelController::resetGameInfo(void) {
+  _gameInfo->reset();
+}
+
 void TestLevelController::computeOrientedArea(void) {
   for (const Polygon& polygon: _model->getPolygonList()) {
     _orientedAreaTotal += polygon.orientedArea();

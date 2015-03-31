@@ -32,6 +32,8 @@ public:
   void setStarsMax(int value);
   void setEvaluation(const QString& value);
 
+  void reset(void);
+
 signals:
   void linesDrawnChanged(void);
   void linesCountChanged(void);

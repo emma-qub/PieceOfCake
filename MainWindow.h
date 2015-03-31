@@ -39,7 +39,7 @@ public slots:
   void showCreateLevel(void);
   void showTestLevel(void);
   void showSaveLevel(bool);
-  void updateQMLView(void);
+  void enableNextStep(void);
 
 private:
   void initHome(void);

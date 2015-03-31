@@ -39,6 +39,10 @@ MainWindow::MainWindow(QWidget* parent):
 
   // Resize
   setFixedSize(1200, 756);
+
+  // Connect level info signals to qml 'next' button
+  connect(_levelInfo, SIGNAL(levelReadyToBeTestedChanged(void)), this, SLOT(enableNextStep(void)));
+  connect(_levelInfo, SIGNAL(levelReadyToBeCutChanged(void)), this, SLOT(enableNextStep(void)));
 }
 
 MainWindow::~MainWindow(void) {
@@ -70,6 +74,7 @@ void MainWindow::showTestLevel(void) {
   _testLevelView->show();
   _testLevelModel->setPolygonList(_levelDesignerModel->getPolygonList());
   _testLevelView->drawFromModel();
+  QMetaObject::invokeMethod(_homeWidget->rootObject(), "qmlEnableNextStep", Q_ARG(QVariant, false));
   std::cerr << "TEST LEVEL REQUESTED" << std::endl;
 }
 
@@ -83,10 +88,13 @@ void MainWindow::showSaveLevel(bool b) {
   std::cerr << "SAVE LEVEL REQUESTED" << std::endl;
 }
 
-void MainWindow::updateQMLView(void) {
-  QQuickItem* item = _homeWidget->rootObject();
-//  std::cerr << item << std::endl;
-  item->setProperty("state", "green");
+void MainWindow::enableNextStep(void) {
+  QVariant currStep = -1;
+  QMetaObject::invokeMethod(_homeWidget->rootObject(), "qmlGetCurrentStep", Qt::AutoConnection, Q_RETURN_ARG(QVariant, currStep));
+  int currentStep = currStep.toInt();
+  bool b = (currentStep == 1 && _levelInfo->levelReadyToBeTested())
+        || (currentStep == 2 && _levelInfo->levelReadyToBeCut());
+  QMetaObject::invokeMethod(_homeWidget->rootObject(), "qmlEnableNextStep", Q_ARG(QVariant, b));
 }
 
 void MainWindow::initHome(void) {
@@ -110,8 +118,6 @@ void MainWindow::initGame(void) {
   _gameView->setModel(_gameModel);
   _gameView->move(175, 150);
   _gameView->hide();
-
-  connect(_gameController, SIGNAL(update()), this, SLOT(updateQMLView()));
 
   _homeWidget->rootContext()->setContextProperty("gameInfo", _gameController->getGameInfo());
   _homeWidget->engine()->addImportPath("../PieceOfCake");
@@ -141,6 +147,8 @@ void MainWindow::initLevelDesigner(void) {
 
   connect(_levelDesignerTreeView, SIGNAL(updateViewNotModel(QModelIndex,int)), _levelDesignerScribbleView, SLOT(drawFromModel(QModelIndex,int)));
   connect(_levelDesignerUndoStack, SIGNAL(indexChanged(int)), _levelDesignerController, SLOT(updateSavingState(int)));
+
+  QMetaObject::invokeMethod(_homeWidget->rootObject(), "qmlEnableNextStep", Q_ARG(QVariant, false));
 }
 
 void MainWindow::initTestLevel(void) {
@@ -158,6 +166,7 @@ void MainWindow::initTestLevel(void) {
 
   QQuickItem* item = _homeWidget->rootObject();
   connect(item, SIGNAL(refreshLevelRequested(void)), _testLevelView, SLOT(replay(void)));
+  connect(item, SIGNAL(testLevelRequested(void)), _testLevelController, SLOT(computeOrientedArea(void)));
   connect(item, SIGNAL(saveLevelRequested(void)), _testLevelController, SLOT(checkWinning(void)));
   connect(_testLevelController, SIGNAL(levelCanBeSaved(bool)), this, SLOT(showSaveLevel(bool)));
 }

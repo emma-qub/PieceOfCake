@@ -18,12 +18,14 @@ function decrementStep() {
   updateQMLWidgets();
 }
 
+function enableNextStep(bool) {
+  nextStepMouseArea.enabled = bool;
+}
+
 function updateQMLWidgets() {
   nextStepMouseArea.width = StepJS.getCurrentStep() < 3 ? 40 : 0;
   nextStepMouseArea.height = StepJS.getCurrentStep() < 3 ? 40 : 0;
   nextText.visible = StepJS.getCurrentStep() < 3;
-
-  nextText.enabled = false;
 
   backStepMouseArea.width = StepJS.getCurrentStep() > 1 ? 40 : 0;
   backStepMouseArea.height = StepJS.getCurrentStep() > 1 ? 40 : 0;

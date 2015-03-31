@@ -10,6 +10,7 @@ TestLevelView::TestLevelView(TestLevelController* controller, QWidget* parent):
   _runningSegment(false),
   _controller(controller) {
 
+  connect(_controller, SIGNAL(update()), this, SLOT(drawFromModel()));
   resize(401, 401);
 
 }
@@ -92,7 +93,6 @@ void TestLevelView::mouseReleaseEvent(QMouseEvent* event) {
       std::cerr << g->linesDrawn() << std::endl;
       std::cerr << g->partsCount() << std::endl;
       std::cerr << g->partsCut() << std::endl;
-      drawFromModel();
     }
     _scribbling = false;
     _runningSegment = false;

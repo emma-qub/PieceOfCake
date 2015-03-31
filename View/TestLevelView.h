@@ -46,7 +46,7 @@ protected:
   bool _goodSegment;
   bool _runningSegment;
   GameModel* _model;
-  GameController* _controller;
+  TestLevelController* _controller;
 
 
 };

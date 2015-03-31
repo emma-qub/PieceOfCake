@@ -142,7 +142,6 @@ void GameController::getVerticesAndIntersections(const Segment& line, const Poly
 }
 
 void GameController::sliceIt(const std::vector<Segment>& lines) {
-  PolygonList oldPolygonList = _model->getPolygonList();
   PolygonList newPolygonList;
 
   for (const Segment& line: lines) {
@@ -209,10 +208,12 @@ void GameController::sliceIt(const std::vector<Segment>& lines) {
         // but not exactly on this point, since it's quite difficult to achieve.
         if (qRound(10.0*newPolygon.orientedArea() * 100.0 / _orientedAreaTotal)/10.0 >= 0.1)
           newPolygonList << newPolygon;
+
         newVertices.clear();
       }
     }
     _model->setPolygonList(newPolygonList);
+
     newPolygonList.clear();
   }
 
@@ -303,21 +304,7 @@ void GameController::checkWinning(void) {
 
 void GameController::undoSliceIt(void) {
   if (_polygonListPerTurn.size() > 1) {
-    std::cerr << "Before" << std::endl;
-    for (const PolygonList& currPolyList: _polygonListPerTurn) {
-      for (const Polygon& currPoly: currPolyList) {
-        std::cerr << currPoly << std::endl;
-      }
-      std::cerr << std::endl;
-    }
     _polygonListPerTurn.pop_back();
-    std::cerr << "After" << std::endl;
-    for (const PolygonList& currPolyList: _polygonListPerTurn) {
-      for (const Polygon& currPoly: currPolyList) {
-        std::cerr << currPoly << std::endl;
-      }
-      std::cerr << std::endl;
-    }
     _model->setPolygonList(_polygonListPerTurn.last());
     _gameInfo->setLinesDrawn(_gameInfo->linesDrawn()-1);
     _gameInfo->setPartsCut(_model->getPolygonsCount());

@@ -10,6 +10,7 @@ import levelinfo 1.0
 
 Rectangle {
   id: homePage
+  objectName: "homePage"
   visible: true
   width: 1200
   height: 756
@@ -25,6 +26,14 @@ Rectangle {
 
   function qmlIncrementStep() {
     StepJS.incrementStep();
+  }
+
+  function qmlEnableNextStep(b) {
+    StepJS.enableNextStep(b);
+  }
+
+  function qmlGetCurrentStep() {
+    return StepJS.getCurrentStep();
   }
 
   // Home Page
@@ -656,14 +665,9 @@ Rectangle {
         acceptedButtons: Qt.LeftButton
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
-        enabled: {
-          (StepJS.getCurrentStep() === 1 && levelInfo.levelReadyToBeTested)
-        ||(StepJS.getCurrentStep() === 2 && levelInfo.levelReadyToBeCut);
-        }
         onClicked: {
           if (StepJS.getCurrentStep() === 1) {
             StepJS.incrementStep();
-            nextStepMouseArea.enabled = false;
             testLevelRequested();
           } else if (StepJS.getCurrentStep() === 2) {
             saveLevelRequested();

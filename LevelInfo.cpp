@@ -35,11 +35,10 @@ bool LevelInfo::levelReadyToBeCut(void) const {
 void LevelInfo::setLevelReadyToBeCut(bool value) {
   if (value != _levelReadyToBeCut) {
     _levelReadyToBeCut = value;
-    emit levelReadyToBeCut();
+    emit levelReadyToBeCutChanged();
   }
 }
 
 void LevelInfo::updateLevelReadyToBeCut(int linesDrawn) {
-  std::cerr << "#updateLevelReadyToBeCut#" << linesDrawn << std::endl;
   setLevelReadyToBeCut(linesDrawn > 0);
 }

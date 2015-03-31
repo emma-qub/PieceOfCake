@@ -14,19 +14,19 @@ TestLevelController::TestLevelController(GameModel* model, QUndoStack* undoStack
 TestLevelController::~TestLevelController(void) {
 }
 
+void TestLevelController::computeOrientedArea(void) {
+  for (const Polygon& polygon: _model->getPolygonList()) {
+    _orientedAreaTotal += polygon.orientedArea();
+  }
+}
+
 void TestLevelController::checkWinning(void) {
 //  if (_testIsOver) {
   cerro("Lines: ");cerro(_gameInfo->linesDrawn());
   cerro("Parts: ");cerro(_gameInfo->partsCut());
 
-
-  for (const Polygon& polygon: _model->getPolygonList()) {
-    _orientedAreaTotal += polygon.orientedArea();
-  }
-
-
-    GameController::checkWinning();
-    emit levelCanBeSaved(_gameInfo->stars() == 6);
+  GameController::checkWinning();
+  emit levelCanBeSaved(_gameInfo->stars() == 6);
 //  }
 }
 
@@ -41,4 +41,5 @@ void TestLevelController::addNewLine(const Segment& line) {
   _gameInfo->setPartsCount(_gameInfo->partsCut());
 
   _levelInfo->updateLevelReadyToBeCut(_gameInfo->linesDrawn());
+  std::cerr << "LevelReadyToBeCut: " << _levelInfo->levelReadyToBeCut() << std::endl;
 }

@@ -17,6 +17,7 @@ public slots:
   void openLevel(const QString& fileName) final;
   //void saveLevel(const QString& fileName) final;
   void addNewLine(const Segment& line);
+  void computeOrientedArea(void);
   void checkWinning(void) override;
 
 signals:
@@ -25,6 +26,7 @@ signals:
 private:
   bool _testIsOver;
   LevelInfo* _levelInfo;
+
 };
 
 #endif // TESTLEVELCONTROLLER_HXX

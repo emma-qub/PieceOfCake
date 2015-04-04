@@ -75,6 +75,7 @@ void MainWindow::showTestLevel(void) {
   _testLevelModel->setPolygonList(_levelDesignerModel->getPolygonList());
   _testLevelController->resetGameInfo();
   _testLevelController->setPrevPolygonList(_testLevelModel->getPolygonList());
+  _testLevelController->computeOrientedArea();
   _testLevelView->drawFromModel();
   QMetaObject::invokeMethod(_homeWidget->rootObject(), "qmlEnableNextStep", Q_ARG(QVariant, false));
   std::cerr << "TEST LEVEL REQUESTED" << std::endl;

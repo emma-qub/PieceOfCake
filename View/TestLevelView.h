@@ -26,6 +26,7 @@ protected:
 public:
   void resizeImage(QImage* image, const QSize& newSize);
   void drawLine(const QPoint& begin, const QPoint& end, const QColor &color = Qt::black, Qt::PenStyle penStyle = Qt::SolidLine);
+  void drawText(const QPoint& position, const QString& text, const QColor &color);
 
 public slots:
   void drawFromModel(void);

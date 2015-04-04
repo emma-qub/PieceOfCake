@@ -24,6 +24,20 @@ void TestLevelController::computeOrientedArea(void) {
   }
 }
 
+void TestLevelController::sliceItNot(const std::vector<Segment>& lines) {
+  _model->setPolygonList(_prevPolygonList);
+
+  PolygonList newPolygonList;
+
+  for (const Segment& line: lines) {
+    // Browse every polygon and slice it!
+    computeNewPolygonList(newPolygonList, line);
+    _model->setPolygonList(newPolygonList);
+
+    newPolygonList.clear();
+  }
+}
+
 void TestLevelController::checkWinning(void) {
 //  if (_testIsOver) {
   cerro("Lines: ");cerro(_gameInfo->linesDrawn());
@@ -34,11 +48,18 @@ void TestLevelController::checkWinning(void) {
 //  }
 }
 
-void TestLevelController::openLevel(const QString&) {
+void TestLevelController::openLevel(const QString& fileName) {
+  GameController::openLevel(fileName);
+  _prevPolygonList = _model->getPolygonList();
 }
 
 //void TestLevelController::saveLevel(const QString&) {
 //}
+
+void TestLevelController::sliceIt(const std::vector<Segment>& lines) {
+  GameController::sliceIt(lines);
+  _prevPolygonList = _model->getPolygonList();
+}
 
 void TestLevelController::addNewLine(const Segment& line) {
   _gameInfo->setLinesCount(_gameInfo->linesDrawn());

@@ -155,63 +155,7 @@ void GameController::sliceIt(const std::vector<Segment>& lines) {
 //    std::cerr << currLine << " " << line << " " << Vector2d::areColinear(currLine.getNormal(), line.getNormal()) << std::endl;
 
     // Browse every polygon and slice it!
-    for (const Polygon& polygon: _model->getPolygonList()) {
-      std::vector<Point2d*> globalVertices;
-      std::vector<Point2d*> intersections;
-      getVerticesAndIntersections(line, polygon, globalVertices, intersections);
-
-      std::vector<Point2d> newVertices;
-
-      std::vector<std::pair<Point2d*, Point2d*>> cuttingSegments = getCuttingSegments(intersections);
-
-      while (stillHasBaseVertices(globalVertices, intersections)) {
-
-        // We really don't want the first point to be an intersection. Trust me.
-        Point2d* p = globalVertices.at(0);
-        while (std::find(intersections.begin(), intersections.end(), p) != intersections.end()) {
-          globalVertices.erase(globalVertices.begin());
-          globalVertices.push_back(p);
-          p = globalVertices.at(0);
-        }
-        std::vector<Point2d*> globalVerticesCopy(globalVertices);
-
-        bool lookingForOtherBound = false;
-        Point2d* otherBound = nullptr;
-        for (Point2d* currVerrtex: globalVerticesCopy) {
-          if (lookingForOtherBound) {
-            if (otherBound == currVerrtex) {
-              newVertices.push_back(*currVerrtex);
-              lookingForOtherBound = false;
-            }
-          } else {
-            if (std::find(intersections.begin(), intersections.end(), currVerrtex) != intersections.end()) {
-              // If the intersection is not equal to the last point, we add it
-              if (newVertices.size() > 0 && (std::find(newVertices.begin(), newVertices.end(), *currVerrtex) == newVertices.end())) {
-                newVertices.push_back(*currVerrtex);
-              }
-              otherBound = getOtherBound(currVerrtex, cuttingSegments);
-              lookingForOtherBound = true;
-            } else {
-              newVertices.push_back(*currVerrtex);
-              auto it = std::find(globalVertices.begin(), globalVertices.end(), currVerrtex);
-              assert(it != globalVertices.end());
-              globalVertices.erase(it);
-            }
-          }
-        }
-        globalVerticesCopy.clear();
-        globalVerticesCopy = globalVertices;
-
-        Polygon newPolygon(newVertices);
-        // Don't add the new polygon if its area is less than 0.1% of the total area.
-        // This allows users to draw several lines that pass near a point,
-        // but not exactly on this point, since it's quite difficult to achieve.
-        if (qRound(10.0*newPolygon.orientedArea() * 100.0 / _orientedAreaTotal)/10.0 >= 0.1)
-          newPolygonList << newPolygon;
-
-        newVertices.clear();
-      }
-    }
+    computeNewPolygonList(newPolygonList, line);
     _model->setPolygonList(newPolygonList);
 
     newPolygonList.clear();
@@ -223,6 +167,66 @@ void GameController::sliceIt(const std::vector<Segment>& lines) {
   _gameInfo->setLinesDrawn(_gameInfo->linesDrawn()+1);
 
   emit update();
+}
+
+void GameController::computeNewPolygonList(PolygonList& newPolygonList, const Segment& line) const {
+  for (const Polygon& polygon: _model->getPolygonList()) {
+    std::vector<Point2d*> globalVertices;
+    std::vector<Point2d*> intersections;
+    getVerticesAndIntersections(line, polygon, globalVertices, intersections);
+
+    std::vector<Point2d> newVertices;
+
+    std::vector<std::pair<Point2d*, Point2d*>> cuttingSegments = getCuttingSegments(intersections);
+
+    while (stillHasBaseVertices(globalVertices, intersections)) {
+
+      // We really don't want the first point to be an intersection. Trust me.
+      Point2d* p = globalVertices.at(0);
+      while (std::find(intersections.begin(), intersections.end(), p) != intersections.end()) {
+        globalVertices.erase(globalVertices.begin());
+        globalVertices.push_back(p);
+        p = globalVertices.at(0);
+      }
+      std::vector<Point2d*> globalVerticesCopy(globalVertices);
+
+      bool lookingForOtherBound = false;
+      Point2d* otherBound = nullptr;
+      for (Point2d* currVerrtex: globalVerticesCopy) {
+        if (lookingForOtherBound) {
+          if (otherBound == currVerrtex) {
+            newVertices.push_back(*currVerrtex);
+            lookingForOtherBound = false;
+          }
+        } else {
+          if (std::find(intersections.begin(), intersections.end(), currVerrtex) != intersections.end()) {
+            // If the intersection is not equal to the last point, we add it
+            if (newVertices.size() > 0 && (std::find(newVertices.begin(), newVertices.end(), *currVerrtex) == newVertices.end())) {
+              newVertices.push_back(*currVerrtex);
+            }
+            otherBound = getOtherBound(currVerrtex, cuttingSegments);
+            lookingForOtherBound = true;
+          } else {
+            newVertices.push_back(*currVerrtex);
+            auto it = std::find(globalVertices.begin(), globalVertices.end(), currVerrtex);
+            assert(it != globalVertices.end());
+            globalVertices.erase(it);
+          }
+        }
+      }
+      globalVerticesCopy.clear();
+      globalVerticesCopy = globalVertices;
+
+      Polygon newPolygon(newVertices);
+      // Don't add the new polygon if its area is less than 0.1% of the total area.
+      // This allows users to draw several lines that pass near a point,
+      // but not exactly on this point, since it's quite difficult to achieve.
+      if (qRound(10.0*newPolygon.orientedArea() * 100.0 / _orientedAreaTotal)/10.0 >= 0.1)
+        newPolygonList << newPolygon;
+
+      newVertices.clear();
+    }
+  }
 }
 
 GameController::LineType GameController::computeLineType(const std::vector<Segment>& lines) const {

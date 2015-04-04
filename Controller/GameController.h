@@ -31,7 +31,8 @@ public:
   void cleanIntersections(const Polygon& polygon, std::vector<Point2d*>& intersections) const;
   void getVerticesAndIntersections(const Segment& line, const Polygon& polygon,
     std::vector<Point2d*>& globalVertices, std::vector<Point2d*>& intersections) const;
-  void sliceIt(const std::vector<Segment>& lines);
+  virtual void sliceIt(const std::vector<Segment>& lines);
+  void computeNewPolygonList(PolygonList& newPolygonList, const Segment& line) const;
 
   LineType computeLineType(const std::vector<Segment>& lines) const;
   void updateStarsMax(int starsMaxCount);

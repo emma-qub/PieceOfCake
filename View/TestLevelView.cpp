@@ -66,6 +66,12 @@ void TestLevelView::mouseMoveEvent(QMouseEvent* event) {
       break;
     }
 
+    if (_goodSegment) {
+      _controller->sliceItNot(lines);
+    } else {
+      _model->setPolygonList(_controller->getPrevPolygonList());
+    }
+
     clearImage();
     drawFromModel();
     drawLine(_firstPoint, currPoint, color, Qt::DashLine);
@@ -134,6 +140,16 @@ void TestLevelView::drawLine(const QPoint& begin, const QPoint& end, const QColo
   update();
 }
 
+void TestLevelView::drawText(const QPoint& position, const QString& text, const QColor &color) {
+  QPainter painter(&_image);
+  painter.setPen(QPen(color, 3, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+  painter.setFont(QFont("", 12, 99));
+  QFontMetrics fm = painter.fontMetrics();
+  int leftShift = -fm.width(text)/2;
+  int topShift = fm.height()/4;
+  painter.drawText(position+QPoint(leftShift, topShift), text);
+}
+
 void TestLevelView::drawFromModel(void) {
   clearImage();
 
@@ -141,6 +157,10 @@ void TestLevelView::drawFromModel(void) {
 
   for (const Polygon& polygon: polygons) {
     QColor color(_model->getColor());
+
+    float area = _controller->computePolygonPercentageArea(polygon);
+    Point2d areaPoint = polygon.barycenter();
+    drawText(QPoint(areaPoint.getX(), areaPoint.getY()), QString::number(area), Qt::black);
 
     std::vector<Point2d> vertices = polygon.getVertices();
     for (unsigned k = 0; k < vertices.size(); k++) {

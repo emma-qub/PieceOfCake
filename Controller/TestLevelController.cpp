@@ -2,9 +2,10 @@
 
 #define cerro(x) std::cerr << x << std::endl;
 
-TestLevelController::TestLevelController(GameModel* model, QUndoStack* undoStack, LevelInfo* levelInfo, QObject* parent):
+TestLevelController::TestLevelController(GameModel* model, TestLevelModel* lineModel, QUndoStack* undoStack, LevelInfo* levelInfo, QObject* parent):
   GameController(model, undoStack, parent),
-  _levelInfo(levelInfo) {
+  _levelInfo(levelInfo),
+  _lineModel(lineModel) {
 
   _levelRunning = true;
   _gameInfo->setLinesCount(0);
@@ -30,13 +31,75 @@ void TestLevelController::sliceItNot(const std::vector<Segment>& lines) {
   PolygonList newPolygonList;
 
   for (const Segment& line: lines) {
-    // Browse every polygon and slice it!
+    // Browse every line and slice it!
     computeNewPolygonList(newPolygonList, line);
     _model->setPolygonList(newPolygonList);
 
     newPolygonList.clear();
   }
 }
+
+void TestLevelController::addLine(int lineRow, const Segment& line) {
+  if (lineRow == -1)
+    lineRow = _lineModel->rowCount();
+
+  _lineModel->insertLine(lineRow, line);
+}
+
+void TestLevelController::appendLine(const Segment& line) {
+  addLine(_lineModel->rowCount(), line);
+}
+
+void TestLevelController::removeLine(int lineRow) {
+  int newLineRow = lineRow;
+  if (_lineModel->rowCount() == 0) {
+    newLineRow = -1;
+  } else {
+    if (lineRow == _lineModel->rowCount()-1) {
+      newLineRow = lineRow-1;
+    }
+  }
+
+  _lineModel->removeLine(newLineRow);
+}
+
+void TestLevelController::moveLine(int lineRow, int oldX, int oldY, int newX, int newY) {
+  Segment line(_lineModel->lineFromIndex(_lineModel->index(lineRow, 0)));
+  line.translate(newX-oldX, newY-oldY);
+  _lineModel->replaceLine(lineRow, line);
+
+  emitUpdate(0);
+}
+
+void TestLevelController::addVertex(int lineRow, int vertexRow, const Point2d& vertex) {
+  _lineModel->insertVertex(lineRow, vertexRow, vertex);
+}
+
+void TestLevelController::removeVertex(int lineRow, int vertexRow, const Point2d& vertex) {
+  int newVertexRow = vertexRow;
+  if (_lineModel->rowCount(_lineModel->index(lineRow, 0)) == 0) {
+    newVertexRow = -1;
+  } else {
+    if (vertexRow == _lineModel->rowCount(_lineModel->index(lineRow, 0)) - 1) {
+      newVertexRow = vertexRow-1;
+    }
+  }
+
+  _lineModel->insertVertex(lineRow, newVertexRow, vertex);
+}
+
+void TestLevelController::moveVertex(int lineRow, int vertexRow, int newX, int newY) {
+  _lineModel->replaceVertex(lineRow, vertexRow, Point2d(newX, newY));
+
+  emitUpdate(0);
+}
+
+//void TestLevelController::clear(void) {
+//  AbstractController::clear();
+//  _lineModel->clear();
+//  emit updateReset();
+//  emitUpdate(0);
+//}
 
 void TestLevelController::checkWinning(void) {
 //  if (_testIsOver) {
@@ -66,5 +129,11 @@ void TestLevelController::addNewLine(const Segment& line) {
   _gameInfo->setPartsCount(_gameInfo->partsCut());
 
   _levelInfo->updateLevelReadyToBeCut(_gameInfo->linesDrawn());
+  appendLine(line);
   std::cerr << "LevelReadyToBeCut: " << _levelInfo->levelReadyToBeCut() << std::endl;
+}
+
+void TestLevelController::emitUpdate(int) {
+  emit selection();
+  emit update();
 }

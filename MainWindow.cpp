@@ -77,6 +77,7 @@ void MainWindow::showTestLevel(void) {
   _testLevelController->setPrevPolygonList(_testLevelModel->getPolygonList());
   _testLevelController->computeOrientedArea();
   _testLevelView->drawFromModel();
+  _testLevelTreeView->show();
   QMetaObject::invokeMethod(_homeWidget->rootObject(), "qmlEnableNextStep", Q_ARG(QVariant, false));
   std::cerr << "TEST LEVEL REQUESTED" << std::endl;
 }
@@ -158,14 +159,23 @@ void MainWindow::initTestLevel(void) {
   _testLevelModel = new GameModel;
   _testLevelModel->setPolygonList(_levelDesignerModel->getPolygonList());
 
-  _testLevelController = new TestLevelController(_testLevelModel, new QUndoStack, _levelInfo);
+  _lineModel = new TestLevelModel;
+
+  _testLevelController = new TestLevelController(_testLevelModel, _lineModel, new QUndoStack, _levelInfo);
 
   _testLevelView = new TestLevelView(_testLevelController, this);
-  _testLevelView->setModel(_testLevelModel);
+  _testLevelView->setModels(_testLevelModel, _lineModel);
   _testLevelView->move(175, 150);
   _testLevelView->hide();
 
   connect(_testLevelView, SIGNAL(newLineDrawn(Segment)), _testLevelController, SLOT(addNewLine(Segment)));
+
+  _testLevelTreeView = new TestLevelTreeView(_testLevelController, this);
+  _testLevelTreeView->setModel(_lineModel);
+  _testLevelTreeView->move(650, 100);
+  _testLevelTreeView->hide();
+
+  connect(_testLevelTreeView, SIGNAL(updateViewNotModel(QModelIndex,int)), _testLevelView, SLOT(drawFromModel(QModelIndex,int)));
 
   QQuickItem* item = _homeWidget->rootObject();
   connect(item, SIGNAL(refreshLevelRequested(void)), _testLevelView, SLOT(replay(void)));

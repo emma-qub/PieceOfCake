@@ -115,7 +115,7 @@ bool LevelDesignerModel::translatePolygon(int polygonRow, const Vector2d& direct
   bool res = true;
 
   std::vector<Point2d> vertices = polygon.getVertices();
-  for (unsigned int k = 0; k < polygon.getVertices().size(); ++k) {
+  for (unsigned int k = 0; k < vertices.size(); ++k) {
     res = res && replaceVertex(polygonRow, k, vertices.at(k));
   }
 

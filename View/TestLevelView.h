@@ -5,6 +5,7 @@
 
 #include "GameModel.h"
 #include "TestLevelController.h"
+#include "TestLevelModel.h"
 
 class TestLevelView: public QWidget
 {
@@ -14,7 +15,7 @@ public:
   ~TestLevelView();
 
   inline GameModel* model() const { return _model; }
-  void setModel(GameModel* model);
+  void setModels(GameModel* model, TestLevelModel* lineModel);
 
 protected:
   void mousePressEvent(QMouseEvent* event);
@@ -47,9 +48,8 @@ protected:
   bool _goodSegment;
   bool _runningSegment;
   GameModel* _model;
+  TestLevelModel* _lineModel;
   TestLevelController* _controller;
-
-
 };
 
 #endif // TESTLEVELVIEW_H

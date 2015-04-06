@@ -34,6 +34,13 @@ Vector2d Segment::getDirection(void) const {
   return Vector2d::fromSegment(*this).normalized();
 }
 
+std::vector<Point2d> Segment::getVertices(void) const {
+  std::vector<Point2d> vertices;
+  vertices.push_back(_boundaries[0]);
+  vertices.push_back(_boundaries[1]);
+  return vertices;
+}
+
 Point2d Segment::getOtherBoundary(const Point2d& boundary) {
   if (boundary == _boundaries[0])
     return _boundaries[1];
@@ -109,6 +116,18 @@ Segment::Intersection Segment::computeIntersection(const Point2d& P, const Point
 
 Segment::Intersection Segment::computeIntersection(const Segment& PQ) const {
   return computeIntersection(PQ.getA(), PQ.getB());
+}
+
+void Segment::translate(const Vector2d& direction) {
+  translate(direction.getX(), direction.getY());
+}
+
+void Segment::translate(float x, float y) {
+  if (x == 0. && y == 0.)
+    return;
+
+  _boundaries[0].move(x, y);
+  _boundaries[1].move(x, y);
 }
 
 float Segment::orientedArea(void) const {

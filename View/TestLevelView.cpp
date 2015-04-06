@@ -12,15 +12,15 @@ TestLevelView::TestLevelView(TestLevelController* controller, QWidget* parent):
 
   connect(_controller, SIGNAL(update()), this, SLOT(drawFromModel()));
   resize(401, 401);
-
 }
 
 TestLevelView::~TestLevelView() {
 }
 
 
-void TestLevelView::setModel(GameModel* model) {
+void TestLevelView::setModels(GameModel* model, TestLevelModel* lineModel) {
   _model = model;
+  _lineModel = lineModel;
 }
 
 void TestLevelView::mousePressEvent(QMouseEvent* event) {
@@ -89,16 +89,7 @@ void TestLevelView::mouseReleaseEvent(QMouseEvent* event) {
       std::vector<Segment> lines;
       _controller->computeDeviateLines(-1.f, line, lines);
       _controller->sliceIt(lines);
-      GameInfo* g = _controller->getGameInfo();
-      std::cerr << g->linesCount() << std::endl;
-      std::cerr << g->linesDrawn() << std::endl;
-      std::cerr << g->partsCount() << std::endl;
-      std::cerr << g->partsCut() << std::endl;
       emit newLineDrawn(line);
-      std::cerr << "\n" << g->linesCount() << std::endl;
-      std::cerr << g->linesDrawn() << std::endl;
-      std::cerr << g->partsCount() << std::endl;
-      std::cerr << g->partsCut() << std::endl;
     }
     _scribbling = false;
     _runningSegment = false;
@@ -170,6 +161,11 @@ void TestLevelView::drawFromModel(void) {
       //drawText(QPoint(fstVertex.getX(), fstVertex.getY()), QString::number(k));
       drawLine(QPoint(fstVertex.getX(), fstVertex.getY()), QPoint(sndVertex.getX(), sndVertex.getY()), color);
     }
+  }
+
+  LineList lines = _lineModel->getLineList();
+  for (const Segment& line: lines) {
+    drawLine(QPoint(line.getA().getX(), line.getA().getY()), QPoint(line.getB().getX(), line.getB().getY()), _lineModel->getRandomColor());
   }
 }
 

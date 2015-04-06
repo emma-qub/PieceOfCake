@@ -45,7 +45,10 @@ HEADERS += \
   ThumbnailCreator.h \
     View/TestLevelView.h \
     LineModifier/Refractor.h \
-    Model/LineModifierModel.h
+    Model/LineModifierModel.h \
+    View/TestLevelTreeView.h \
+    Model/TestLevelModel.h \
+    Delegate/TestLevelTreeItemDelegate.h
 
 SOURCES += \
   # Controller
@@ -90,7 +93,10 @@ SOURCES += \
   ThumbnailCreator.cpp \
     View/TestLevelView.cpp \
     LineModifier/Refractor.cpp \
-    Model/LineModifierModel.cpp
+    Model/LineModifierModel.cpp \
+    View/TestLevelTreeView.cpp \
+    Model/TestLevelModel.cpp \
+    Delegate/TestLevelTreeItemDelegate.cpp
 
 INCLUDEPATH += \
   Controller \

@@ -25,6 +25,8 @@
 // Test Level
 #include "TestLevelController.h"
 #include "TestLevelView.h"
+#include "TestLevelModel.h"
+#include "TestLevelTreeView.h"
 
 class MainWindow: public QMainWindow {
   Q_OBJECT
@@ -66,6 +68,8 @@ private:
   TestLevelView* _testLevelView;
   TestLevelController* _testLevelController;
   GameModel* _testLevelModel;
+  TestLevelTreeView* _testLevelTreeView;
+  TestLevelModel* _lineModel;
 
   QWidget* _gameWidget;
   QWidget* _levelDesignerWidget;

@@ -51,8 +51,8 @@ public:
   void updatePolygons(void);
   void updateVertices(QModelIndex polygonIndex);
 
-  void description(QString& desc, TreeItem* item, int shift);
-  void description(void);
+//  void description(QString& desc, TreeItem* item, int shift);
+//  void description(void);
 
 public slots:
   void debug(QModelIndex,QModelIndex);

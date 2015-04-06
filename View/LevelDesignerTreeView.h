@@ -2,7 +2,6 @@
 #define POLYGONTREEVIEW_H
 
 #include <QTreeView>
-#include <QUndoStack>
 
 #include "LevelDesignerModel.h"
 #include "LevelDesignerController.h"
@@ -29,7 +28,6 @@ signals:
   void updateViewNotModel(QModelIndex, int);
 
 protected:
-  QUndoStack* _undoStack;
   LevelDesignerModel* _model;
   LevelDesignerController* _controller;
   LevelDesignerTreeItemDelegate* _delegate;

@@ -66,16 +66,16 @@ void Polygon::replaceVertex(int position, const Point2d& newVertex) {
 }
 
 void Polygon::translate(const Vector2d& direction) {
-  if (direction == Vector2d())
+  translate(direction.getX(), direction.getY());
+}
+
+void Polygon::translate(float x, float y) {
+  if (x == 0. && y == 0.)
     return;
 
   auto it = _vertices.begin();
   for (; it != _vertices.end(); ++it)
-    it->move(direction.getX(), direction.getY());
-}
-
-void Polygon::translate(float x, float y) {
-  translate(Vector2d(x, y));
+    it->move(x, y);
 }
 
 void Polygon::homothetie(const Point2d& origin, float scale) {

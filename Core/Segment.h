@@ -36,6 +36,7 @@ public:
   Point2d getCenter(void) const;
   Vector2d getNormal(void) const;
   Vector2d getDirection(void) const;
+  std::vector<Point2d> getVertices(void) const;
 
   Point2d getOtherBoundary(const Point2d& boundary);
 
@@ -44,6 +45,9 @@ public:
   Intersection computeIntersection(const Point2d& P, const Point2d& Q) const;
   Intersection computeIntersection(const Segment& PQ) const;
   static Point2d intersectionPoint(const Segment& AB, const Segment& PQ);
+
+  void translate(const Vector2d& direction);
+  void translate(float x, float y);
 
   float orientedArea(void) const;
 

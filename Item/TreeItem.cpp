@@ -49,7 +49,7 @@
 #include <QStringList>
 #include <QDebug>
 
-TreeItem::TreeItem(const QVector<QPair<QVariant, QVariant>> &data, TreeItem *parent) {
+TreeItem::TreeItem(const QVector<QPair<QVariant, QVariant>>& data, TreeItem* parent) {
   parentItem = parent;
   itemData = data;
 }
@@ -58,7 +58,7 @@ TreeItem::~TreeItem() {
   qDeleteAll(childItems);
 }
 
-TreeItem *TreeItem::child(int number) const {
+TreeItem* TreeItem::child(int number) const {
   return childItems.value(number);
 }
 
@@ -92,7 +92,7 @@ bool TreeItem::insertChildren(int position, int count, int columns) {
 
   for (int row = 0; row < count; ++row) {
     QVector<QPair<QVariant, QVariant>> data(columns);
-    TreeItem *item = new TreeItem(data, this);
+    TreeItem* item = new TreeItem(data, this);
     childItems.insert(position, item);
   }
 
@@ -106,13 +106,13 @@ bool TreeItem::insertColumns(int position, int columns) {
   for (int column = 0; column < columns; ++column)
     itemData.insert(position, QPair<QVariant, QVariant>());
 
-  foreach (TreeItem *child, childItems)
+  for (TreeItem* child: childItems)
     child->insertColumns(position, columns);
 
   return true;
 }
 
-TreeItem *TreeItem::parent() const {
+TreeItem* TreeItem::parent() const {
   return parentItem;
 }
 
@@ -133,13 +133,13 @@ bool TreeItem::removeColumns(int position, int columns) {
   for (int column = 0; column < columns; ++column)
     itemData.remove(position);
 
-  foreach (TreeItem *child, childItems)
+  for (TreeItem* child: childItems)
     child->removeColumns(position, columns);
 
   return true;
 }
 
-bool TreeItem::setData(int column, const QVariant &value, int role) {
+bool TreeItem::setData(int column, const QVariant& value, int role) {
   if ((column < 0 || column >= itemData.size()) && (role != Qt::EditRole || role != Qt::DecorationRole))
     return false;
 

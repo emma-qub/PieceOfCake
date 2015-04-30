@@ -47,7 +47,7 @@ TreeModel::TreeModel(const QStringList &headers, const QString &data, QObject *p
   QAbstractItemModel(parent) {
 
   QVector<QPair<QVariant, QVariant>> rootData;
-  foreach (QString header, headers)
+  for (QString header: headers)
     rootData << QPair<QVariant, QVariant>(header, QVariant());
 
   rootItem = new TreeItem(rootData);

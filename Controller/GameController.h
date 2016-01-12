@@ -28,8 +28,8 @@ public:
   Point2d* getOtherBound(const Point2d* intersection, const std::vector<std::pair<Point2d*, Point2d*>>& cuttingSegments) const;
   std::vector<std::pair<Point2d*, Point2d*>> getCuttingSegments(const std::vector<Point2d*>& intersections) const;
   bool stillHasBaseVertices(const std::vector<Point2d*>& verticesGlobal, const std::vector<Point2d*>& intersections) const;
-  void cleanIntersections(const Polygon& polygon, std::vector<Point2d*>& intersections) const;
-  void getVerticesAndIntersections(const Segment& line, const Polygon& polygon,
+  void cleanIntersections(const poc::Polygon& polygon, std::vector<Point2d*>& intersections) const;
+  void getVerticesAndIntersections(const Segment& line, const poc::Polygon& polygon,
     std::vector<Point2d*>& globalVertices, std::vector<Point2d*>& intersections) const;
   virtual void sliceIt(const std::vector<Segment>& lines);
   void computeNewPolygonList(PolygonList& newPolygonList, const Segment& line) const;
@@ -42,7 +42,7 @@ public:
   Deviation* getNearestDeviation(const Segment& line) const;
   void computeDeviateLines(float firstLineLength, const Segment& line, std::vector<Segment>& lines) const;
 
-  float computePolygonPercentageArea(const Polygon& polygon) const;
+  float computePolygonPercentageArea(const poc::Polygon& polygon) const;
   Point2d computeGlobalBarycenter() const;
 
 public slots:

@@ -7,7 +7,7 @@
 #include "TreeItem.h"
 #include "TreeModel.h"
 
-typedef QList<Polygon> PolygonList;
+typedef QList<poc::Polygon> PolygonList;
 
 class  LevelDesignerModel: public TreeModel {
   Q_OBJECT
@@ -35,13 +35,13 @@ public:
 
   bool polygonHasVertex(int polygonRow);
 
-  Polygon polygonFromIndex(const QModelIndex& polygonIndex);
+  poc::Polygon polygonFromIndex(const QModelIndex& polygonIndex);
   Point2d vertexFromIndex(const QModelIndex& vertexIndex);
 
-  bool appendPolygon(const Polygon& polygon);
-  bool insertPolygon(int polygonRow, const Polygon& polygon);
+  bool appendPolygon(const poc::Polygon& polygon);
+  bool insertPolygon(int polygonRow, const poc::Polygon& polygon);
   bool removePolygon(int polygonRow);
-  bool replacePolygon(int polygonRow, const Polygon& polygon);
+  bool replacePolygon(int polygonRow, const poc::Polygon& polygon);
   bool translatePolygon(int polygonRow, const Vector2d& direction);
 
   bool insertVertex(int polygonRow, int vertexRow, const Point2d& vertex, bool exist = false);

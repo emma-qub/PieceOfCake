@@ -64,7 +64,7 @@ LevelDesignerScribbleView::LevelDesignerScribbleView(LevelDesignerController* co
   _redoAction->setShortcut(QKeySequence::Redo);
   addAction(_redoAction);
 
-  _addPolygonAction = new QAction("&New Polygon", this);
+  _addPolygonAction = new QAction("&New poc::Polygon", this);
   _addPolygonAction->setShortcut(QKeySequence("CTRL+SHIFT+N"));
   addAction(_addPolygonAction);
   connect(_addPolygonAction, SIGNAL(triggered()), _controller, SLOT(appendPolygon()));
@@ -125,7 +125,7 @@ void LevelDesignerScribbleView::mouseMoveEvent(QMouseEvent* event) {
       return;
     }
 
-    Polygon currPolygon = _model->polygonFromIndex(currIndex);
+    poc::Polygon currPolygon = _model->polygonFromIndex(currIndex);
     std::vector<Point2d> vertices = currPolygon.getVertices();
     _nearToVertex = false;
     _nearToBarycenter = false;
@@ -233,7 +233,7 @@ void LevelDesignerScribbleView::mouseReleaseEvent(QMouseEvent* event) {
     // This is the header
   } else if (fstData == "Polygon") {
     qDebug() << "There";
-    _controller->addPolygon(_model->rowCount(), Polygon());
+    _controller->addPolygon(_model->rowCount(), poc::Polygon());
     polygonIndex = _model->index(_model->rowCount()-1, 0);
     vertexRow = 0;
     // This is a polygon
@@ -253,7 +253,7 @@ void LevelDesignerScribbleView::mouseReleaseEvent(QMouseEvent* event) {
     _beforeMovingVertexY = -1;
     return;
   } else if (_movingPolygon) {
-    Polygon polygon = _model->polygonFromIndex(polygonIndex);
+    poc::Polygon polygon = _model->polygonFromIndex(polygonIndex);
     //        qDebug() << "Compute polygon barycenter from LevelDesignerScribbleView::mouseReleaseEvent";
     Point2d barycenter = polygon.barycenter();
     if (barycenter.getX() != _beforeMovingPolygonX || barycenter.getY() != _beforeMovingPolygonY) {
@@ -433,7 +433,7 @@ void LevelDesignerScribbleView::drawPolygon(const QModelIndex& polygonIndex, con
   }
 
   if (polygonIndex.isValid() && _model->rowCount(polygonIndex) > 2) {
-    Polygon polygon(_model->polygonFromIndex(polygonIndex));
+    poc::Polygon polygon(_model->polygonFromIndex(polygonIndex));
     //        qDebug() << "Compute polygon barycenter from LevelDesignerScribbleView::drawPolygon";
     Point2d barycenter(polygon.barycenter());
     drawPoint(QPoint(barycenter.getX(), barycenter.getY()), color);
@@ -482,7 +482,7 @@ void LevelDesignerScribbleView::clearImage(void) {
 }
 
 //void LevelDesignerScribbleView::newPolygon(void) {
-//    _model->appendPolygon(Polygon());
+//    _model->appendPolygon(poc::Polygon());
 //    QModelIndex currIndex = _model->index(_model->rowCount()-1, 0);
 //    _selectionModel->setCurrentIndex(currIndex, QItemSelectionModel::ClearAndSelect);
 //}

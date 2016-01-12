@@ -146,7 +146,7 @@ void TestLevelView::drawFromModel(void) {
 
   PolygonList polygons = _model->getPolygonList();
 
-  for (const Polygon& polygon: polygons) {
+  for (const poc::Polygon& polygon: polygons) {
     QColor color(_model->getColor());
 
     float area = _controller->computePolygonPercentageArea(polygon);

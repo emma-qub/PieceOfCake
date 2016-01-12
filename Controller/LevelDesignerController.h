@@ -19,8 +19,8 @@ public:
 
   void initPolygon(void);
 
-  void addPolygon(int polygonRow, const Polygon& polygon);
-  void removePolygon(int polygonRow, const Polygon& polygon);
+  void addPolygon(int polygonRow, const poc::Polygon& polygon);
+  void removePolygon(int polygonRow, const poc::Polygon& polygon);
   void movePolygon(int polygonRow, int oldX, int oldY, int newX, int newY, bool pushToStack = true);
 
   void addVertex(int polygonRow, int vertexRow, const Point2d& vertex);

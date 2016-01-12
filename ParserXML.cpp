@@ -140,7 +140,7 @@ QDomElement ParserXML::tolerancesToNode(unsigned int tolerances) {
   return intToNode(tolerances, "tolerances");
 }
 
-QDomElement ParserXML::polygonToNode(const Polygon& polygon, int id) {
+QDomElement ParserXML::polygonToNode(const poc::Polygon& polygon, int id) {
   QDomElement element(_doc.createElement("polygon"));
   element.setAttribute("id", id);
 
@@ -221,7 +221,7 @@ QDomElement ParserXML::hintToNode(const Hint& hint, int id) {
   return element;
 }
 
-void ParserXML::addPolygon(const Polygon& polygon) {
+void ParserXML::addPolygon(const poc::Polygon& polygon) {
   _polygons.appendChild(polygonToNode(polygon, _polygonNodesCount++));
 }
 
@@ -303,7 +303,7 @@ void ParserXML::setTolerances(int tolerances) {
   _doc.elementsByTagName("tolerances").at(0).toElement().setAttribute("value", tolerances);
 }
 
-void ParserXML::replacePolygon(const Polygon& polygon, int id) {
+void ParserXML::replacePolygon(const poc::Polygon& polygon, int id) {
   _polygons.replaceChild(polygonToNode(polygon, id), getPolygon(id));
 }
 
@@ -433,8 +433,8 @@ int ParserXML::getTolerances(void) {
   return getIntValue("tolerances");
 }
 
-Polygon ParserXML::createPolygon(const QDomElement& element) {
-  Polygon polygon;
+poc::Polygon ParserXML::createPolygon(const QDomElement& element) {
+  poc::Polygon polygon;
 
   QDomNodeList vertices = element.elementsByTagName("vertex");
   if (vertices.size() < 3) {

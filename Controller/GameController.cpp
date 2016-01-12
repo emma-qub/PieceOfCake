@@ -67,7 +67,7 @@ bool GameController::stillHasBaseVertices(const std::vector<Point2d*>& globalVer
   return false;
 }
 
-void GameController::cleanIntersections(const Polygon& polygon, std::vector<Point2d*>& intersections) const {
+void GameController::cleanIntersections(const poc::Polygon& polygon, std::vector<Point2d*>& intersections) const {
   if (intersections.size() < 2) {
     intersections.clear();
     return;
@@ -103,7 +103,7 @@ void GameController::cleanIntersections(const Polygon& polygon, std::vector<Poin
   intersections = realIntersection;
 }
 
-void GameController::getVerticesAndIntersections(const Segment& line, const Polygon& polygon,
+void GameController::getVerticesAndIntersections(const Segment& line, const poc::Polygon& polygon,
   std::vector<Point2d*>& globalVertices, std::vector<Point2d*>& intersections) const {
 
   std::vector<Point2d> baseVertices = polygon.getVertices();
@@ -170,7 +170,7 @@ void GameController::sliceIt(const std::vector<Segment>& lines) {
 }
 
 void GameController::computeNewPolygonList(PolygonList& newPolygonList, const Segment& line) const {
-  for (const Polygon& polygon: _model->getPolygonList()) {
+  for (const poc::Polygon& polygon: _model->getPolygonList()) {
     std::vector<Point2d*> globalVertices;
     std::vector<Point2d*> intersections;
     getVerticesAndIntersections(line, polygon, globalVertices, intersections);
@@ -217,7 +217,7 @@ void GameController::computeNewPolygonList(PolygonList& newPolygonList, const Se
       globalVerticesCopy.clear();
       globalVerticesCopy = globalVertices;
 
-      Polygon newPolygon(newVertices);
+      poc::Polygon newPolygon(newVertices);
       // Don't add the new polygon if its area is less than 0.1% of the total area.
       // This allows users to draw several lines that pass near a point,
       // but not exactly on this point, since it's quite difficult to achieve.
@@ -236,7 +236,7 @@ GameController::LineType GameController::computeLineType(const std::vector<Segme
 
   PolygonList polygonList = _model->getPolygonList();
   for (const Segment& line: lines) {
-    for (const Polygon& polygon: polygonList) {
+    for (const poc::Polygon& polygon: polygonList) {
       if (!polygon.isCrossing(line) && !polygon.isPointInside2(line.getA())) {
         noCrossing = true;
       } else if (polygon.isGoodSegment(line)) {
@@ -272,7 +272,7 @@ void GameController::checkWinning(void) {
     float minArea = 100.0;
     float maxArea = 0.0;
 
-    for (const Polygon& polygon: _model->getPolygonList()) {
+    for (const poc::Polygon& polygon: _model->getPolygonList()) {
       float currArea = computePolygonPercentageArea(polygon);
 
       orientedAreas << currArea;
@@ -382,7 +382,7 @@ void GameController::translatePolygons(const QList<Vector2d>& shiftVectors) {
   auto it = _model->getPolygonList().cbegin();
   unsigned int currIndex = 0;
   for (; it != _model->getPolygonList().cend(); ++it) {
-    Polygon newPolygon(*it);
+    poc::Polygon newPolygon(*it);
     newPolygon.translate(shiftVectors.at(currIndex));
     newPolygons << newPolygon;
     ++currIndex;
@@ -470,7 +470,7 @@ void GameController::computeDeviateLines(float firstLineLength, const Segment& l
   }
 }
 
-float GameController::computePolygonPercentageArea(const Polygon& polygon) const {
+float GameController::computePolygonPercentageArea(const poc::Polygon& polygon) const {
   return qRound(10.0*polygon.orientedArea() * 100.0 / _orientedAreaTotal)/10.0;
 }
 
@@ -478,7 +478,7 @@ Point2d GameController::computeGlobalBarycenter() const {
   Point2d globalBarycenter;
   unsigned int polygonCount = 0;
 
-  for (const Polygon& polygon: _model->getPolygonList()) {
+  for (const poc::Polygon& polygon: _model->getPolygonList()) {
     globalBarycenter += polygon.barycenter();
     ++polygonCount;
   }
@@ -526,7 +526,7 @@ void GameController::openLevel(const QString& fileName) {
   _gameInfo->setStarsMax(parser.getStarsCount());
   _maxGapToWin = parser.getMaxGapToWin();
 
-  for (const Polygon& polygon: _model->getPolygonList()) {
+  for (const poc::Polygon& polygon: _model->getPolygonList()) {
     _orientedAreaTotal += polygon.orientedArea();
   }
 

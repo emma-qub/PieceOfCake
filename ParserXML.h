@@ -12,7 +12,7 @@
 #include "Refractor.h"
 #include "Hint.h"
 
-typedef QList<Polygon> PolygonList;
+typedef QList<poc::Polygon> PolygonList;
 typedef QList<Tape> TapeList;
 typedef QList<Mirror> MirrorList;
 typedef QList<Portal> PortalList;
@@ -36,14 +36,14 @@ public:
   QDomElement linescountToNode(unsigned int linescount = 0);
   QDomElement starscountToNode(unsigned int starscount = 0);
   QDomElement tolerancesToNode(unsigned int tolerances = 1);
-  QDomElement polygonToNode(const Polygon& polygon, int id);
+  QDomElement polygonToNode(const poc::Polygon& polygon, int id);
   QDomElement tapeToNode(const Tape& tape, int id);
   QDomElement mirrorToNode(const Mirror& mirror, int id);
   QDomElement portalToNode(const Portal& portal, int id);
   QDomElement refractorToNode(const Refractor& refractor, int id);
   QDomElement hintToNode(const Hint& hint, int id);
 
-  void addPolygon(const Polygon& polygon);
+  void addPolygon(const poc::Polygon& polygon);
   void addTape(const Tape& tape);
   void addMirror(const Mirror& mirror);
   void addPortal(const Portal& portal);
@@ -64,7 +64,7 @@ public:
   void setStarsCount(int starscount);
   void setTolerances(int tolerances);
 
-  void replacePolygon(const Polygon& polygon, int id);
+  void replacePolygon(const poc::Polygon& polygon, int id);
   void replaceTape(const Tape& tape, int id);
   void replaceMirror(const Mirror& mirror, int id);
   void replacePortal(const Portal& portal, int id);
@@ -91,7 +91,7 @@ public:
   int getStarsCount(void);
   int getTolerances(void);
 
-  Polygon createPolygon(const QDomElement& element);
+  poc::Polygon createPolygon(const QDomElement& element);
   Tape createTape(const QDomElement& element);
   Mirror createMirror(const QDomElement& element);
   Portal createPortal(const QDomElement& element);

@@ -18,7 +18,7 @@ void LevelInfo::setLevelReadyToBeTested(bool value) {
 }
 
 void LevelInfo::updateLevelReadyToBeTested(const PolygonList& polygonList) {
-  for (const Polygon& polygon: polygonList) {
+  for (const poc::Polygon& polygon: polygonList) {
     if (polygon.getVertices().size() < 3) {
       setLevelReadyToBeTested(false);
       return;

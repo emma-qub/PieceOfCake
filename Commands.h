@@ -45,7 +45,7 @@ private:
 
 class AddPolygonCommand: public QUndoCommand {
 public:
-  AddPolygonCommand(LevelDesignerModel* model, int polygonRow, const Polygon& polygon, int selectionPolygonRow, int selectionVertexRow, QUndoCommand* parent = NULL);
+  AddPolygonCommand(LevelDesignerModel* model, int polygonRow, const poc::Polygon& polygon, int selectionPolygonRow, int selectionVertexRow, QUndoCommand* parent = NULL);
 
   virtual void undo(void);
   virtual void redo(void);
@@ -53,7 +53,7 @@ public:
 private:
   LevelDesignerModel* _model;
   int _polygonRow;
-  Polygon _polygon;
+  poc::Polygon _polygon;
   int _selectionPolygonRow;
   int _selectionVertexRow;
 };
@@ -62,7 +62,7 @@ private:
 
 class RemovePolygonCommand: public QUndoCommand {
 public:
-  RemovePolygonCommand(LevelDesignerModel* model, int polygonRow, const Polygon& polygon, int selectionPolygonRow, int selectionVertexRow, QUndoCommand* parent = NULL);
+  RemovePolygonCommand(LevelDesignerModel* model, int polygonRow, const poc::Polygon& polygon, int selectionPolygonRow, int selectionVertexRow, QUndoCommand* parent = NULL);
 
   virtual void undo(void);
   virtual void redo(void);
@@ -70,7 +70,7 @@ public:
 private:
   LevelDesignerModel* _model;
   int _polygonRow;
-  Polygon _polygon;
+  poc::Polygon _polygon;
   int _selectionPolygonRow;
   int _selectionVertexRow;
 };

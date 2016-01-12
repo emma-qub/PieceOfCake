@@ -9,6 +9,8 @@
 class Point2d;
 class Vector2d;
 
+namespace poc {
+
 class Polygon {
 public:
   Polygon(const std::vector<Point2d>& vertices = std::vector<Point2d>());
@@ -58,5 +60,7 @@ public:
 private:
   std::vector<Point2d> _vertices;
 };
+
+}
 
 #endif // POLYGON_H

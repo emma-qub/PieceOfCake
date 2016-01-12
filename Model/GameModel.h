@@ -10,7 +10,7 @@
 #include "Portal.h"
 #include "Refractor.h"
 
-typedef QList<Polygon> PolygonList;
+typedef QList<poc::Polygon> PolygonList;
 typedef QList<Tape> TapeList;
 typedef QList<Mirror> MirrorList;
 typedef QList<Portal> PortalList;
@@ -37,8 +37,8 @@ public:
 
   void populate(void);
 
-  void insertPolygon(int polygonRow, const Polygon& polygon);
-  void appendPolygon(const Polygon& polygon);
+  void insertPolygon(int polygonRow, const poc::Polygon& polygon);
+  void appendPolygon(const poc::Polygon& polygon);
   void insertVertex(int polygonRow, int vertexRow, const Point2d& vertex);
 
   void insertTape(int tapeRow, const Tape& tape);

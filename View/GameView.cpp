@@ -154,7 +154,7 @@ void GameView::drawFromModel(void) {
 
   // Draw every polygon in model color
   PolygonList polygons = _model->getPolygonList();
-  for (const Polygon& polygon: polygons) {
+  for (const poc::Polygon& polygon: polygons) {
     QColor color(_model->getColor());
 
     std::vector<Point2d> vertices = polygon.getVertices();
@@ -168,7 +168,7 @@ void GameView::drawFromModel(void) {
   }
 
   // Redraw too small polygons in red
-  for (const Polygon& polygon: polygons) {
+  for (const poc::Polygon& polygon: polygons) {
     QColor color("#AF0F0F");
 
     // Determine if polygon's area is too small and draw it red if so
@@ -249,7 +249,7 @@ void GameView::drawText(const QPoint& position, const QString& text, const QColo
 void GameView::drawAreaValues(const QList<float>& orientedAreas) {
   PolygonList polygons = _model->getPolygonList();
   int k = 0;
-  for (const Polygon& polygon: polygons) {
+  for (const poc::Polygon& polygon: polygons) {
     Point2d areaPoint = polygon.barycenter();
     drawText(QPoint(areaPoint.getX(), areaPoint.getY()), QString::number(orientedAreas.at(k)), Qt::black);
     ++k;

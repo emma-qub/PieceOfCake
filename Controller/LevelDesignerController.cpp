@@ -9,7 +9,7 @@ LevelDesignerController::LevelDesignerController(LevelDesignerModel *model, QUnd
   _model(model),
   _levelInfo(levelInfo) {
 
-  addPolygon(0, Polygon());
+  addPolygon(0, poc::Polygon());
 
   connect(_undoStack, SIGNAL(indexChanged(int)), this, SLOT(emitUpdate(int)));
 }
@@ -21,7 +21,7 @@ LevelInfo* LevelDesignerController::getLevelInfo(void) const {
   return _levelInfo;
 }
 
-void LevelDesignerController::addPolygon(int polygonRow, const Polygon& polygon) {
+void LevelDesignerController::addPolygon(int polygonRow, const poc::Polygon& polygon) {
   if (polygonRow == -1)
     polygonRow = _model->rowCount();
 
@@ -35,7 +35,7 @@ void LevelDesignerController::addPolygon(int polygonRow, const Polygon& polygon)
   _levelInfo->updateLevelReadyToBeTested(_model->getPolygonList());
 }
 
-void LevelDesignerController::removePolygon(int polygonRow, const Polygon& polygon) {
+void LevelDesignerController::removePolygon(int polygonRow, const poc::Polygon& polygon) {
   int newPolygonRow = polygonRow;
   if (_model->rowCount() == 0) {
     newPolygonRow = -1;
@@ -60,7 +60,7 @@ void LevelDesignerController::movePolygon(int polygonRow, int oldX, int oldY, in
     QUndoCommand* movePolygonCommand = new MovePolygonCommand(_model, polygonRow, oldX, oldY, newX, newY, polygonRow, -1);
     _undoStack->push(movePolygonCommand);
   } else {
-    Polygon polygon(_model->polygonFromIndex(_model->index(polygonRow, 0)));
+    poc::Polygon polygon(_model->polygonFromIndex(_model->index(polygonRow, 0)));
     polygon.translate(Vector2d(newX-oldX, newY-oldY));
     _model->replacePolygon(polygonRow, polygon);
 
@@ -127,7 +127,7 @@ void LevelDesignerController::clear(void) {
 }
 
 void LevelDesignerController::appendPolygon(void) {
-  addPolygon(_model->rowCount(), Polygon());
+  addPolygon(_model->rowCount(), poc::Polygon());
 }
 
 void LevelDesignerController::saveLevel(const QString& fileName) {
@@ -136,7 +136,7 @@ void LevelDesignerController::saveLevel(const QString& fileName) {
   parser.initFileName(fileName);
 
   PolygonList polygonList(_model->getPolygonList());
-  for (const Polygon& polygon: polygonList) {
+  for (const poc::Polygon& polygon: polygonList) {
     parser.addPolygon(polygon);
   }
 

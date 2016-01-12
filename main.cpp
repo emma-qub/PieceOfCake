@@ -55,8 +55,8 @@ int main(int argc, char** argv) {
   QApplication app(argc, argv);
 
   PolygonList polygonList;
-  //polygonList << Polygon(30, 250, 21, 260, 5);
-  Polygon polygon;
+  //polygonList << poc::Polygon(30, 250, 21, 260, 5);
+  poc::Polygon polygon;
   polygon << Point2d(55, 55)
   << Point2d(455, 55)
   << Point2d(455, 455)
@@ -116,10 +116,10 @@ int main(int argc, char** argv) {
 #endif
 
 #if GNUPLOT
-  // Polygon polygon;
+  // poc::Polygon polygon;
   // polygon << << Point2d() << << Point2d(0, 1) << << Point2d(1, 1) << << Point2d(1);
 
-  Polygon polygon(0, 100, 0, 100, 7);
+  poc::Polygon polygon(0, 100, 0, 100, 7);
   //    std::vector<Point2d> vertices = polygon.getVertices();
   //    for (unsigned int k = 0; k < vertices.size(); ++k)
   //        std::cerr << vertices.at(k).getX() << " " << vertices.at(k).getY() << " " << -10 << std::endl;

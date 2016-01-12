@@ -26,7 +26,7 @@ LevelDesignerModel::~LevelDesignerModel(void) {
 }
 
 void LevelDesignerModel::setPolygonList(const PolygonList& polygonList) {
-  for (const Polygon& polygon: polygonList) {
+  for (const poc::Polygon& polygon: polygonList) {
     appendPolygon(polygon);
   }
 }
@@ -40,11 +40,11 @@ bool LevelDesignerModel::polygonHasVertex(int polygonRow) {
   return (_polygonList.at(polygonRow).getVertices().size() > 1 && hasChildren(index(polygonRow, 0)));
 }
 
-Polygon LevelDesignerModel::polygonFromIndex(const QModelIndex& polygonIndex) {
+poc::Polygon LevelDesignerModel::polygonFromIndex(const QModelIndex& polygonIndex) {
   if (_polygonList.size() > polygonIndex.row())
     return _polygonList.at(polygonIndex.row());
   else
-    return Polygon();
+    return poc::Polygon();
 }
 
 Point2d LevelDesignerModel::vertexFromIndex(const QModelIndex& vertexIndex) {
@@ -55,11 +55,11 @@ Point2d LevelDesignerModel::vertexFromIndex(const QModelIndex& vertexIndex) {
     return Point2d();
 }
 
-bool LevelDesignerModel::appendPolygon(const Polygon& polygon) {
+bool LevelDesignerModel::appendPolygon(const poc::Polygon& polygon) {
   return insertPolygon(rowCount(), polygon);
 }
 
-bool LevelDesignerModel::insertPolygon(int polygonRow, const Polygon& polygon) {
+bool LevelDesignerModel::insertPolygon(int polygonRow, const poc::Polygon& polygon) {
   std::vector<Point2d> vertices = polygon.getVertices();
 
   int r = std::rand()%255;
@@ -95,7 +95,7 @@ bool LevelDesignerModel::removePolygon(int polygonRow) {
   return success;
 }
 
-bool LevelDesignerModel::replacePolygon(int polygonRow, const Polygon& polygon) {
+bool LevelDesignerModel::replacePolygon(int polygonRow, const poc::Polygon& polygon) {
   bool res = true;
 
   std::vector<Point2d> vertices = polygon.getVertices();
@@ -109,7 +109,7 @@ bool LevelDesignerModel::replacePolygon(int polygonRow, const Polygon& polygon) 
 }
 
 bool LevelDesignerModel::translatePolygon(int polygonRow, const Vector2d& direction) {
-  Polygon polygon(_polygonList.at(polygonRow));
+  poc::Polygon polygon(_polygonList.at(polygonRow));
   polygon.translate(direction);
 
   bool res = true;
@@ -162,7 +162,7 @@ bool LevelDesignerModel::replaceVertex(int polygonRow, int vertexRow, const Poin
 
 void LevelDesignerModel::updatePolygons(void) {
   for (int k = 0; k < rowCount(); k++) {
-    setData(index(k, 0), "Polygon "+QString::number(k));
+    setData(index(k, 0), "poc::Polygon "+QString::number(k));
     updateVertices(index(k, 0));
   }
 }

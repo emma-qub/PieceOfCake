@@ -16,7 +16,7 @@ void ThumbnailCreator::makeThumbnail(const QString& fileName) {
   int ymin = _polygonList.at(0).getVertices().at(0).getY();
   int xmax = xmin;
   int ymax = ymin;
-  for (const Polygon& polygon: _polygonList) {
+  for (const poc::Polygon& polygon: _polygonList) {
     for (const Point2d& vertex: polygon.getVertices()) {
       xmin = qMin(xmin, static_cast<int>(vertex.getX()));
       ymin = qMin(ymin, static_cast<int>(vertex.getY()));
@@ -55,7 +55,7 @@ void ThumbnailCreator::makeThumbnail(const QString& fileName) {
   image.fill(qRgba(0, 0, 0, 0));
   painter.setPen(QPen(Qt::white, 20));
   painter.setRenderHint(QPainter::Antialiasing, true);
-  for (const Polygon& polygon: _polygonList) {
+  for (const poc::Polygon& polygon: _polygonList) {
     std::vector<Point2d> vertices = polygon.getVertices();
     for (unsigned int k = 0; k < vertices.size(); ++k) {
       Point2d currVertex = vertices.at(k);

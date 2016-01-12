@@ -5,7 +5,7 @@
 
 #include "Polygon.h"
 
-typedef QList<Polygon> PolygonList;
+typedef QList<poc::Polygon> PolygonList;
 
 class ThumbnailCreator {
 public:

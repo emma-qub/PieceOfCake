@@ -20,7 +20,7 @@ void TestLevelController::resetGameInfo(void) {
 }
 
 void TestLevelController::computeOrientedArea(void) {
-  for (const Polygon& polygon: _model->getPolygonList()) {
+  for (const poc::Polygon& polygon: _model->getPolygonList()) {
     _orientedAreaTotal += polygon.orientedArea();
   }
 }

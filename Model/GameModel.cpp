@@ -96,7 +96,7 @@ void GameModel::populate(void) {
   appendRow(_refractorsItem);
 
   // Add every polygon to model
-  for (const Polygon& polygon: _polygonList) {
+  for (const poc::Polygon& polygon: _polygonList) {
     appendPolygon(polygon);
   }
 
@@ -121,8 +121,8 @@ void GameModel::populate(void) {
   }
 }
 
-void GameModel::insertPolygon(int polygonRow, const Polygon& polygon) {
-  QStandardItem* polygonItem = new QStandardItem("Polygon"+QString::number(polygonRow));
+void GameModel::insertPolygon(int polygonRow, const poc::Polygon& polygon) {
+  QStandardItem* polygonItem = new QStandardItem("poc::Polygon"+QString::number(polygonRow));
 
 //  polygonItem->setData(_color, Qt::DecorationRole);
   _polygonsItem->insertRow(polygonRow, polygonItem);
@@ -134,7 +134,7 @@ void GameModel::insertPolygon(int polygonRow, const Polygon& polygon) {
   }
 }
 
-void GameModel::appendPolygon(const Polygon& polygon) {
+void GameModel::appendPolygon(const poc::Polygon& polygon) {
   insertPolygon(_polygonsItem->rowCount(), polygon);
 }
 

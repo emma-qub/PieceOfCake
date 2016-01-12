@@ -10,6 +10,8 @@
 #include <algorithm>    // sort
 #include <iomanip>      // boolalpha
 
+namespace poc {
+
 Polygon::Polygon(const std::vector<Point2d>& vertices):
   _vertices(vertices) {
 }
@@ -367,4 +369,6 @@ QDebug operator<<(QDebug dbg, const Polygon &polygon) {
   }
 
   return dbg.maybeSpace();
+}
+
 }

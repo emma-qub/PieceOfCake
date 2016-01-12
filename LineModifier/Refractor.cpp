@@ -1,6 +1,10 @@
 #include "Refractor.h"
 #include "Vector2d.h"
 
+#ifndef M_PI
+#  define M_PI 3.14159265358979323846
+#endif
+
 Refractor::Refractor(int xa, int ya, int xb, int yb, float indice):
   Deviation(),
   _refractorLine(xa, ya, xb, yb),

@@ -492,7 +492,7 @@ void LevelDesignerScribbleView::updateViewNotModel(QModelIndex vertexIndex, int 
 }
 
 void LevelDesignerScribbleView::currentChanged(QModelIndex currentIndex, QModelIndex previousIndex) {
-  if ((currentIndex.parent() == QModelIndex()) || (currentIndex.parent() != QModelIndex() && currentIndex.parent() != previousIndex.parent()))
+  if ((!currentIndex.parent().isValid()) || (currentIndex.parent().isValid() && currentIndex.parent() != previousIndex.parent()))
     drawFromModel();
 }
 

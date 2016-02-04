@@ -262,8 +262,8 @@ void GameView::clearImage(void) {
 
 void GameView::currentChanged(QModelIndex currentIndex, QModelIndex /*previousIndex*/) {
   drawFromModel();
-  if (currentIndex.parent() != QModelIndex()) {
-    if (currentIndex.parent().parent() != QModelIndex()) {
+  if (currentIndex.parent().isValid()) {
+    if (currentIndex.parent().parent().isValid()){
       currentIndex = currentIndex.parent();
     }
 

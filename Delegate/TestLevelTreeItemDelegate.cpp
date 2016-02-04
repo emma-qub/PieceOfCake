@@ -6,7 +6,7 @@ TestLevelTreeItemDelegate::TestLevelTreeItemDelegate(QObject* parent):
 }
 
 QWidget* TestLevelTreeItemDelegate::createEditor(QWidget* parent, const QStyleOptionViewItem& /*option*/, const QModelIndex& index) const {
-  if ((index.column() != 2 && index.column() != 3) || index.parent() == QModelIndex())
+  if ((index.column() != 2 && index.column() != 3) || !index.parent().isValid())
     return NULL;
 
   _index = index;

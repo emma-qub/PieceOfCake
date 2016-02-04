@@ -6,8 +6,8 @@ LevelDesignerTreeItemDelegate::LevelDesignerTreeItemDelegate(QObject* parent):
 }
 
 QWidget* LevelDesignerTreeItemDelegate::createEditor(QWidget* parent, const QStyleOptionViewItem& /*option*/, const QModelIndex& index) const {
-  if ((index.column() != 2 && index.column() != 3) || index.parent() == QModelIndex())
-    return NULL;
+  if ((index.column() != 2 && index.column() != 3) || !index.parent().isValid())
+    return nullptr;
 
   _index = index;
 
